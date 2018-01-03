@@ -56,4 +56,24 @@ public class SolarSystemView : MonoBehaviour
 			SpawnGameObjectForOrbital(prefab, go.transform, orbital.Children[i]);
 		}
 	}
+
+	void Update()
+	{
+		for (int i = 0; i < solarSystem.Orbitals.Count; i++)
+			UpdateGameObjectsForOrbital (solarSystem.Orbitals[i]);
+	}
+
+	/// <summary>
+	/// Updates the GameObject's position for this orbital.
+	/// </summary>
+	public void UpdateGameObjectsForOrbital (Orbital orbital)
+	{
+		GameObject go = orbitalGameObjectMap[orbital];
+		go.transform.position = orbital.Position;
+
+		for (int i = 0; i < orbital.Children.Count; i++)
+		{
+			UpdateGameObjectsForOrbital(orbital.Children[i]);
+		}
+	}
 }
