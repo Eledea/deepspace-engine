@@ -1,20 +1,33 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SolarSystem : Orbital
+public class SolarSystem
 {
-	/// <summary>
-	/// Generate a new SolarSystem.
-	/// </summary>
-	public void Generate()
+	public SolarSystem()
 	{
-		Orbital myStar = new Orbital();
-		myStar.GraphicID = 0;
-		this.AddChild (myStar);
+	}
 
-		Orbital planet = new Orbital();
-		planet.MakePlanet();
-		planet.GraphicID = 1;
-		myStar.AddChild (planet);
+	/// <summary>
+	/// The Orbitals in this SolarSystem.
+	/// </summary>
+	public List<Orbital> Orbitals;
+
+	/// <summary>
+	/// Generate the Orbitals for this Solar System.
+	/// </summary>
+	public void Generate(int numOrbitals)
+	{
+		Orbitals = new List<Orbital>();
+
+		for (int i = 0; i < numOrbitals; i++)
+		{
+			Orbital orbital = new Orbital ();
+
+			Orbitals.Add (orbital);
+		}
+	}
+
+	public void LoadFromFile(string fileName)
+	{
 	}
 }

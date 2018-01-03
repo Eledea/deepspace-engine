@@ -6,7 +6,10 @@ public class Orbital
 {
 	public Orbital()
 	{
-		TimeToOrbit = 1;
+		Children = new List<Orbital>();
+
+		InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
+		OrbitalDistance = (ulong)UnityEngine.Random.Range(5, 100);
 	}
 
 	/// <summary>
@@ -14,25 +17,28 @@ public class Orbital
 	/// </summary>
 	public Orbital Parent;
 
+	/// <summary>
+	/// The child Orbitals of this Orbital.
+	/// </summary>
 	public List<Orbital> Children;
 
 	/// <summary>
-	/// The angle of in radians of our orbit around our parent Orbital.
+	/// The angle in radians that this Orbital will start at around it's parent.
 	/// </summary>
-	public float Angle;
+	public float InitAngle;
 
 	/// <summary>
-	/// The distance in meters from our parent Orbital.
+	/// The distance of this Orbital from it's parent Orbital.
 	/// </summary>
 	public UInt64 OrbitalDistance;
 
 	/// <summary>
-	/// The time this Orbital takes to orbit our parent Orbital.
+	/// The orbital period of this Orbital.
 	/// </summary>
-	public UInt64 TimeToOrbit;
+	public UInt64 OrbitalPeriod; //Use Kepler's 3rd Law?
 
 	/// <summary>
-	/// What Graphic do we represent ingame?
+	/// What texture does the Orbital have on the Graphical side?
 	/// </summary>
 	public int GraphicID;
 
@@ -43,46 +49,36 @@ public class Orbital
 	{
 		get
 		{
-			//TODO: Convert our orbit into a Vector3 that we can use 
-			//to render something as a Unity GameObject.
-			return new Vector3(
-				Mathf.Sin(Angle),
-				Mathf.Cos(Angle),
-				0 //hardcoded to zero.
+			Vector3 offset = new Vector3 (
+				Mathf.Sin (InitAngle) * OrbitalDistance,
+				0,
+				-Mathf.Cos (InitAngle) * OrbitalDistance
 			);
+
+			if (Parent != null)
+			{
+				offset += Parent.Position;
+			}
+
+			return offset;
 		}
 	}
 
-	public void Update(UInt64 timeSinceStart)
+	/// <summary>
+	/// Adds an Orbital as a child to this Orbital.
+	/// </summary>
+	public void AddChild(Orbital orbital)
 	{
-		//Advance our angle by the current amount of time.
-
-		Angle = (timeSinceStart / TimeToOrbit) * 2 * Mathf.PI;
-
-		//Update for all our children.
-		for (int i = 0; i < Children.Count; i++)
-		{
-			Children [i].Update (timeSinceStart);
-		}
+		orbital.Parent = this;
+		Children.Add (orbital);
 	}
 
-	public void MakePlanet()
+	/// <summary>
+	/// Remove an Orbital as a child from this Orbital.
+	/// </summary>
+	public void RemoveChild(Orbital orbital)
 	{
-		Angle = 0; //"North" of our parent.
-		OrbitalDistance = 150000000000; //150 million Km.
-
-		TimeToOrbit = 365 * 24 * 60 * 60;
-	}
-
-	public void AddChild(Orbital c)
-	{
-		c.Parent = this;
-		Children.Add (c);
-	}
-
-	public void RemoveChild(Orbital c)
-	{
-		c.Parent = null;
-		Children.Remove (c);
+		orbital.Parent = null;
+		Children.Remove (orbital);
 	}
 }
