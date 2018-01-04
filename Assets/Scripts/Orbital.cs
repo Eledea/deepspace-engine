@@ -5,16 +5,11 @@ using UnityEngine;
 public class Orbital
 {
 	/// <summary>
-	/// Initializes a new instance of an Orbital/> class.
+	/// Initializes a new instance of an Orbital class.
 	/// </summary>
 	public Orbital()
 	{
 		Children = new List<Orbital>();
-
-		OrbitalDistance = (ulong)UnityEngine.Random.Range(10, 100);
-
-		OrbitalPeriod = Math.Sqrt((39.48 * Math.Pow(OrbitalDistance, 3)) / 39);
-		InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
 	}
 
 	/// <summary> The parent Orbital of this Orbital. </summary>
@@ -23,20 +18,26 @@ public class Orbital
 	/// <summary> The child Orbitals of this Orbital. </summary>
 	public List<Orbital> Children { get; private set; }
 
+	/// <summary> The Standard Gravitational Parameter of this Orbital. </summary>
+	public UInt64 Mu { get; set;}
+
 	/// <summary> The angle in radians that this Orbital will start at around it's parent. </summary>
-	public float InitAngle { get; private set; }
+	public float InitAngle { get; set; }
 
 	/// <summary> The angle in radians that this Orbital is offset at around it's parent. </summary>
-	public float OffsetAngle { get; private set; }
+	public float OffsetAngle { get; set; }
 
 	/// <summary> The distance of this Orbital from it's parent Orbital. </summary>
-	public UInt64 OrbitalDistance { get; private set; }
+	public UInt64 OrbitalDistance { get; set; }
 
 	/// <summary> The orbital period of this Orbital. </summary>
-	public Double OrbitalPeriod { get; private set; } //Use Kepler's 3rd Law?
+	public Double OrbitalPeriod { get; set; } //Use Kepler's 3rd Law?
 
 	/// <summary> What texture does the Orbital have on the Graphical side? </summary>
-	public int GraphicID { get; private set; }
+	public int GraphicID { get; set; }
+
+	/// <summary> The zoomLevel in our SolarSystemView class. </summary>
+	private ulong zoomLevel { get; set; }
 
 	/// <summary>
 	/// Returns the world-space position of this Orbital.
@@ -46,9 +47,9 @@ public class Orbital
 		get
 		{
 			Vector3 offset = new Vector3 (
-				Mathf.Sin (InitAngle + OffsetAngle) * OrbitalDistance,
+				Mathf.Sin (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel),
 				0,
-				-Mathf.Cos (InitAngle + OffsetAngle) * OrbitalDistance
+				-Mathf.Cos (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel)
 			);
 
 			if (Parent != null)
@@ -91,5 +92,10 @@ public class Orbital
 	{
 		orbital.Parent = null;
 		Children.Remove (orbital);
+	}
+
+	public void UpdateZoomLevel(ulong zoomLevel)
+	{
+		this.zoomLevel = zoomLevel;
 	}
 }

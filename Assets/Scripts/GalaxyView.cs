@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SolarSystemView : MonoBehaviour
+public class GalaxyView : MonoBehaviour
 {
 	void Start()
 	{
@@ -10,9 +10,11 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	GameController gc;
-	SolarSystem solarSystem;
+	Galaxy galaxy;
 
 	public GameObject[] gameObjects;
+
+	public ulong zoomLevel = 10000000;
 
 	Dictionary<Orbital, GameObject> orbitalGameObjectMap;
 
@@ -27,40 +29,40 @@ public class SolarSystemView : MonoBehaviour
 			child.SetParent (null);
 			Destroy (child.gameObject);
 		}
-
+			
 		orbitalGameObjectMap = new Dictionary<Orbital, GameObject>();
 
-		solarSystem = gc.solarSystem;
+		galaxy = gc.galaxy;
 
-		for (int i = 0; i < solarSystem.Orbitals.Count; i++)
-			SpawnGameObjectForOrbital (gameObjects[0], this.transform, solarSystem.Orbitals[i]);
+		for (int i = 0; i < galaxy.SolarSystems.Count; i++)
+			for (int j = 0; j < galaxy.SolarSystems[i].Orbitals.Count; j++)
+				SpawnGameObjectForOrbital (galaxy.SolarSystems[i].Orbitals[j], gameObjects[0], this.transform);
 	}
 
 	/// <summary>
 	/// Spawns the GameObject for this Orbital.
 	/// </summary>
-	public void SpawnGameObjectForOrbital(GameObject prefab, Transform transformParent, Orbital orbital)
+	public void SpawnGameObjectForOrbital(Orbital orbital, GameObject prefab, Transform transformParent)
 	{
-		GameObject go =
-		(GameObject)Instantiate (
-			prefab,
-			orbital.Position,
-			Quaternion.identity,
-			transformParent
-		);
+		orbital.UpdateZoomLevel (zoomLevel);
+
+		GameObject go = (GameObject)Instantiate (prefab);
+		go.transform.position = orbital.Position;
+		go.transform.parent = transformParent;
 
 		orbitalGameObjectMap[orbital] = go;
 
 		for (int i = 0; i < orbital.Children.Count; i++)
 		{
-			SpawnGameObjectForOrbital(prefab, go.transform, orbital.Children[i]);
+			SpawnGameObjectForOrbital(orbital.Children[i], prefab, go.transform);
 		}
 	}
 
 	void Update()
 	{
-		for (int i = 0; i < solarSystem.Orbitals.Count; i++)
-			UpdateGameObjectsForOrbital (solarSystem.Orbitals[i]);
+		for (int i = 0; i < galaxy.SolarSystems.Count; i++)
+			for (int j = 0; j < galaxy.SolarSystems[i].Orbitals.Count; j++)
+				UpdateGameObjectsForOrbital (galaxy.SolarSystems[i].Orbitals[j]);
 	}
 
 	/// <summary>
@@ -68,6 +70,8 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public void UpdateGameObjectsForOrbital (Orbital orbital)
 	{
+		orbital.UpdateZoomLevel (zoomLevel);
+
 		GameObject go = orbitalGameObjectMap[orbital];
 		go.transform.position = orbital.Position;
 

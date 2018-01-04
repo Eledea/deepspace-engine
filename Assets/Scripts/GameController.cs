@@ -4,20 +4,20 @@ public class GameController : MonoBehaviour
 {
 	void OnEnable()
 	{
-	 	GenerateGalaxy ("Testworld");
+		BuildGalaxy ("Testworld");
 	}
 
 	/// <summary>
-	/// Generate a galaxy with fileName.
+	/// Build a galaxy with fileName.
 	/// </summary>
-	public void GenerateGalaxy(string fileName)
+	public void BuildGalaxy(string fileName)
 	{
-		solarSystem = new SolarSystem();
-		solarSystem.Generate (5);
+		galaxy = new Galaxy();
+		galaxy.GenerateGalaxy (1);
 	}
 
 	/// <summary> The SolarSystem that we currently have loaded. </summary>
-	public SolarSystem solarSystem { get; set; }
+	public Galaxy galaxy { get; set; }
 
 	/// <summary>
 	/// The game time in seconds.
@@ -36,6 +36,6 @@ public class GameController : MonoBehaviour
 	{
 		GameTime += (uint)numSeconds;
 
-		solarSystem.Update(GameTime);
+		galaxy.UpdateGalaxy(GameTime);
 	}
 }
