@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GalaxyView : MonoBehaviour
@@ -14,7 +14,7 @@ public class GalaxyView : MonoBehaviour
 
 	public GameObject[] gameObjects;
 
-	public ulong zoomLevel = 10000000;
+	public ulong zoomLevel = 5000000;
 
 	Dictionary<Orbital, GameObject> orbitalGameObjectMap;
 

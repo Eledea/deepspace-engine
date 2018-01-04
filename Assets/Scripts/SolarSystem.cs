@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,9 +21,9 @@ public class SolarSystem
 		for (int i = 0; i < numPlanets; i++)
 		{
 			Orbital orbital = new Orbital ();
-			orbital.Mu = (ulong)UnityEngine.Random.Range(10, 200) * 667408000 * (ulong)UnityEngine.Random.Range(10, 200);
-			orbital.OrbitalDistance = (ulong)UnityEngine.Random.Range(1, 101) * (ulong)UnityEngine.Random.Range(1, 1001) * (ulong)1000000000000;
-			orbital.OrbitalPeriod = (Math.Sqrt((4 * Math.PI * Math.PI * Math.Pow(orbital.OrbitalDistance, 3)) / orbital.Mu));
+			orbital.Mu = 4904869500000;//(ulong)UnityEngine.Random.Range(10, 200) * 667408000 * (ulong)UnityEngine.Random.Range(10, 200);
+			orbital.OrbitalDistance = 400000000;//(ulong)UnityEngine.Random.Range(1, 101) * (ulong)UnityEngine.Random.Range(1, 1001) * (ulong)1000000000000;
+			orbital.OrbitalPeriod = (Math.Sqrt((4 * Math.PI * Math.PI * Math.Pow(orbital.OrbitalDistance, 3)) / orbital.Mu)) / 100000;
 			orbital.InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
 
 			Orbitals.Add (orbital);
@@ -35,7 +35,7 @@ public class SolarSystem
 		//TODO: Consider only updating part of the SolarSystem if we have a crazy
 		//number of Orbitals?
 
-		foreach (Orbital orbital in this.Orbitals)
+		foreach (Orbital orbital in Orbitals)
 		{
 			orbital.Update (timeSinceStart);
 		}

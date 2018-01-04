@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ public class Galaxy
 		for (int i = 0; i < numSolarSystems; i++)
 		{
 			SolarSystem ss = new SolarSystem ();
-			ss.GenerateSolarSystem (5, 0, 1);
+			ss.GenerateSolarSystem (1, 0, 1);
 
 			SolarSystems.Add (ss);
 		}
