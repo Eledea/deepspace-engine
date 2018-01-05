@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class SolarSystem
 {
-	public SolarSystem()
-	{
-	}
-
 	/// <summary> The Orbitals in this SolarSystem. </summary>
 	public List<Orbital> Orbitals;
 
@@ -16,20 +12,30 @@ public class SolarSystem
 	/// </summary>
 	public void GenerateSolarSystem(int numPlanets, int minMoons, int maxMoons)
 	{
-		Orbitals = new List<Orbital>();
+		Orbitals = new List<Orbital> ();
+		
+		//Generate x number of planets.
 
 		for (int i = 0; i < numPlanets; i++)
 		{
-			Orbital orbital = new Orbital ();
-			orbital.Mu = 4904869500000;//(ulong)UnityEngine.Random.Range(10, 200) * 667408000 * (ulong)UnityEngine.Random.Range(10, 200);
-			orbital.OrbitalDistance = 400000000;//(ulong)UnityEngine.Random.Range(1, 101) * (ulong)UnityEngine.Random.Range(1, 1001) * (ulong)1000000000000;
-			orbital.OrbitalPeriod = (Math.Sqrt((4 * Math.PI * Math.PI * Math.Pow(orbital.OrbitalDistance, 3)) / orbital.Mu)) / 100000;
-			orbital.InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
-
-			Orbitals.Add (orbital);
+			GeneratePlanet ();
 		}
 	}
 
+	void GeneratePlanet()
+	{
+		Orbital orbital = new Orbital ();
+		Orbitals.Add (orbital);
+
+		orbital.Mu = 398600441800000;
+		orbital.InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
+		orbital.OrbitalDistance = 149597870700;
+		orbital.OrbitalPeriod = (Math.Sqrt((4 * Math.PI * Math.PI * Math.Pow(orbital.OrbitalDistance, 3)) / orbital.Mu)) / 1000000;
+	}
+
+	/// <summary>
+	/// Updates each Orbital in this SolarSystem.
+	/// </summary>
 	public void UpdateSolarSystem(UInt64 timeSinceStart)
 	{
 		//TODO: Consider only updating part of the SolarSystem if we have a crazy

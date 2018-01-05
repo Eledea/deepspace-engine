@@ -14,7 +14,7 @@ public class GalaxyView : MonoBehaviour
 
 	public GameObject[] gameObjects;
 
-	public ulong zoomLevel = 5000000;
+	public ulong zoomLevel = 14959787070;
 
 	Dictionary<Orbital, GameObject> orbitalGameObjectMap;
 

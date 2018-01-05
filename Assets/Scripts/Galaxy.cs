@@ -30,6 +30,9 @@ public class Galaxy
 	{
 	}
 
+	/// <summary>
+	/// Updates each SolarSystem in this Galaxy.
+	/// </summary>
 	public void UpdateGalaxy(UInt64 timeSinceStart)
 	{
 		//TODO: Consider only updating part of the Galaxy if we have a crazy
