@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Standalone Data class for storing a Galaxy.
+/// </summary>
 public class Galaxy
 {
 	/// <summary> The SolarSystems in this Galaxy. </summary>
@@ -31,7 +34,7 @@ public class Galaxy
 	}
 
 	/// <summary>
-	/// Updates each SolarSystem in this Galaxy.
+	/// Update each Orbital in this Galaxy.
 	/// </summary>
 	public void UpdateGalaxy(UInt64 timeSinceStart)
 	{

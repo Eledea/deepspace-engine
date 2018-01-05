@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Standalone Data class for defining the parameters of an Orbital.
+/// </summary>
 public class Orbital
 {
-	/// <summary>
-	/// Initializes a new instance of an Orbital class.
-	/// </summary>
 	public Orbital()
 	{
 		Children = new List<Orbital>();
@@ -47,9 +47,9 @@ public class Orbital
 		get
 		{
 			Vector3 offset = new Vector3 (
-				Mathf.Sin (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel),
+				Mathf.Sin (InitAngle + OffsetAngle) * (OrbitalDistance / 14959787070),
 				0,
-				-Mathf.Cos (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel)
+				-Mathf.Cos (InitAngle + OffsetAngle) * (OrbitalDistance / 14959787070)
 			);
 
 			if (Parent != null)

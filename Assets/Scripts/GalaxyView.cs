@@ -35,8 +35,8 @@ public class GalaxyView : MonoBehaviour
 		galaxy = gc.galaxy;
 
 		for (int i = 0; i < galaxy.SolarSystems.Count; i++)
-			for (int j = 0; j < galaxy.SolarSystems[i].Orbitals.Count; j++)
-				SpawnGameObjectForOrbital (galaxy.SolarSystems[i].Orbitals[j], gameObjects[0], this.transform);
+			for (int j = 0; j < galaxy.SolarSystems[i].Children.Count; j++)
+				SpawnGameObjectForOrbital (galaxy.SolarSystems[i].Children[j], gameObjects[0], this.transform);
 	}
 
 	/// <summary>
@@ -61,8 +61,8 @@ public class GalaxyView : MonoBehaviour
 	void Update()
 	{
 		for (int i = 0; i < galaxy.SolarSystems.Count; i++)
-			for (int j = 0; j < galaxy.SolarSystems[i].Orbitals.Count; j++)
-				UpdateGameObjectsForOrbital (galaxy.SolarSystems[i].Orbitals[j]);
+			for (int j = 0; j < galaxy.SolarSystems[i].Children.Count; j++)
+				UpdateGameObjectsForOrbital (galaxy.SolarSystems[i].Children[j]);
 	}
 
 	/// <summary>
