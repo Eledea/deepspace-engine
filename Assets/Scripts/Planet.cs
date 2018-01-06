@@ -12,6 +12,10 @@ public class Planet : Orbital
 	/// </summary>
 	public void GeneratePlanet(int maxMoons)
 	{
+		//TODO: We need a better way of defining the properties of an Orbital.
+
+		this.Name = "Planet";
+		this.Type = 2;
 		this.Mu = 39860044180000;
 		this.InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
 		this.OrbitalDistance = 149597870700;
@@ -23,6 +27,8 @@ public class Planet : Orbital
 			Orbital moon = new Orbital ();
 			this.AddChild (moon);
 
+			moon.Name = "Moon";
+			moon.Type = 3;
 			moon.Mu = 4904869500000;
 			moon.InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
 			moon.OrbitalDistance = 3840000000;

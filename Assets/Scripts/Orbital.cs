@@ -18,8 +18,14 @@ public class Orbital
 	/// <summary> The child Orbitals of this Orbital. </summary>
 	public List<Orbital> Children { get; private set; }
 
+	/// <summary> The display name of this Orbital. </summary>
+	public string Name { get; set; }
+
+	/// <summary> The type of Orbital this Orbital is. </summary>
+	public int Type { get; set; }
+
 	/// <summary> The Standard Gravitational Parameter of this Orbital. </summary>
-	public UInt64 Mu { get; set;}
+	public UInt64 Mu { get; set; }
 
 	/// <summary> The angle in radians that this Orbital will start at around it's parent. </summary>
 	public float InitAngle { get; set; }
@@ -32,9 +38,6 @@ public class Orbital
 
 	/// <summary> The orbital period of this Orbital. </summary>
 	public Double OrbitalPeriod { get; set; } //Use Kepler's 3rd Law?
-
-	/// <summary> What texture does the Orbital have on the Graphical side? </summary>
-	public int GraphicID { get; set; }
 
 	/// <summary> The zoomLevel in our SolarSystemView class. </summary>
 	private ulong zoomLevel = 1495978707;
@@ -58,6 +61,21 @@ public class Orbital
 			}
 
 			return offset;
+		}
+	}
+
+	public Vector3 Size
+	{
+		get
+		{
+			float scalar = 0.2f;
+
+			if (Type == 1)
+				scalar = 5;
+			if (Type == 2)
+				scalar = 0.5f;
+			
+			return new Vector3 (scalar, scalar, scalar);
 		}
 	}
 

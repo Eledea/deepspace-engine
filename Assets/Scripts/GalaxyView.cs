@@ -44,7 +44,10 @@ public class GalaxyView : MonoBehaviour
 	{
 		GameObject go = (GameObject)Instantiate (prefab);
 		go.transform.position = orbital.Position;
+
 		go.transform.parent = transformParent;
+		go.name = orbital.Name;
+		go.transform.localScale = orbital.Size;
 
 		orbitalGameObjectMap[orbital] = go;
 

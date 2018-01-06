@@ -13,14 +13,14 @@ public class Galaxy
 	/// <summary>
 	/// Generate the SolarSystems for this Galaxy.
 	/// </summary>
-	public void GenerateGalaxy(int numSolarSystems)
+	public void GenerateGalaxy(int numSolarSystems, int numPlanets, int maxMoons)
 	{
 		SolarSystems = new List<SolarSystem>();
 
 		for (int i = 0; i < numSolarSystems; i++)
 		{
 			SolarSystem ss = new SolarSystem ();
-			ss.GenerateSolarSystem (4, 1);
+			ss.GenerateSolarSystem (numSolarSystems, numPlanets, maxMoons, i);
 
 			SolarSystems.Add (ss);
 		}

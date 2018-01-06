@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
 	public void BuildGalaxy(string fileName)
 	{
 		galaxy = new Galaxy();
-		galaxy.GenerateGalaxy (1);
+		galaxy.GenerateGalaxy (3, 4, 3);
 	}
 
 	/// <summary> The SolarSystem that we currently have loaded. </summary>

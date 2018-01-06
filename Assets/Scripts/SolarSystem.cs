@@ -10,15 +10,19 @@ public class SolarSystem : Orbital
 	/// <summary>
 	/// Generate the Orbitals for this SolarSystem.
 	/// </summary>
-	public void GenerateSolarSystem(int numPlanets, int maxMoons)
+	public void GenerateSolarSystem(int numSolarSystems, int numPlanets, int maxMoons, int solarSystemID)
 	{
 		Orbital star = new Orbital ();
 		this.AddChild (star);
 
+		//TODO: We need a better way of defining the properties of an Orbital.
+
+		star.Name = "Star";
+		star.Type = 1;
 		star.Mu = 13271244001800000000;
-		star.OrbitalDistance = 1;
-		star.InitAngle = UnityEngine.Random.Range(0, Mathf.PI*2);
-		star.OrbitalPeriod = (Math.Sqrt((4 * Math.PI * Math.PI * Math.Pow(star.OrbitalDistance, 3)) / star.Mu) * 10);
+		star.OrbitalDistance = 598391482800;
+		star.InitAngle = (Mathf.PI * 2) / numSolarSystems * solarSystemID;
+		star.OrbitalPeriod = (Math.Sqrt((4 * Math.PI * Math.PI * Math.Pow(star.OrbitalDistance, 3)) / star.Mu) * 10) / 100000;
 
 		//Generate x number of planets.
 
