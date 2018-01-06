@@ -14,8 +14,6 @@ public class GalaxyView : MonoBehaviour
 
 	public GameObject[] gameObjects;
 
-	public ulong zoomLevel = 14959787070;
-
 	Dictionary<Orbital, GameObject> orbitalGameObjectMap;
 
 	/// <summary>
@@ -44,8 +42,6 @@ public class GalaxyView : MonoBehaviour
 	/// </summary>
 	public void SpawnGameObjectForOrbital(Orbital orbital, GameObject prefab, Transform transformParent)
 	{
-		orbital.UpdateZoomLevel (zoomLevel);
-
 		GameObject go = (GameObject)Instantiate (prefab);
 		go.transform.position = orbital.Position;
 		go.transform.parent = transformParent;
@@ -70,8 +66,6 @@ public class GalaxyView : MonoBehaviour
 	/// </summary>
 	public void UpdateGameObjectsForOrbital (Orbital orbital)
 	{
-		orbital.UpdateZoomLevel (zoomLevel);
-
 		GameObject go = orbitalGameObjectMap[orbital];
 		go.transform.position = orbital.Position;
 

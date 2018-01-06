@@ -37,7 +37,7 @@ public class Orbital
 	public int GraphicID { get; set; }
 
 	/// <summary> The zoomLevel in our SolarSystemView class. </summary>
-	private ulong zoomLevel { get; set; }
+	private ulong zoomLevel = 1495978707;
 
 	/// <summary>
 	/// Returns the world-space position of this Orbital.
@@ -47,9 +47,9 @@ public class Orbital
 		get
 		{
 			Vector3 offset = new Vector3 (
-				Mathf.Sin (InitAngle + OffsetAngle) * (OrbitalDistance / 14959787070),
+				Mathf.Sin (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel),
 				0,
-				-Mathf.Cos (InitAngle + OffsetAngle) * (OrbitalDistance / 14959787070)
+				-Mathf.Cos (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel)
 			);
 
 			if (Parent != null)
@@ -92,10 +92,5 @@ public class Orbital
 	{
 		orbital.Parent = null;
 		Children.Remove (orbital);
-	}
-
-	public void UpdateZoomLevel(ulong zoomLevel)
-	{
-		this.zoomLevel = zoomLevel;
 	}
 }

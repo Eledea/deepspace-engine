@@ -10,7 +10,7 @@ public class SolarSystem : Orbital
 	/// <summary>
 	/// Generate the Orbitals for this SolarSystem.
 	/// </summary>
-	public void GenerateSolarSystem(int numPlanets, int minMoons, int maxMoons)
+	public void GenerateSolarSystem(int numPlanets, int maxMoons)
 	{
 		Orbital star = new Orbital ();
 		this.AddChild (star);
@@ -26,7 +26,7 @@ public class SolarSystem : Orbital
 		{
 			Planet planet = new Planet ();
 			star.AddChild (planet);
-			planet.GeneratePlanet ();
+			planet.GeneratePlanet (maxMoons);
 		}
 	}
 

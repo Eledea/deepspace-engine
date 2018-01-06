@@ -20,7 +20,7 @@ public class Galaxy
 		for (int i = 0; i < numSolarSystems; i++)
 		{
 			SolarSystem ss = new SolarSystem ();
-			ss.GenerateSolarSystem (1, 0, 1);
+			ss.GenerateSolarSystem (4, 1);
 
 			SolarSystems.Add (ss);
 		}
