@@ -1,41 +1,57 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// The central core of the game. Responsible for managing server side operations that
+/// are not done within individual data classes.
+/// </summary>
 public class GameController : MonoBehaviour
 {
 	void OnEnable()
 	{
-		BuildGalaxy ("Testworld");
+		NewGalaxy ("Testworld");
 	}
 
 	/// <summary>
-	/// Build a galaxy with fileName.
+	/// The Galaxy we currently have loaded.
 	/// </summary>
-	public void BuildGalaxy(string fileName)
+	public Galaxy Galaxy { get; set; }
+
+	/// <summary>
+	/// Generates a new galaxy with filename.
+	/// </summary>
+	public void NewGalaxy(string fileName)
 	{
-		galaxy = new Galaxy();
-		galaxy.GenerateGalaxy (3, 4, 3);
+		this.Galaxy = new Galaxy ();
+
+		Galaxy.GenerateGalaxy (1, 4, 3);
 	}
 
-	/// <summary> The SolarSystem that we currently have loaded. </summary>
-	public Galaxy galaxy { get; set; }
-
 	/// <summary>
-	/// The game time in seconds.
+	/// Loads a galaxy from file with filename.
 	/// </summary>
-	public ulong GameTime = 0;
+	public void LoadGalaxy(string fileName)
+	{
+		if (Galaxy != null)
+		{
+			//Uh-Oh! We shouldn't have a Galaxy loaded if we are on our title screen!
+			Debug.LogError("ERROR: A galaxy is loaded while on the title screen.");
+			return;
+		}
+
+		//TODO: Load a Galaxy from a file into a new Galaxy class.
+	}
 
 	void Update()
 	{
-		AdvanceTime (1);
+		if (Galaxy != null)
+			Galaxy.UpdateGalaxy();
 	}
 
 	/// <summary>
-	/// Advances the time.
+	/// Saves the galaxy we currently have loaded as filename.
 	/// </summary>
-	public void AdvanceTime(int numSeconds)
+	public void SaveGalaxy(string fileName)
 	{
-		GameTime += (uint)numSeconds;
-
-		galaxy.UpdateGalaxy(GameTime);
+		//TODO: Save a Galaxy to a file from the Galaxy class we have loaded.
 	}
 }
