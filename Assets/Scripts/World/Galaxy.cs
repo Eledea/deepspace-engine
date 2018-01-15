@@ -101,11 +101,6 @@ public class Galaxy
 	/// </summary>
 	public void UpdateGalaxy()
 	{
-		AdvanceTime (1000);
-
-		foreach (SolarSystem ss in SolarSystems)
-		{
-			ss.UpdateAngles (timeSinceStart);
-		}
+		AdvanceTime (1);
 	}
 }

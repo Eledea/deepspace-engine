@@ -23,29 +23,14 @@ public class Orbital
 	public List<Orbital> Children { get; set; }
 
 	/// <summary>
-	/// The angle in radians around it's parent Orbital that this Orbital starts at.
+	/// The angle in radians around it's parent Orbital that this Orbital is positioned at.
 	/// </summary>
-	public float InitAngle { get; set; }
-
-	/// <summary>
-	/// The angle in radians around it's parent Orbital that this Orbital is offset by from it's starting angle.
-	/// </summary>
-	public float OffsetAngle { get; set; }
-
-	/// <summary>
-	/// The Standard Gravitational Parameter of this Orbital.
-	/// </summary>
-	public UInt64 Mu { get; set; }
+	public float OrbitalAngle { get; set; }
 
 	/// <summary>
 	/// The distance of this Orbital from it's parent Orbital. 
 	/// </summary>
 	public UInt64 OrbitalDistance { get; set; }
-
-	/// <summary>
-	/// The orbital period of this orbital in seconds.
-	/// </summary>
-	public UInt64 OrbitalPeriod { get; set; }
 
 	/// <summary>
 	/// The zoom level to apply when returning the position of this Orbital.
@@ -60,9 +45,9 @@ public class Orbital
 		get
 		{
 			Vector3 Position = new Vector3 (
-				Mathf.Sin (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel),
+				Mathf.Sin (OrbitalAngle) * (OrbitalDistance / zoomLevel),
 				0,
-				-Mathf.Cos (InitAngle + OffsetAngle) * (OrbitalDistance / zoomLevel)
+				-Mathf.Cos (OrbitalAngle) * (OrbitalDistance / zoomLevel)
 			);
 
 			if (Parent != null)
@@ -70,19 +55,6 @@ public class Orbital
 
 			return Position;
 		}
-	}
-
-	/// <summary>
-	/// Updates the angles for this Orbital and it's child Orbitals.
-	/// </summary>
-	public void UpdateAngles(UInt64 timeSinceStart)
-	{
-		//TODO: Reset angles every revolution to avoid floating point drift late game?
-
-		OffsetAngle = ((float)timeSinceStart / (float)OrbitalPeriod) * 2 * Mathf.PI;
-
-		for (int i = 0; i < Children.Count; i++)
-			Children[i].UpdateAngles(timeSinceStart);
 	}
 
 	/// <summary>

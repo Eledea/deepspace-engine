@@ -69,7 +69,7 @@ public class SolarSystemView : MonoBehaviour
 		go.transform.position = player.Position;
 
 		playerGameObjectMap [player] = go;
-		go.GetComponent<PlayerController> ().Player = player;
+		go.GetComponent<PlayerController>().Player = player;
 	}
 
 	void Update()
@@ -92,7 +92,6 @@ public class SolarSystemView : MonoBehaviour
 	void UpdateGameObjectForOrbital (Orbital orbital)
 	{
 		GameObject go = orbitalGameObjectMap [orbital];
-		go.transform.position = orbital.Position;
 
 		for (int i = 0; i < orbital.Children.Count; i++)
 			UpdateGameObjectForOrbital (orbital.Children[i]);
