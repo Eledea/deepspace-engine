@@ -3,8 +3,13 @@
 /// <summary>
 /// Independent data class for storing a Player.
 /// </summary>
-public class Player
+public class Player : Inventory
 {
+	public Player()
+	{
+		Inventory_ = new ItemStack [5,5];
+	}
+
 	/// <summary>
 	/// The Name of this Player.
 	/// </summary>
@@ -40,57 +45,14 @@ public class Player
 	/// </summary>
 	public float Oxygen { get; set; }
 
-	//What is the best way of storing the data for Items in an Inventory???
-	//We have a few options...
-
-	//The data type that makes the most sense in this situation in a 2D array
-	//for that columns and rows that we will have on the interface.
-
-	//But HOW will the game know what each slot has???
-	//We COULD use integers to store data and have each interger correspond to an
-	//item type in an enum....but how will we know how much of each item we will have???
-
-	//A 2D int array in this situation is no good, because we are NOT able to know
-	//how many of an item we have in each slot.
-
-	/// <summary>
-	/// The Inventory of this Player.
-	/// </summary>
-	public ItemStack[,] Inventory { get; set; }
-
 	/// <summary>
 	/// Updates the Position for this Player.
 	/// </summary>
 	public void UpdatePosition()
 	{
+		if (float.IsNaN(Velocity.x))
+			return;
+		
 		Position += (Velocity * Time.deltaTime) / 1000;
-	}
-
-	/// <summary>
-	/// Adds an ItemStack at this array position.
-	/// </summary>
-	public void AddItemStackAt(ItemStack s, int x, int y)
-	{
-		if (Inventory == null)
-			Inventory = new ItemStack [5,5];
-
-		Inventory [x, y] = s;
-	}
-
-	/// <summary>
-	/// Removes an ItemStack from this array position.
-	/// </summary>
-	public void RemoveItemStackFrom(int x, int y)
-	{
-		if (Inventory != null)
-			Inventory [x, y] = null;
-	}
-
-	/// <summary>
-	/// Gets an ItemStack at this array position.
-	/// </summary>
-	public ItemStack GetItemStackAt(int x, int y)
-	{
-		return Inventory [x, y];
 	}
 }

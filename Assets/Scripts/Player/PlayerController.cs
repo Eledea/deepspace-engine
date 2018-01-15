@@ -12,11 +12,8 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public Player Player { get; set;}
 
-	/// <summary>
-	/// Does this Player have their dampeners on? Other players don't need to know this
-	/// so we can keep this client side.
-	/// </summary>
-	public bool DampenersOn { get; set; }
+	bool DampenersOn = true;
+	bool InventoryOpen = false;
 
 	Vector3 rotateTo;
 
@@ -24,14 +21,22 @@ public class PlayerController : MonoBehaviour
 	{
 		//TODO: Split this function into multiple seperate functions.
 
-		//TODO: Add Inventory controls.
-
 		Update_PlayerMovement ();
 		Update_PlayerRotation ();
+
+		Update_Inventory ();
 	}
 
 	void Update_PlayerMovement()
 	{
+		if (Input.GetKeyDown(KeyCode.Z))
+		{
+			if (DampenersOn == true)
+				DampenersOn = false;
+			else
+				DampenersOn = true;
+		}
+
 		//TODO: Make this work with any rotation.
 
 		//We want to be able to move in each direction relative to the rotation that we current at.
@@ -56,10 +61,13 @@ public class PlayerController : MonoBehaviour
 
 		//If our inertia dampeners are on, we need to factor in possible deceleration.
 		//Is our current acceleration 0?
-		if (DampenersOn && acceleration.magnitude == 0 && Player.Velocity.magnitude != 0)
+		if (DampenersOn && acceleration.magnitude == 0)
 		{
-			//For every frame where our Velocity is not 0, work out a deceleration based on velocity.
-			acceleration -= Update_Deceleration (Player.Velocity);
+			//For every frame where our Velocity is not "0", work out a deceleration based on velocity.
+			if (Player.Velocity.magnitude > 0.001f)
+				acceleration -= Update_Deceleration (Player.Velocity);
+			else
+				acceleration = Vector3.zero;
 		}
 
 		Player.Velocity += acceleration;
@@ -73,21 +81,26 @@ public class PlayerController : MonoBehaviour
 	{
 		//We need to find an acceleration from the input Vector3.
 		//We want deceleration to be (effectively) constant for the most part, but as we near Vector3.zero, deceleration should change so that the lower the velocity, the lower the acceleration.
-		//This means that we need an logarithmic function to calculate deceleration, but what equation should we be using???
+		//This means that we need an logarithmic function to calculate deceleration.
 		//y = log10(x)+2 where y is acceleration and x is velocity.
 
-		//But we need to work with Vector3 datatypes, so we'll have to work with the magnitude of our velocity...
-		//float _acceleration = Mathf.Log10(currentVelocity.magnitude) + 2;
-
-		//Now we need to convert this magnitude to a Vector3.
-		//We know that root x^2 + y^2 + z^2 = magnitude of a Vector3. We know the magnitude of the Vector3, but NOT what each component of the Vector should actually be.
-		//This is a very difficult situation because we don't know the proportions. This is, in fact, no good.
-
-		//TODO: Make this work!
-
-		Vector3 acceleration = Vector3.zero;
+		Vector3 acceleration = new Vector3(CalculateDeceleration(Player.Velocity.x), CalculateDeceleration(Player.Velocity.y), CalculateDeceleration(Player.Velocity.z));
 
 		return acceleration;
+	}
+
+	float CalculateDeceleration(float velocity)
+	{
+		if (velocity != 0)
+		{
+			//TODO: Figure out why this log function returns NaN??
+
+			return Mathf.Log (velocity, 2) + 6;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	void Update_PlayerRotation()
@@ -99,6 +112,21 @@ public class PlayerController : MonoBehaviour
 		rotateTo += new Vector3 (diffMouse.x * 5f, -diffMouse.y * 5f, 0);
 
 		//Update the rotation in our data class.
-		Player.Rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler (rotateTo.y, rotateTo.x, 0), 30f * Time.deltaTime);
+		Player.Rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler (rotateTo.y, rotateTo.x, rotateTo.z), 30f * Time.deltaTime);
+	}
+
+	void Update_Inventory()
+	{
+		if (Input.GetKeyDown (KeyCode.F))
+		{
+			if (InventoryOpen == false)
+				InventoryOpen = true;
+			else
+				InventoryOpen = false;
+		}
+
+		//TODO: Add an InventoryController class to do this???
+
+		//TODO: Add an Interface to allow Player interaction Inventories.
 	}
 }

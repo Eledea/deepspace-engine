@@ -9,7 +9,7 @@ public class ItemStack
 	/// <summary>
 	/// The Items in this stack.
 	/// </summary>
-	public HashSet<Item> Items { get; set; }
+	public List<Item> Items { get; set; }
 
 	/// <summary>
 	/// The type of this ItemStack.
@@ -22,9 +22,11 @@ public class ItemStack
 	public void AddItemToStack(Item item)
 	{
 		if (Items == null)
-			Items = new HashSet<Item> ();
+			Items = new List<Item> ();
 
-		Items.Add (item);
+		//Check to see if this ItemStack is the same IType as the Item we are trying to add.
+		if (this.Type == item.Type)
+			Items.Add (item);
 	}
 
 	/// <summary>
