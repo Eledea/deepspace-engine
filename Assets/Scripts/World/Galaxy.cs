@@ -55,7 +55,7 @@ public class Galaxy
 	/// </summary>
 	void CreatePlayer(SolarSystem mySolarSystem)
 	{
-		//TODO: Move player creation to a centralised class.
+		//TODO: Move player creation to a centralised class?
 
 		Player p = new Player();
 		p.Name = "Sam";
@@ -74,7 +74,7 @@ public class Galaxy
 
 		w.MoveToStack (s);
 
-		//Now we have to add this to this Player's data class.
+		//Now we have to add this to this Player's Inventory.
 		p.AddItemStackAt (s, 0, 0);
 	}
 

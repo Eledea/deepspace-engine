@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Unity-side class for controlling a player ingame.
+/// Unity-side class for controlling a player's movement ingame.
 /// </summary>
-public class PlayerController : MonoBehaviour
+public class MovementController : MonoBehaviour
 {
 	//For now, let's only work in terms of single-player.
 
@@ -13,18 +13,13 @@ public class PlayerController : MonoBehaviour
 	public Player Player { get; set;}
 
 	bool DampenersOn = true;
-	bool InventoryOpen = false;
 
 	Vector3 rotateTo;
 
 	void Update()
 	{
-		//TODO: Split this function into multiple seperate functions.
-
 		Update_PlayerMovement ();
 		Update_PlayerRotation ();
-
-		Update_Inventory ();
 	}
 
 	void Update_PlayerMovement()
@@ -72,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
 		Player.Velocity += acceleration;
 
-		//Debug.Log (Player.Velocity);
+		Debug.Log (Player.Velocity);
 		//Update our position in our data.
 		Player.UpdatePosition ();
 	}
@@ -91,16 +86,7 @@ public class PlayerController : MonoBehaviour
 
 	float CalculateDeceleration(float velocity)
 	{
-		if (velocity != 0)
-		{
-			//TODO: Figure out why this log function returns NaN??
-
-			return Mathf.Log (velocity, 2) + 6;
-		}
-		else
-		{
-			return 0;
-		}
+		//TODO: Add a function to return deceleration. 
 	}
 
 	void Update_PlayerRotation()
@@ -113,20 +99,5 @@ public class PlayerController : MonoBehaviour
 
 		//Update the rotation in our data class.
 		Player.Rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler (rotateTo.y, rotateTo.x, rotateTo.z), 30f * Time.deltaTime);
-	}
-
-	void Update_Inventory()
-	{
-		if (Input.GetKeyDown (KeyCode.F))
-		{
-			if (InventoryOpen == false)
-				InventoryOpen = true;
-			else
-				InventoryOpen = false;
-		}
-
-		//TODO: Add an InventoryController class to do this???
-
-		//TODO: Add an Interface to allow Player interaction Inventories.
 	}
 }

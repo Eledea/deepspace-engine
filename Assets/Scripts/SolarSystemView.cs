@@ -69,7 +69,7 @@ public class SolarSystemView : MonoBehaviour
 		go.transform.position = player.Position;
 
 		playerGameObjectMap [player] = go;
-		go.GetComponent<PlayerController>().Player = player;
+		go.GetComponent<MovementController>().Player = player;
 	}
 
 	void Update()

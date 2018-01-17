@@ -21,16 +21,16 @@ public class Inventory
 	//how many of an item we have in each slot.
 
 	/// <summary>
-	/// The Inventory of this Player.
+	/// The Inventory of this Inventory.
 	/// </summary>
-	public ItemStack[,] Inventory_ { get; set; }
+	public ItemStack[,] Inv { get; set; }
 
 	/// <summary>
 	/// Adds an ItemStack at this array position.
 	/// </summary>
 	public void AddItemStackAt(ItemStack s, int x, int y)
 	{
-		Inventory_ [x, y] = s;
+		Inv [x, y] = s;
 	}
 
 	/// <summary>
@@ -38,7 +38,7 @@ public class Inventory
 	/// </summary>
 	public void RemoveItemStackFrom(int x, int y)
 	{
-		Inventory_ [x, y] = null;
+		Inv [x, y] = null;
 	}
 
 	/// <summary>
@@ -46,7 +46,7 @@ public class Inventory
 	/// </summary>
 	public ItemStack GetItemStackAt(int x, int y)
 	{
-		return Inventory_ [x, y];
+		return Inv [x, y];
 	}
 
 	/// <summary>
@@ -54,15 +54,10 @@ public class Inventory
 	/// </summary>
 	public void MoveItemStackTo(int x, int y, Inventory inventory, int a, int b)
 	{
-		if (Inventory_ [x, y] != null)
+		if (Inv [x, y] != null)
 		{
 			inventory.AddItemStackAt (GetItemStackAt (x, y), a, b);
 			this.RemoveItemStackFrom (x, y);
-		}
-		else
-		{
-			Debug.LogError ("ERROR: No ItemStack at this array position!");
-			return;
 		}
 	}
 
@@ -78,11 +73,11 @@ public class Inventory
 
 		ItemStack newItemStack = new ItemStack ();
 		for (int i = 0; i < numberPerStack; i++)
-			stackToSplit.Items [i].MoveToStack (newItemStack);
+			stackToSplit.Items [numberPerStack + i].MoveToStack (newItemStack);
 
 		//Now remove the Items from our existing stack.
 		for (int j = 0; j < numberPerStack; j++)
-			stackToSplit.RemoveItemFromStack(stackToSplit.Items[j]);
+			stackToSplit.RemoveItemFromStack(stackToSplit.Items[numberPerStack + j]);
 
 		return newItemStack;
 	}
