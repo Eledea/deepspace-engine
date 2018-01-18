@@ -50,7 +50,7 @@ public class MovementController : MonoBehaviour
 
 		//We need to factor in any deceleration that might be happening this frame.
 		//Does this player have their dampeners on?
-		if (DampenersOn)
+		if (DampenersOn && Player.Velocity.magnitude != 0)
 		{
 			if (acceleration.x == 0)
 				acceleration.x -= Deceleration (Player.Velocity.x);
@@ -63,17 +63,15 @@ public class MovementController : MonoBehaviour
 		//Scale and update our velocity.
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
 
-		Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
+		//Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
 		//Update our position in our data.
 		Player.UpdatePosition ();
 	}
 
 	private float Deceleration(float velocity)
 	{
-		if (velocity > 0)
-			return Mathf.Clamp(Mathf.Abs(velocity), 0f, 1f);
-		else if (velocity < 0)
-			return -Mathf.Clamp(Mathf.Abs(velocity), 0f, 1f);
+		if (velocity != 0)
+			return Mathf.Clamp(velocity, -1f, 1f);
 		else
 			return 0;
 	}

@@ -91,6 +91,8 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void UpdateGameObjectForOrbital (Orbital orbital)
 	{
+		//TODO: Right now this function does nothing. Later we'll use it for Dynamic Rendering.
+
 		GameObject go = orbitalGameObjectMap [orbital];
 
 		for (int i = 0; i < orbital.Children.Count; i++)

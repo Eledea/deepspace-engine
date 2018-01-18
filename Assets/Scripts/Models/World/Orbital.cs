@@ -7,11 +7,6 @@ using UnityEngine;
 /// </summary>
 public class Orbital
 {
-	public Orbital()
-	{
-		Children = new List<Orbital> ();
-	}
-
 	/// <summary>
 	/// The parent Orbital of this Orbital.
 	/// </summary>
@@ -33,11 +28,6 @@ public class Orbital
 	public UInt64 OrbitalDistance { get; set; }
 
 	/// <summary>
-	/// The zoom level to apply when returning the position of this Orbital.
-	/// </summary>
-	private ulong zoomLevel = 1000; //1 Unity unit = 1000m
-
-	/// <summary>
 	/// Returns the world-space position of this Orbital.
 	/// </summary>
 	public Vector3 Position
@@ -45,9 +35,9 @@ public class Orbital
 		get
 		{
 			Vector3 Position = new Vector3 (
-				Mathf.Sin (OrbitalAngle) * (OrbitalDistance / zoomLevel),
+				Mathf.Sin (OrbitalAngle) * (OrbitalDistance / 1000),
 				0,
-				-Mathf.Cos (OrbitalAngle) * (OrbitalDistance / zoomLevel)
+				-Mathf.Cos (OrbitalAngle) * (OrbitalDistance / 1000)
 			);
 
 			if (Parent != null)
@@ -62,8 +52,11 @@ public class Orbital
 	/// </summary>
 	public void AddChild(Orbital child)
 	{
-		child.Parent = this;
+		if (Children == null)
+			Children = new List<Orbital> ();
+		
 		Children.Add (child);
+		child.Parent = this;
 	}
 
 	/// <summary>
@@ -71,7 +64,9 @@ public class Orbital
 	/// </summary>
 	public void RemoveChild(Orbital child)
 	{
+		if (Children != null)
+			Children.Remove (child);
+
 		child.Parent = null;
-		Children.Remove (child);
 	}
 }
