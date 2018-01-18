@@ -56,8 +56,9 @@ public class SolarSystemView : MonoBehaviour
 
 		orbitalGameObjectMap [orbital] = go;
 
-		for (int i = 0; i < orbital.Children.Count; i++)
-			SpawnGameObjectForOrbital (orbital.Children[i], go.transform);
+		if (orbital.Children != null)
+			for (int i = 0; i < orbital.Children.Count; i++)
+				SpawnGameObjectForOrbital (orbital.Children[i], go.transform);
 	}
 
 	/// <summary>
@@ -95,8 +96,9 @@ public class SolarSystemView : MonoBehaviour
 
 		GameObject go = orbitalGameObjectMap [orbital];
 
-		for (int i = 0; i < orbital.Children.Count; i++)
-			UpdateGameObjectForOrbital (orbital.Children[i]);
+		if (orbital.Children != null)
+			for (int i = 0; i < orbital.Children.Count; i++)
+				UpdateGameObjectForOrbital (orbital.Children[i]);
 	}
 
 	/// <summary>
