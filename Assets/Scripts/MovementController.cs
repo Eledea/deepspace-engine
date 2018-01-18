@@ -71,9 +71,9 @@ public class MovementController : MonoBehaviour
 	private float Deceleration(float velocity)
 	{
 		if (velocity > 0)
-			return Mathf.Clamp(Mathf.Sqrt (Mathf.Abs(velocity)), 0f, 1f);
+			return Mathf.Clamp(Mathf.Abs(velocity), 0f, 1f);
 		else if (velocity < 0)
-			return -Mathf.Clamp(Mathf.Sqrt (Mathf.Abs(velocity)), 0f, 1f);
+			return -Mathf.Clamp(Mathf.Abs(velocity), 0f, 1f);
 		else
 			return 0;
 	}
