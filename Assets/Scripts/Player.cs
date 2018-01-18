@@ -21,12 +21,12 @@ public class Player : Inventory
 	public SolarSystem SolarSystem { get; set; }
 
 	/// <summary>
-	/// The world-space position of this Player in it's SolarSystem.
+	/// The Position of this Player from the map center in meters on each axis.
 	/// </summary>
 	public Vector3 Position { get; set; }
 
 	/// <summary>
-	/// The Velocity of this Player.
+	/// The Velocity of this Player in meters per second on each axis.
 	/// </summary>
 	public Vector3 Velocity { get; set;}
 
@@ -46,13 +46,21 @@ public class Player : Inventory
 	public float Oxygen { get; set; }
 
 	/// <summary>
+	/// Returns the world-space position of this Player.
+	/// </summary>
+	public Vector3 WorldPosition
+	{
+		get
+		{
+			return Position / 1000f;
+		}
+	}
+
+	/// <summary>
 	/// Updates the Position for this Player.
 	/// </summary>
 	public void UpdatePosition()
 	{
-		if (float.IsNaN(Velocity.x))
-			return;
-		
-		Position += (Velocity * Time.deltaTime) / 1000;
+		Position += (Velocity * Time.deltaTime);
 	}
 }

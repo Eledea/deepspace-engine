@@ -60,7 +60,7 @@ public class Galaxy
 		Player p = new Player();
 		p.Name = "Sam";
 		p.SolarSystem = mySolarSystem;
-		p.Position = new Vector3(50, 0, 50);
+		p.Position = new Vector3(50000, 0, 50000);
 		p.Rotation = Quaternion.Euler (0, 0, 0);
 		p.Health = 100;
 		p.Oxygen = 100;

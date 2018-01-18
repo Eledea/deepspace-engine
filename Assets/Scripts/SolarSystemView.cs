@@ -66,7 +66,7 @@ public class SolarSystemView : MonoBehaviour
 	void SpawnGameObjectForPlayer(Player player)
 	{
 		GameObject go = (GameObject)Instantiate (gameObjects [1]);
-		go.transform.position = player.Position;
+		go.transform.position = player.WorldPosition;
 
 		playerGameObjectMap [player] = go;
 		go.GetComponent<MovementController>().Player = player;
@@ -103,7 +103,7 @@ public class SolarSystemView : MonoBehaviour
 	void UpdateGameObjectForPlayer(Player player)
 	{
 		GameObject go = playerGameObjectMap [player];
-		go.transform.position = player.Position;
+		go.transform.position = player.WorldPosition;
 		go.transform.rotation = player.Rotation;
 	}
 }
