@@ -15,14 +15,16 @@ public class MovementController : MonoBehaviour
 
 	void Update()
 	{
+		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
+
+		Update_PlayerDampeners ();
+
 		Update_PlayerMovement ();
 		Update_PlayerRotation ();
 	}
 
-	void Update_PlayerMovement()
+	void Update_PlayerDampeners()
 	{
-		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
-
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
 			if (DampenersOn == true)
@@ -30,7 +32,10 @@ public class MovementController : MonoBehaviour
 			else
 				DampenersOn = true;
 		}
+	}
 
+	void Update_PlayerMovement()
+	{
 		//Store changes to velocity this frame here.
 		Vector3 acceleration = Vector3.zero;
 
@@ -50,30 +55,25 @@ public class MovementController : MonoBehaviour
 
 		//We need to factor in any deceleration that might be happening this frame.
 		//Does this player have their dampeners on?
-		if (DampenersOn && Player.Velocity.magnitude != 0)
+		if (DampenersOn)
 		{
-			if (acceleration.x == 0)
-				acceleration.x -= Deceleration (Player.Velocity.x);
-			if (acceleration.y == 0)
-				acceleration.y -= Deceleration (Player.Velocity.y);
-			if (acceleration.z == 0)
-				acceleration.z -= Deceleration (Player.Velocity.z);
+			if (Player.Velocity.magnitude != 0)
+			{
+				if (acceleration.x == 0)
+					acceleration.x -= Mathf.Clamp(Player.Velocity.x, -1f, 1f);
+				if (acceleration.y == 0)
+					acceleration.y -= Mathf.Clamp(Player.Velocity.y, -1f, 1f);
+				if (acceleration.z == 0)
+					acceleration.z -= Mathf.Clamp(Player.Velocity.z, -1f, 1f);
+			}
 		}
 
 		//Scale and update our velocity.
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
 
-		//Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
+		Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
 		//Update our position in our data.
 		Player.UpdatePosition ();
-	}
-
-	private float Deceleration(float velocity)
-	{
-		if (velocity != 0)
-			return Mathf.Clamp(velocity, -1f, 1f);
-		else
-			return 0;
 	}
 
 	void Update_PlayerRotation()

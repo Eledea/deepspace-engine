@@ -55,12 +55,12 @@ public class Galaxy
 	/// </summary>
 	void CreatePlayer(SolarSystem mySolarSystem)
 	{
-		//TODO: Move player creation to a centralised class?
+		//TODO: Move player creation to a seperate class?
 
 		Player p = new Player();
 		p.Name = "Sam";
 		p.SolarSystem = mySolarSystem;
-		p.Position = new Vector3(50000, 0, 50000);
+		p.Position = new Vector3 (50000, 0, 50000);
 		p.Rotation = Quaternion.Euler (0, 0, 0);
 		p.Health = 100;
 		p.Oxygen = 100;
