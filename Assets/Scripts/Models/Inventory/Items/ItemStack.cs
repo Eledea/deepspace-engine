@@ -7,9 +7,14 @@ using UnityEngine;
 public class ItemStack
 {
 	/// <summary>
-	/// The Items in this stack.
+	/// The number of items currently held by this ItemStack.
 	/// </summary>
-	public List<Item> Items { get; set; }
+	public int StackedItems { get; set; }
+
+	/// <summary>
+	/// The maximum number of items that this ItemStack can hold.
+	/// </summary>
+	public int MaxItems { get; set; }
 
 	/// <summary>
 	/// The type of this ItemStack.
@@ -41,22 +46,18 @@ public class ItemStack
 	/// <summary>
 	/// Adds an item to this ItemStack.
 	/// </summary>
-	public void AddItemToStack(Item item)
+	public void AddItemsToStack(int n)
 	{
-		if (Items == null)
-			Items = new List<Item> ();
-
-		//Check to see if this ItemStack is the same IType as the Item we are trying to add.
-		if (this.IType == item.Type)
-			Items.Add (item);
+		for (int i = 0; i < n; i++)
+			StackedItems++;
 	}
 
 	/// <summary>
 	/// Removes an item from this ItemStack.
 	/// </summary>
-	public void RemoveItemFromStack(Item item)
+	public void RemoveItemsFromStack(int n)
 	{
-		if (Items != null)
-			Items.Remove (item);
+		for (int i = 0; i < n; i++)
+			StackedItems--;
 	}
 }

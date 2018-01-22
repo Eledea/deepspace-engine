@@ -87,25 +87,4 @@ public class Inventory
 			this.RemoveItemStackFrom (x, y);
 		}
 	}
-
-	/// <summary>
-	/// Splits an ItemStack into 2 ItemStacks
-	/// </summary>
-	public ItemStack SplitStack(int x, int y)
-	{
-		ItemStack stackToSplit = GetItemStackAt (x, y);
-		int numberPerStack = stackToSplit.Items.Count / 2;
-
-		//TODO: Make this work with odd numbers.
-
-		ItemStack newItemStack = new ItemStack ();
-		for (int i = 0; i < numberPerStack; i++)
-			stackToSplit.Items [numberPerStack + i].MoveToStack (newItemStack);
-
-		//Now remove the Items from our existing stack.
-		for (int j = 0; j < numberPerStack; j++)
-			stackToSplit.RemoveItemFromStack(stackToSplit.Items[numberPerStack + j]);
-
-		return newItemStack;
-	}
 }

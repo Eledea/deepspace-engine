@@ -67,15 +67,11 @@ public class Galaxy
 
 		Players.Add (p);
 
-		//Add 1 Wood Item to this player's Inventory.
-		//First create the Item and add it to an ItemStack.
-		Wood w = new Wood ();
-		ItemStack s = new ItemStack ();
-
-		w.MoveToStack (s);
+		//Make a new ItemStack of Wood...
+		WoodStack w = new WoodStack(5);
 
 		//Now add this to this Player's Inventory.
-		p.AddItemStackAt (s, 0, 0);
+		p.AddItemStackAt (w, 0, 0);
 	}
 
 	/// <summary>

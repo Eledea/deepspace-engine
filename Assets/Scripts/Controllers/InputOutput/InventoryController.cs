@@ -110,6 +110,8 @@ public class InventoryController : MonoBehaviour
 					UpdateItemStack(Player.GetItemStackAt(x, y), IndexToWorldSpacePosition (x, y, 50, 200, 200));
 					Debug.Log ("At " + x + "," + y + " there is an ItemStack containing: " + Player.GetItemStackAt(x, y).ITypeName);
 				}
+
+				//What about for ItemStacks that are no longer part of this inventory?
 			}
 		}
 	}
@@ -131,6 +133,7 @@ public class InventoryController : MonoBehaviour
 			Image image = myImage.AddComponent<Image> ();
 			image.sprite = Sprites [0];
 			image.rectTransform.sizeDelta = new Vector2 (50, 50);
+			image.rectTransform.localScale = new Vector3 (1, 1, 1);
 		}
 	}
 
@@ -150,6 +153,6 @@ public class InventoryController : MonoBehaviour
 
 		Vector2 offsetFromOrigin = new Vector2 ((x * s) + (s / 2), (y * s) + (s / 2));
 
-		return new Vector3(offsetFromOrigin.x - centerOfThisInventory.x, 0, offsetFromOrigin.y - centerOfThisInventory.y);
+		return new Vector3(offsetFromOrigin.x - centerOfThisInventory.x, offsetFromOrigin.y - centerOfThisInventory.y, 0);
 	}
 }
