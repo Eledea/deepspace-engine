@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// The central core of the game. Responsible for managing server side operations that
@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
 	/// </summary>
 	public void NewGalaxy(string fileName)
 	{
-		//TODO: Move these functions to a seperate class fr managing the world.
+		//TODO: Move these functions to a seperate class for managing the world.
 
 		this.Galaxy = new Galaxy ();
 

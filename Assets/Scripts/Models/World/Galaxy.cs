@@ -74,7 +74,7 @@ public class Galaxy
 
 		w.MoveToStack (s);
 
-		//Now we have to add this to this Player's Inventory.
+		//Now add this to this Player's Inventory.
 		p.AddItemStackAt (s, 0, 0);
 	}
 

@@ -23,7 +23,23 @@ public class Inventory
 	/// <summary>
 	/// The Inventory of this Inventory.
 	/// </summary>
-	public ItemStack[,] Inv { get; set; }
+	protected ItemStack[,] Inv { get; set; }
+
+	public int InvSize_x
+	{
+		get
+		{
+			return Inv.GetLength (0);
+		}
+	}
+
+	public int InvSize_y
+	{
+		get
+		{
+			return Inv.GetLength (1);
+		}
+	}
 
 	/// <summary>
 	/// Adds an ItemStack at this array position.
@@ -39,6 +55,17 @@ public class Inventory
 	public void RemoveItemStackFrom(int x, int y)
 	{
 		Inv [x, y] = null;
+	}
+
+	/// <summary>
+	/// Determines whether this instance contains an ItemStack at the specified array index.
+	/// </summary>
+	public bool IsItemStackAt(int x, int y)
+	{
+		if (GetItemStackAt (x, y) != null)
+			return true;
+		else
+			return false;
 	}
 
 	/// <summary>

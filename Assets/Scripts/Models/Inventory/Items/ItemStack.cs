@@ -14,7 +14,29 @@ public class ItemStack
 	/// <summary>
 	/// The type of this ItemStack.
 	/// </summary>
-	public IType Type { get; set; }
+	public IType IType { get; set; }
+
+	/// <summary>
+	/// Returns the Type name of this ItemStack.
+	/// </summary>
+	public string ITypeName
+	{
+		get
+		{
+			return IType.ToString ();
+		}
+	}
+
+	/// <summary>
+	/// Returns the Type integer of this ItemStack.
+	/// </summary>
+	public int ITypeInt
+	{
+		get
+		{
+			return (int)IType;
+		}
+	}
 
 	/// <summary>
 	/// Adds an item to this ItemStack.
@@ -25,7 +47,7 @@ public class ItemStack
 			Items = new List<Item> ();
 
 		//Check to see if this ItemStack is the same IType as the Item we are trying to add.
-		if (this.Type == item.Type)
+		if (this.IType == item.Type)
 			Items.Add (item);
 	}
 

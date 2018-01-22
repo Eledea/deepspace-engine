@@ -107,6 +107,8 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void UpdateGameObjectForPlayer(Player player)
 	{
+		//TODO: Consider calling this function with an event if our Player position changes rather than every iteration?
+
 		GameObject go = playerGameObjectMap [player];
 		go.transform.position = player.WorldPosition;
 		go.transform.rotation = player.Rotation;
