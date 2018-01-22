@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The Inventory class defines an Inventory.
+/// The Inventory class defines an Inventory of an Entity.
 /// </summary>
-public class Inventory
+public class Inventory : Entity
 {
 	//What is the best way of storing the data for Items in an Inventory???
 	//We have a few options...
