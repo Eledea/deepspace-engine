@@ -71,7 +71,7 @@ public class MovementController : MonoBehaviour
 		//Scale and update our velocity.
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
 
-		Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
+		//Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
 		//Update our position in our data.
 		Player.UpdatePosition ();
 	}

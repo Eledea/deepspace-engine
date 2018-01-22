@@ -48,8 +48,6 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForOrbital(Orbital orbital, Transform parent)
 	{
-		//TODO: Make prefab spawning not hardcoded.
-
 		GameObject go = (GameObject)Instantiate (gameObjects[0]);
 		go.transform.position = orbital.Position;
 		go.transform.parent = parent;
@@ -95,11 +93,11 @@ public class SolarSystemView : MonoBehaviour
 	{
 		//TODO: Right now this function does nothing. Later we'll use it for Dynamic Rendering.
 
-		GameObject go = orbitalGameObjectMap [orbital];
+		/*GameObject go = orbitalGameObjectMap [orbital];
 
 		if (orbital.Children != null)
 			for (int i = 0; i < orbital.Children.Count; i++)
-				UpdateGameObjectForOrbital (orbital.Children[i]);
+				UpdateGameObjectForOrbital (orbital.Children[i]);*/
 	}
 
 	/// <summary>

@@ -55,7 +55,7 @@ public class Galaxy
 	/// </summary>
 	void CreatePlayer(SolarSystem mySolarSystem)
 	{
-		//TODO: Move player creation to a seperate class?
+		//TODO: Move player creation to a PlayerManager class.
 
 		Player p = new Player();
 		p.Name = "Sam";

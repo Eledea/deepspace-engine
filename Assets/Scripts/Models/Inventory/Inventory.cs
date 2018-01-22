@@ -25,6 +25,9 @@ public class Inventory
 	/// </summary>
 	protected ItemStack[,] Inv { get; set; }
 
+	/// <summary>
+	/// Returns the length of the x axis of this Inventory.
+	/// </summary>
 	public int InvSize_x
 	{
 		get
@@ -33,6 +36,9 @@ public class Inventory
 		}
 	}
 
+	/// <summary>
+	/// Returns the length of the y axis of this Inventory.
+	/// </summary>
 	public int InvSize_y
 	{
 		get

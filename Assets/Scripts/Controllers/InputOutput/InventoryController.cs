@@ -44,7 +44,7 @@ public class InventoryController : MonoBehaviour
 
 	void Update_OverlayController()
 	{
-		//TODO: Consider if it is more effecient to remove our ItemStack images each time a Player closes
+		//TODO: Consider if it is more efficient to remove our ItemStack images each time a Player closes
 		//their inventory or if it is better to just keep them and turn the SpriteRenderers off.
 
 		if (Input.GetKeyDown (KeyCode.I))
@@ -107,44 +107,41 @@ public class InventoryController : MonoBehaviour
 				//How do we get the canvas position from our array?
 				if (Player.IsItemStackAt(x, y))
 				{
-					UpdateItemStack(Player.GetItemStackAt(x, y), IndexToWorldSpacePosition (x, y, 50, 200, 200));
-					Debug.Log ("At " + x + "," + y + " there is an ItemStack containing: " + Player.GetItemStackAt(x, y).ITypeName);
+					UpdateItemStackGraphic(Player.GetItemStackAt(x, y), IndexToWorldSpacePosition (x, y, 50, 200, 200));
+					//Debug.Log ("At " + x + "," + y + " there is an ItemStack containing: " + Player.GetItemStackAt(x, y).ITypeName);
 				}
 
-				//What about for ItemStacks that are no longer part of this inventory?
+				//TODO: What about for ItemStacks that are no longer part of this inventory?
 			}
 		}
 	}
 
-	void UpdateItemStack(ItemStack s, Vector3 position)
+	/// <summary>
+	/// Updates the GameObject for an ItemStack.
+	/// </summary>
+	void UpdateItemStackGraphic(ItemStack s, Vector3 position)
 	{
 		//Do we already have a GameObject spawned for this Inventory item?
 		if (!itemstackGameObjectMap.ContainsKey (s))
 		{
 			//Spawn a new image.
-			GameObject myImage = new GameObject ();
-			itemstackGameObjectMap [s] = myImage;
-			myImage.transform.parent = inventorySlots.transform;
+			GameObject newGraphic = new GameObject ();
+			itemstackGameObjectMap [s] = newGraphic;
+			newGraphic.transform.parent = inventorySlots.transform;
 
-			//TODO: Add a function to find the world-space position of an image from an array position.
-			myImage.transform.localPosition = position;
-
-			//TODO: We should be using the correct texture for each Item.
-			Image image = myImage.AddComponent<Image> ();
+			Image image = newGraphic.AddComponent<Image> ();
 			image.sprite = Sprites [0];
 			image.rectTransform.sizeDelta = new Vector2 (50, 50);
 			image.rectTransform.localScale = new Vector3 (1, 1, 1);
 		}
+
+		GameObject myGraphic = itemstackGameObjectMap [s];
+		myGraphic.transform.localPosition = position;
 	}
 
 	/// <summary>
 	/// Returns a world space position from an array index.
 	/// </summary>
-	/// <param name="x">The x coordinate of the array index.</param>
-	/// <param name="y">The y coordinate of the array index.</param>
-	/// <param name="s">The size of each tile in UI Units.</param>
-	/// <param name="a">The width of the Inventory interface in UI Units.</param>
-	/// <param name="b">The height of the Inventory interface in UI Units.</param>
 	Vector3 IndexToWorldSpacePosition(int x, int y, int s, int a, int b)
 	{
 		//TODO: Consider moving this helper function to a Utilities class?
