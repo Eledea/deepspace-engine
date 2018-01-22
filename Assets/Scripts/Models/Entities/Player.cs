@@ -52,6 +52,7 @@ public class Player : Inventory
 	{
 		get
 		{
+			//TODO: Store position as 64-bit number to avoid floating-point drift?
 			return Position / 1000f;
 		}
 	}
