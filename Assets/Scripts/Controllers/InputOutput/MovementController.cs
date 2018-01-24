@@ -5,10 +5,17 @@
 /// </summary>
 public class MovementController : MonoBehaviour
 {
+	void OnEnable()
+	{
+		invCtrl = this.transform.GetComponent<InventoryController> ();
+	}
+
 	/// <summary>
 	/// The Player data class that this controller is linked to.
 	/// </summary>
 	public Player Player { get; set;}
+
+	InventoryController invCtrl;
 
 	private bool DampenersOn = true;
 	Vector3 rotateTo;
@@ -17,10 +24,13 @@ public class MovementController : MonoBehaviour
 	{
 		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
 
-		Update_PlayerDampeners ();
+		if (invCtrl.IsControllable)
+		{
+			Update_PlayerDampeners ();
 
-		Update_PlayerMovement ();
-		Update_PlayerRotation ();
+			Update_PlayerMovement ();
+			Update_PlayerRotation ();
+		}
 	}
 
 	void Update_PlayerDampeners()

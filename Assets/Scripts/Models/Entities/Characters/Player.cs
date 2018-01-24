@@ -7,7 +7,7 @@ public class Player : Inventory
 {
 	public Player()
 	{
-		Inv = new ItemStack [3,3];
+		Inv = new ItemStack [4,4];
 	}
 
 	/// <summary>

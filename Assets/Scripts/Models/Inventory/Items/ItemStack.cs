@@ -22,6 +22,17 @@ public class ItemStack
 	public IType IType { get; set; }
 
 	/// <summary>
+	/// Gets the number of Items in this ItemStack.
+	/// </summary>
+	public string ItemCount
+	{
+		get
+		{
+			return StackedItems.ToString ();
+		}
+	}
+
+	/// <summary>
 	/// Returns the Type name of this ItemStack.
 	/// </summary>
 	public string ITypeName

@@ -3,6 +3,7 @@
 /// </summary>
 public enum IType
 {
+	Empty,
 	Wood,
 	Stone
 }

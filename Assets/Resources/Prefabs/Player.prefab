@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 222811534615921702}
   - component: {fileID: 114535390684007026}
   m_Layer: 0
-  m_Name: InventorySlots
+  m_Name: InventoryUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,8 +226,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b132c4f62f8c9224ca99ae3e8be6ab0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Graphic: {fileID: 1332646433362564, guid: 9c16519afd212b94394245980b681c46, type: 2}
   Sprites:
   - {fileID: 21300000, guid: 3a8f297de3da4dc459fca9b06b111d42, type: 3}
+  graphicSize: 50
 --- !u!114 &114402469331149944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 7cccdc8dd6656734d84b3e66702e86b7, type: 2}
+  m_Material: {fileID: 2100000, guid: d6ccf86c32be3ee4bb183d7ac16bde45, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
