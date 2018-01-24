@@ -52,7 +52,8 @@ public class Inventory : Entity
 	/// </summary>
 	public void AddItemStackAt(ItemStack s, int x, int y)
 	{
-		Inv [x, y] = s;
+		if (Inv [x, y] == null)
+			Inv [x, y] = s;
 	}
 
 	/// <summary>

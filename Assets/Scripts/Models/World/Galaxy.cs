@@ -68,10 +68,12 @@ public class Galaxy
 		Players.Add (p);
 
 		//Make a new ItemStack of Wood...
-		WoodStack w = new WoodStack(5);
+		WoodStack w = new WoodStack (5);
+		StoneStack s = new StoneStack (11);
 
 		//Now add this to this Player's Inventory.
 		p.AddItemStackAt (w, 0, 0);
+		p.AddItemStackAt (s, 2, 3);
 	}
 
 	/// <summary>

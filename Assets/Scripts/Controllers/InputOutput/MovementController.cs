@@ -15,9 +15,10 @@ public class MovementController : MonoBehaviour
 	/// </summary>
 	public Player Player { get; set;}
 
-	InventoryController invCtrl;
+	static InventoryController invCtrl;
 
-	private bool DampenersOn = true;
+	bool DampenersOn = true;
+	Vector3 acceleration;
 	Vector3 rotateTo;
 
 	void Update()
@@ -26,14 +27,15 @@ public class MovementController : MonoBehaviour
 
 		if (invCtrl.IsControllable)
 		{
-			Update_PlayerDampeners ();
+			Update_DampenersController ();
 
-			Update_PlayerMovement ();
 			Update_PlayerRotation ();
 		}
+
+		Update_PlayerMovement ();
 	}
 
-	void Update_PlayerDampeners()
+	void Update_DampenersController()
 	{
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
@@ -42,26 +44,29 @@ public class MovementController : MonoBehaviour
 			else
 				DampenersOn = true;
 		}
-	}
+	} 
 
 	void Update_PlayerMovement()
 	{
 		//Store changes to velocity this frame here.
-		Vector3 acceleration = Vector3.zero;
+		acceleration = Vector3.zero;
 
 		//For now, we'll use hardcoded inputs in 6 directions.
-		if (Input.GetKey(KeyCode.W))
-			acceleration += this.transform.forward;
-		if (Input.GetKey(KeyCode.S))
-			acceleration -= this.transform.forward;
-		if (Input.GetKey(KeyCode.D))
-			acceleration += this.transform.right;
-		if (Input.GetKey(KeyCode.A))
-			acceleration -= this.transform.right;
-		if (Input.GetKey(KeyCode.Space))
-			acceleration += this.transform.up;
-		if (Input.GetKey(KeyCode.LeftControl))
-			acceleration -= this.transform.up;
+		if (invCtrl.IsControllable)
+		{
+			if (Input.GetKey(KeyCode.W))
+				acceleration += this.transform.forward;
+			if (Input.GetKey(KeyCode.S))
+				acceleration -= this.transform.forward;
+			if (Input.GetKey(KeyCode.D))
+				acceleration += this.transform.right;
+			if (Input.GetKey(KeyCode.A))
+				acceleration -= this.transform.right;
+			if (Input.GetKey(KeyCode.Space))
+				acceleration += this.transform.up;
+			if (Input.GetKey(KeyCode.LeftControl))
+				acceleration -= this.transform.up;
+		}
 
 		//We need to factor in any deceleration that might be happening this frame.
 		//Does this player have their dampeners on?
@@ -89,7 +94,7 @@ public class MovementController : MonoBehaviour
 	void Update_PlayerRotation()
 	{
 		//TODO: Fix rotation when "upside-down".
-
+	
 		//Find the difference between the mouse position this frame and last.
 		Vector2 diffMouse = new Vector2 (Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 		rotateTo += new Vector3 (diffMouse.x * 5f, -diffMouse.y * 5f, rotateTo.z);

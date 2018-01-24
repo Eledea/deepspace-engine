@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 4708427413968722}
   - component: {fileID: 114402469331149944}
   - component: {fileID: 114018156044383314}
+  - component: {fileID: 114828865867804728}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -226,10 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b132c4f62f8c9224ca99ae3e8be6ab0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Graphic: {fileID: 1332646433362564, guid: 9c16519afd212b94394245980b681c46, type: 2}
-  Sprites:
-  - {fileID: 21300000, guid: 3a8f297de3da4dc459fca9b06b111d42, type: 3}
-  graphicSize: 50
+  showingInventoryOverlay: 0
 --- !u!114 &114402469331149944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -305,6 +303,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114828865867804728
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1089692713121096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 058f4028ed243264580c1d8e65f0e180, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Graphic: {fileID: 1485198997241770, guid: 0850c9316ff274c49b694a4d4ed72471, type: 2}
+  Sprites:
+  - {fileID: 21300000, guid: 3a8f297de3da4dc459fca9b06b111d42, type: 3}
+  - {fileID: 21300000, guid: 8244f224d518ea941aba5bcfffad7c1d, type: 3}
+  graphicSize: 50
 --- !u!136 &136030842309383790
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -59,8 +59,7 @@ public class ItemStack
 	/// </summary>
 	public void AddItemsToStack(int n)
 	{
-		for (int i = 0; i < n; i++)
-			StackedItems++;
+		StackedItems += n;
 	}
 
 	/// <summary>
@@ -68,7 +67,6 @@ public class ItemStack
 	/// </summary>
 	public void RemoveItemsFromStack(int n)
 	{
-		for (int i = 0; i < n; i++)
-			StackedItems--;
+		StackedItems -= n;
 	}
 }
