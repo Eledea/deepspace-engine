@@ -54,6 +54,9 @@ public class Inventory : Entity
 	{
 		if (Inv [x, y] == null)
 			Inv [x, y] = s;
+
+		s.Inv_x = x;
+		s.Inv_y = y;
 	}
 
 	/// <summary>

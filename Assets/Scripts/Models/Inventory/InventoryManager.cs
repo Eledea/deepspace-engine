@@ -13,6 +13,11 @@ public class InventoryManager : MonoBehaviour
 		Instance = this;
 
 		inventoryToGameObject = new Dictionary<Inventory, GameObject>();
+		gameObjectToInventory = new Dictionary<GameObject, Inventory>();
+
+		//TODO: Move Player data to a seperate static PlayerManager class.
+
+		Players = new List<Player>();
 	}
 		
 	Dictionary<Inventory, GameObject> inventoryToGameObject;
@@ -65,7 +70,7 @@ public class InventoryManager : MonoBehaviour
 	/// <summary>
 	/// Determines whether this Inventory has a GameObject paired with it.
 	/// </summary>
-	public bool IsInventoryAttachedTo(Inventory inv)
+	public bool IsGameObjectAttachedTo(Inventory inv)
 	{
 		if (inventoryToGameObject [inv] != null)
 			return true;
@@ -107,5 +112,19 @@ public class InventoryManager : MonoBehaviour
 	{
 		if (Players != null)
 			Players.Remove (p);
+	}
+
+	/// <summary>
+	/// Updates the ItemStack graphics for players who are using the Inventory system.
+	/// </summary>
+	public void UpdateItemStackGraphicsForPlayers()
+	{
+		foreach (Player p in Players)
+		{
+			//InventoryController instances will not be networked. Therefore, we have to use our data class to call the function to update Inventories.
+
+			if (p.IsUsingInventorySystem)
+				p.InventoryUpdateFlag = true;
+		}
 	}
 }

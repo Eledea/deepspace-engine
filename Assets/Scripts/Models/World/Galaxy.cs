@@ -72,6 +72,8 @@ public class Galaxy
 
 		p.AddItemStackAt (w, 0, 0);
 		p.AddItemStackAt (s, 2, 3);
+
+		InventoryManager.Instance.AddPlayerToManager (p);
 	}
 
 	/// <summary>

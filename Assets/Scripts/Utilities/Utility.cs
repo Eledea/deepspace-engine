@@ -18,7 +18,7 @@ namespace DeepSpace.Utility
 		/// <summary>
 		/// Returns an array index from a world space position.
 		/// </summary>
-		public static Vector2 WorldSpacePositionToIndex(Vector3 position, int s, float a, float b)
+		public static Vector2 WorldSpacePositionToIndex(Vector2 position, int s, float a, float b)
 		{
 			return new Vector2(Mathf.FloorToInt((a * s / 2 + position.x) / s), Mathf.FloorToInt((b * s / 2 + position.y) / s));;
 		}

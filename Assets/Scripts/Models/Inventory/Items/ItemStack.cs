@@ -12,6 +12,16 @@ public class ItemStack
 	public Inventory Inv { get; set; }
 
 	/// <summary>
+	/// The x index of this ItemStack in it's array.
+	/// </summary>
+	public int Inv_x;
+
+	/// <summary>
+	/// The y index of this ItemStack in it's array.
+	/// </summary>
+	public int Inv_y;
+
+	/// <summary>
 	/// The number of items currently held by this ItemStack.
 	/// </summary>
 	public int StackedItems { get; set; }
@@ -25,6 +35,17 @@ public class ItemStack
 	/// The type of this ItemStack.
 	/// </summary>
 	public IType IType { get; set; }
+
+	/// <summary>
+	/// Gets the index of this ItemStack in it's Inventory.
+	/// </summary>
+	public Vector2 InventoryIndex
+	{
+		get
+		{
+			return new Vector2 (Inv_x, Inv_y);
+		}
+	}
 
 	/// <summary>
 	/// Gets the number of Items in this ItemStack.
