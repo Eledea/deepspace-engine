@@ -39,7 +39,7 @@ public class Entity
 		{
 			return Position / 1000f;
 		}
-	}
+	} 
 
 	/// <summary>
 	/// Updates the Position for this Entity.

@@ -7,6 +7,11 @@ using UnityEngine;
 public class ItemStack
 {
 	/// <summary>
+	/// The Inventory this ItemStack is located.
+	/// </summary>
+	public Inventory Inv { get; set; }
+
+	/// <summary>
 	/// The number of items currently held by this ItemStack.
 	/// </summary>
 	public int StackedItems { get; set; }

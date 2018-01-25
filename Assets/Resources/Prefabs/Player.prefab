@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 223510180022771320}
   - component: {fileID: 114517256922907268}
   - component: {fileID: 114561400448789960}
+  - component: {fileID: 114803745985504800}
   m_Layer: 0
   m_Name: InventoryOverlay
   m_TagString: Untagged
@@ -38,8 +39,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4708427413968722}
   - component: {fileID: 114402469331149944}
-  - component: {fileID: 114018156044383314}
-  - component: {fileID: 114828865867804728}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -216,18 +215,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1643807811599650}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114018156044383314
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1089692713121096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b132c4f62f8c9224ca99ae3e8be6ab0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showingInventoryOverlay: 0
 --- !u!114 &114402469331149944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -303,15 +290,15 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114828865867804728
+--- !u!114 &114803745985504800
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1089692713121096}
+  m_GameObject: {fileID: 1046972671338640}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058f4028ed243264580c1d8e65f0e180, type: 3}
+  m_Script: {fileID: 11500000, guid: b132c4f62f8c9224ca99ae3e8be6ab0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Graphic: {fileID: 1485198997241770, guid: 0850c9316ff274c49b694a4d4ed72471, type: 2}

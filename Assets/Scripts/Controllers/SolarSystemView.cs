@@ -69,7 +69,7 @@ public class SolarSystemView : MonoBehaviour
 
 		playerGameObjectMap [player] = go;
 		go.GetComponent<MovementController>().Player = player;
-		go.GetComponent<InventoryController>().Player = player;
+		go.GetComponentInChildren<InventoryController>().Player = player;
 	}
 
 	void Update()

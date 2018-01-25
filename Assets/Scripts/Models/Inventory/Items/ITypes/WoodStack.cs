@@ -5,8 +5,10 @@
 /// </summary>
 public class WoodStack : ItemStack
 {
-	public WoodStack(int n)
+	public WoodStack(Inventory inv, int n)
 	{
+		Inv = inv;
+
 		IType = IType.Wood;
 		MaxItems = 50;
 

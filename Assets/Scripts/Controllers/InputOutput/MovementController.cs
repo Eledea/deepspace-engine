@@ -7,7 +7,7 @@ public class MovementController : MonoBehaviour
 {
 	void OnEnable()
 	{
-		invCtrl = this.transform.GetComponent<InventoryController> ();
+		invCtrl = this.transform.GetComponentInChildren<InventoryController> ();
 	}
 
 	/// <summary>
@@ -15,7 +15,7 @@ public class MovementController : MonoBehaviour
 	/// </summary>
 	public Player Player { get; set;}
 
-	static InventoryController invCtrl;
+	public static InventoryController invCtrl;
 
 	bool DampenersOn = true;
 	Vector3 acceleration;
@@ -96,8 +96,7 @@ public class MovementController : MonoBehaviour
 		//TODO: Fix rotation when "upside-down".
 	
 		//Find the difference between the mouse position this frame and last.
-		Vector2 diffMouse = new Vector2 (Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-		rotateTo += new Vector3 (diffMouse.x * 5f, -diffMouse.y * 5f, rotateTo.z);
+		rotateTo += new Vector3 (Input.GetAxis("Mouse X") * 5f, -Input.GetAxis("Mouse Y") * 5f, rotateTo.z);
 
 		//Update the rotation in our data class.
 		Player.Rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler (rotateTo.y, rotateTo.x, rotateTo.z), 30f * Time.deltaTime);
