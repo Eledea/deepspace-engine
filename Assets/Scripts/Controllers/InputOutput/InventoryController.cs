@@ -1,3 +1,4 @@
+using DeepSpace.InventorySystem;
 using DeepSpace.Utility;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,16 @@ using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
+	public static InventoryController Instance { get; protected set; }
+
 	public GameObject ItemGraphic;
 	public Sprite[] Sprites;
 	public int graphicSize = 50;
 
 	void OnEnable()
 	{
+		Instance = this;
+
 		inventoryUI = this.transform.Find("InventoryUI").gameObject;
 		overlayComponents = inventoryUI.GetComponentsInChildren<Image>();
 	}
@@ -19,17 +24,6 @@ public class InventoryController : MonoBehaviour
 	/// The Player data class that this controller is linked to.
 	/// </summary>
 	public Player Player { get; set; }
-
-	/// <summary>
-	/// Gets a value indicating whether this Player should be able to use controls.
-	/// </summary>
-	public bool IsControllable
-	{
-		get
-		{
-			return !showingInventoryOverlay;
-		}
-	}
 		
 	GameObject inventoryUI;
 	Image[] overlayComponents;
@@ -41,7 +35,7 @@ public class InventoryController : MonoBehaviour
 
 	Queue<GameObject> overlayGraphics;
 
-	bool showingInventoryOverlay = false;
+	public bool showingInventoryOverlay = false;
 
 	GameObject selectedStack_GO;
 

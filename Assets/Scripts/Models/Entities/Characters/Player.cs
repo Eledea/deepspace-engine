@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DeepSpace.InventorySystem;
+using UnityEngine;
 
 /// <summary>
 /// Independent data class for storing a Player.

@@ -6,8 +6,12 @@ using UnityEngine;
 /// </summary>
 public class GameController : MonoBehaviour
 {
+	public static GameController Instance { get; protected set; }
+
 	void OnEnable()
 	{
+		Instance = this;
+
 		NewGalaxy ("Testworld");
 	}
 
@@ -39,21 +43,11 @@ public class GameController : MonoBehaviour
 			Debug.LogError("ERROR: A galaxy is loaded while on the title screen.");
 			return;
 		}
-
-		//TODO: Load a Galaxy from a file into a new Galaxy class.
 	}
 
 	void Update()
 	{
 		if (Galaxy != null)
 			Galaxy.UpdateGalaxy();
-	}
-
-	/// <summary>
-	/// Saves the galaxy we currently have loaded as filename.
-	/// </summary>
-	public void SaveGalaxy(string fileName)
-	{
-		//TODO: Save a Galaxy to a file from the Galaxy class we have loaded.
 	}
 }

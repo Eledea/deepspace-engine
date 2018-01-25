@@ -3,18 +3,23 @@ using UnityEngine.EventSystems;
 
 public class Interfacable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler
 {
-	void OnEnable()
+	public void OnPointerDown(PointerEventData eventData)
 	{
-		invCtrl = this.transform.parent.parent.GetComponent<InventoryController>();
+		InventoryController.Instance.OnPointerDown (this);
 	}
 
-	InventoryController invCtrl;
+	public void OnBeginDrag (PointerEventData eventData)
+	{
+		InventoryController.Instance.OnBeginDrag (this);
+	}
 
-	public void OnPointerDown(PointerEventData eventData) {invCtrl.OnPointerDown (this);}
+	public void OnDrag (PointerEventData eventData)
+	{
+		InventoryController.Instance.OnDrag (this, eventData.position);
+	}
 
-	public void OnBeginDrag (PointerEventData eventData) {invCtrl.OnBeginDrag (this);}
-
-	public void OnDrag (PointerEventData eventData) {invCtrl.OnDrag (this, eventData.position);}
-
-	public void OnEndDrag (PointerEventData eventData) {invCtrl.OnEndDrag (this);}
+	public void OnEndDrag (PointerEventData eventData)
+	{
+		InventoryController.Instance.OnEndDrag (this);
+	}
 }

@@ -10,11 +10,9 @@ public class SolarSystemView : MonoBehaviour
 
 	void Start()
 	{
-		gc = FindObjectOfType<GameController>();
 		SetSolarSystem ();
 	}
 
-	GameController gc;
 	SolarSystem mySolarSystem;
 
 	Dictionary<Orbital, GameObject> orbitalGameObjectMap;
@@ -35,12 +33,12 @@ public class SolarSystemView : MonoBehaviour
 		orbitalGameObjectMap = new Dictionary<Orbital, GameObject> ();
 		playerGameObjectMap = new Dictionary<Player, GameObject> ();
 
-		mySolarSystem = gc.Galaxy.CurrentSolarSystem;
+		mySolarSystem = GameController.Instance.Galaxy.CurrentSolarSystem;
 
 		SpawnGameObjectForOrbital (mySolarSystem, this.transform);
 
-		for (int p = 0; p < gc.Galaxy.Players.Count; p++)
-			SpawnGameObjectForPlayer(gc.Galaxy.Players [p]);
+		for (int p = 0; p < GameController.Instance.Galaxy.Players.Count; p++)
+			SpawnGameObjectForPlayer(GameController.Instance.Galaxy.Players [p]);
 	}
 
 	/// <summary>
@@ -74,15 +72,15 @@ public class SolarSystemView : MonoBehaviour
 
 	void Update()
 	{
-		if (gc.Galaxy != null)
+		if (GameController.Instance.Galaxy != null)
 		{
 			if (mySolarSystem != null)
 				UpdateGameObjectForOrbital (mySolarSystem);
 			else
 				Debug.LogError ("We have a Galaxy loaded, but no SolarSystem!");
 
-			for (int p = 0; p < gc.Galaxy.Players.Count; p++)
-				UpdateGameObjectForPlayer(gc.Galaxy.Players [p]);
+			for (int p = 0; p < GameController.Instance.Galaxy.Players.Count; p++)
+				UpdateGameObjectForPlayer(GameController.Instance.Galaxy.Players [p]);
 		}
 	}
 
