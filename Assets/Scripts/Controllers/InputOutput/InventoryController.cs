@@ -134,7 +134,7 @@ public class InventoryController : MonoBehaviour
 				Vector2 currentIndex = Utility.WorldSpacePositionToIndex(dragStartPosition, graphicSize, inv.InvSize_x, inv.InvSize_y);
 				Vector2 newIndex = Utility.WorldSpacePositionToIndex(dragObject.anchoredPosition, graphicSize, inv.InvSize_x, inv.InvSize_y);
 
-				if (currentIndex != newIndex)
+				if (currentIndex != newIndex && newIndex != -Vector2.one)
 				{
 					inv.MoveItemStackTo ((int)currentIndex.x, (int)currentIndex.y, inv, (int)newIndex.x, (int)newIndex.y);
 					Debug.Log("We moved an ItemStack from " + currentIndex + " to " + newIndex);
@@ -198,7 +198,7 @@ public class InventoryController : MonoBehaviour
 			{
 				for (int y = 0; y < Player.InvSize_y; y++)
 				{
-					Vector3 myPosition = Utility.IndexToWorldSpacePosition (x, y, graphicSize, Player.InvSize_x, Player.InvSize_y);
+					Vector2 myPosition = Utility.IndexToWorldSpacePosition (x, y, graphicSize, Player.InvSize_x, Player.InvSize_y);
 
 					if (Player.IsItemStackAt (x, y))
 						overlayGraphics.Enqueue (SpawnItemStackGraphic (Player.GetItemStackAt (x, y), myPosition));
