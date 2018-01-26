@@ -35,18 +35,29 @@ public class InventoryController : MonoBehaviour
 
 	Queue<GameObject> overlayGraphics;
 
-	public bool showingInventoryOverlay = false;
+	//bool showingInventoryOverlay = false;
 
 	GameObject selectedStack_GO;
 
 	Vector2 dragStartPosition;
 	RectTransform dragObject;
 
+	/// <summary>
+	/// Gets a value indicating whether this Player should be able to use controls.
+	/// </summary>
+	public bool IsControllable
+	{
+		get
+		{
+			return !Player.IsUsingInventorySystem;
+		}
+	}
+
 	void Update()
 	{
 		Update_OverlayController ();
 
-		if (showingInventoryOverlay)
+		if (Player.IsUsingInventorySystem)
 		{			
 			if (Player.InventoryUpdateFlag)
 			{
@@ -61,14 +72,14 @@ public class InventoryController : MonoBehaviour
 	{
 		if (Input.GetKeyDown (KeyCode.I))
 		{
-			if (showingInventoryOverlay) 
+			if (Player.IsUsingInventorySystem) 
 			{
-				showingInventoryOverlay = false;
+				Player.IsUsingInventorySystem = false;
 				CloseInventory();
 			} 
 			else
 			{
-				showingInventoryOverlay = true;
+				Player.IsUsingInventorySystem = true;
 				OpenInventory();
 			}
 		}
@@ -178,7 +189,7 @@ public class InventoryController : MonoBehaviour
 	{
 		//TODO: Call this function from the InventoryManager class when a Player makes a change to an Inventory.
 
-		if (showingInventoryOverlay)
+		if (Player.IsUsingInventorySystem)
 		{
 			if (itemstackToGameObject != null)
 				DestroyAllItemStackGraphics ();

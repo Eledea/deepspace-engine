@@ -9,6 +9,6 @@ public class Moon : Orbital
 	public void GenerateMoon()
 	{
 		OrbitalAngle = Utility.RandomizePointAngle;
-		OrbitalDistance = (ulong)Random.Range(50000, 200000);
+		OrbitalDistance = 10000;
 	}
 }

@@ -37,7 +37,7 @@ public class Entity
 	{
 		get
 		{
-			return Position / 1000f;
+			return Position;
 		}
 	} 
 

@@ -10,6 +10,8 @@ public class SolarSystemView : MonoBehaviour
 
 	void Start()
 	{
+		//TODO: Dramatic changed needed in this class to make it work with the (half-implemnented) Entity system.
+
 		SetSolarSystem ();
 	}
 
@@ -103,8 +105,6 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void UpdateGameObjectForPlayer(Player player)
 	{
-		//TODO: Consider calling this function with an event if our Player position changes rather than every iteration?
-
 		GameObject go = playerGameObjectMap [player];
 		go.transform.position = player.WorldPosition;
 		go.transform.rotation = player.Rotation;

@@ -18,7 +18,7 @@ public class MovementController : MonoBehaviour
 	{
 		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
 
-		if (IsControllable)
+		if (InventoryController.Instance.IsControllable)
 		{
 			Update_DampenersController ();
 
@@ -45,7 +45,7 @@ public class MovementController : MonoBehaviour
 		acceleration = Vector3.zero;
 
 		//For now, we'll use hardcoded inputs in 6 directions.
-		if (IsControllable)
+		if (InventoryController.Instance.IsControllable)
 		{
 			if (Input.GetKey(KeyCode.W))
 				acceleration += this.transform.forward;
@@ -93,16 +93,5 @@ public class MovementController : MonoBehaviour
 
 		//Update the rotation in our data class.
 		Player.Rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler (rotateTo.y, rotateTo.x, rotateTo.z), 30f * Time.deltaTime);
-	}
-
-	/// <summary>
-	/// Gets a value indicating whether this Player should be able to use controls.
-	/// </summary>
-	public bool IsControllable
-	{
-		get
-		{
-			return !InventoryController.Instance.showingInventoryOverlay;
-		}
 	}
 }

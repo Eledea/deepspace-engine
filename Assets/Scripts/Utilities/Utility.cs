@@ -8,7 +8,7 @@ namespace DeepSpace.Utility
 	public sealed class Utility
 	{
 		/// <summary>
-		/// Returns a random floating-point number representing an angle around a point.
+		/// Returns a random floating-point number representing an angle in radians around a point.
 		/// </summary>
 		public static float RandomizePointAngle
 		{

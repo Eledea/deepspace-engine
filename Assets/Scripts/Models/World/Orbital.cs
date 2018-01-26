@@ -35,9 +35,9 @@ public class Orbital
 		get
 		{
 			Vector3 Position = new Vector3 (
-				Mathf.Sin (OrbitalAngle) * (OrbitalDistance / 1000),
+				(float)(Math.Sin (OrbitalAngle) * OrbitalDistance),
 				0,
-				-Mathf.Cos (OrbitalAngle) * (OrbitalDistance / 1000)
+				(float)(-Math.Cos (OrbitalAngle) * OrbitalDistance)
 			);
 
 			if (Parent != null)

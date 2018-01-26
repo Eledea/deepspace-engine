@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameObjects:
   - {fileID: 1316545316231452, guid: 7acb28dd3697a074cbe0db023058deaa, type: 2}
-  - {fileID: 1747783335428794, guid: 286e1ee818ef7a34e9786147c25b886a, type: 2}
+  - {fileID: 1747783335428794, guid: 83a2bac043ee9ab4faaa607b154d0c78, type: 2}
 --- !u!1 &1172678764
 GameObject:
   m_ObjectHideFlags: 0
