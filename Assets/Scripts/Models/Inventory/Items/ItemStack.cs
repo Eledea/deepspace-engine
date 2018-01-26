@@ -39,7 +39,7 @@ namespace DeepSpace.InventorySystem
 		public IType IType { get; set; }
 
 		/// <summary>
-		/// Gets the index of this ItemStack in it's Inventory.
+		/// Returns the array index of this ItemStack in it's Inventory.
 		/// </summary>
 		public Vector2 InventoryIndex
 		{

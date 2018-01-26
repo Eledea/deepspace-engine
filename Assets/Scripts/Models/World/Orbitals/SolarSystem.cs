@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using DeepSpace.Utility;
 using UnityEngine;
 
 /// <summary>
@@ -6,13 +6,10 @@ using UnityEngine;
 /// </summary>
 public class SolarSystem : Orbital
 {
-	/// <summary>
-	/// Generates the data for the Orbitals in this SolarSystem.
-	/// </summary>
 	public void GenerateSolarSystem(int numPlanets, int maxMoons)
 	{
-		this.OrbitalDistance = 0;
-		this.OrbitalAngle = UnityEngine.Random.Range (0, Mathf.PI * 2);
+		OrbitalAngle = Utility.RandomizePointAngle;
+		OrbitalDistance = 0;
 
 		for (int i = 0; i < numPlanets; i++)
 		{

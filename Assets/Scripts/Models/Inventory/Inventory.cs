@@ -57,6 +57,7 @@ namespace DeepSpace.InventorySystem
 			if (Inv [x, y] == null)
 				Inv [x, y] = s;
 
+			s.Inv = this;
 			s.Inv_x = x;
 			s.Inv_y = y;
 		}
@@ -66,6 +67,9 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public void RemoveItemStackFrom(int x, int y)
 		{
+			ItemStack s = GetItemStackAt (x, y);
+			s.Inv = null;
+
 			Inv [x, y] = null;
 		}
 
@@ -95,8 +99,10 @@ namespace DeepSpace.InventorySystem
 		{
 			if (Inv [x, y] != null)
 			{
-				inventory.AddItemStackAt (GetItemStackAt (x, y), a, b);
+				ItemStack s = GetItemStackAt (x, y);
+
 				this.RemoveItemStackFrom (x, y);
+				inventory.AddItemStackAt (s, a, b);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DeepSpace.Utility;
+using UnityEngine;
 
 /// <summary>
 /// Sub-class of an Orbital for storing a Moon.
@@ -7,7 +8,7 @@ public class Moon : Orbital
 {
 	public void GenerateMoon()
 	{
-		OrbitalAngle = Random.Range (0, Mathf.PI * 2);
+		OrbitalAngle = Utility.RandomizePointAngle;
 		OrbitalDistance = (ulong)Random.Range(50000, 200000);
 	}
 }

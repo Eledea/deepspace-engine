@@ -37,8 +37,8 @@ public class SolarSystemView : MonoBehaviour
 
 		SpawnGameObjectForOrbital (mySolarSystem, this.transform);
 
-		for (int p = 0; p < GameController.Instance.Galaxy.Players.Count; p++)
-			SpawnGameObjectForPlayer(GameController.Instance.Galaxy.Players [p]);
+		for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
+			SpawnGameObjectForPlayer(PlayerManager.Instance.GetPlayerInManager (i));
 	}
 
 	/// <summary>
@@ -79,8 +79,8 @@ public class SolarSystemView : MonoBehaviour
 			else
 				Debug.LogError ("We have a Galaxy loaded, but no SolarSystem!");
 
-			for (int p = 0; p < GameController.Instance.Galaxy.Players.Count; p++)
-				UpdateGameObjectForPlayer(GameController.Instance.Galaxy.Players [p]);
+			for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
+				UpdateGameObjectForPlayer(PlayerManager.Instance.GetPlayerInManager (i));
 		}
 	}
 

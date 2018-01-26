@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace.InventorySystem
 {
 	// <summary>
-	/// Manage all our Inventories in the Galaxy that we have loaded.
+	/// Manages the Inventories for the Galaxy that we have loaded.
 	/// </summary>
 	public class InventoryManager : MonoBehaviour
 	{
@@ -16,16 +16,10 @@ namespace DeepSpace.InventorySystem
 
 			inventoryToGameObject = new Dictionary<Inventory, GameObject>();
 			gameObjectToInventory = new Dictionary<GameObject, Inventory>();
-
-			//TODO: Move Player data to a seperate static PlayerManager class.
-
-			Players = new List<Player>();
 		}
 
 		Dictionary<Inventory, GameObject> inventoryToGameObject;
 		Dictionary<GameObject, Inventory> gameObjectToInventory;
-
-		List<Player> Players;
 
 		/// <summary>
 		/// Adds an Inventory and it's respective GameObject to the InventoryManager.
@@ -97,36 +91,18 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Adds a Player to the InventoryManager.
-		/// </summary>
-		public void AddPlayerToManager(Player p)
-		{
-			if (Players == null)
-				Players = new List<Player> ();
-
-			Players.Add (p);
-		}
-
-		/// <summary>
-		/// Removes an Inventory from the InventoryManager.
-		/// </summary>
-		public void RemovePlayerFromManager(Player p)
-		{
-			if (Players != null)
-				Players.Remove (p);
-		}
-
-		/// <summary>
 		/// Updates the ItemStack graphics for players who are using the Inventory system.
 		/// </summary>
 		public void UpdateItemStackGraphicsForPlayers()
 		{
-			foreach (Player p in Players)
+			for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
 			{
 				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the function to update Inventories.
 
-				if (p.IsUsingInventorySystem)
-					p.InventoryUpdateFlag = true;
+				Player myPlayer = PlayerManager.Instance.GetPlayerInManager (i);
+
+				if (myPlayer.IsUsingInventorySystem)
+					myPlayer.InventoryUpdateFlag = true;
 			}
 		}
 	}
