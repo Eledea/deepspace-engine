@@ -10,12 +10,23 @@ namespace DeepSpace.Utility
 		/// <summary>
 		/// Returns a random floating-point number representing an angle in radians around a point.
 		/// </summary>
-		public static float RandomizePointAngle
+		public static float RandomizedPointAngle
 		{
 			get
 			{
 				return Random.Range(0, Mathf.PI * 2);
 			}
+		}
+
+		/// <summary>
+		/// Returns 1 if true, 0 is false.
+		/// </summary>
+		public static int BoolToInt(bool b)
+		{
+			if (!b)
+				return 0;
+			else
+				return 1;
 		}
 
 		/// <summary>

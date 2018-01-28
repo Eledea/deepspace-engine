@@ -8,7 +8,7 @@ public class SolarSystem : Orbital
 {
 	public void GenerateSolarSystem(int numPlanets, int maxMoons)
 	{
-		OrbitalAngle = Utility.RandomizePointAngle;
+		OrbitalAngle = Utility.RandomizedPointAngle;
 		OrbitalDistance = 0;
 
 		for (int i = 0; i < numPlanets; i++)

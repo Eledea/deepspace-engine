@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Unity-centric class for allowing Player interaction with the Inventory system.
+/// </summary>
 public class InventoryController : MonoBehaviour
 {
 	public static InventoryController Instance { get; protected set; }

@@ -1,31 +1,48 @@
-﻿using UnityEngine;
+﻿using DeepSpace.Utility;
+using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
-/// Unity-side class for controlling a player's movement ingame.
+/// Unity-centric class for controlling a player's movement ingame.
 /// </summary>
 public class MovementController : MonoBehaviour
 {
+	enum Axis { X, Y, Z };
+
+	void OnEnable()
+	{
+		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
+
+		axisBindings = new Dictionary<Axis, KeyBinding>()
+		{
+			{ Axis.X, new KeyBinding(KeyCode.W, KeyCode.S) },
+			{ Axis.Y, new KeyBinding(KeyCode.D, KeyCode.A) },
+			{ Axis.Z, new KeyBinding(KeyCode.Space, KeyCode.LeftControl) }
+		};
+	}
+
 	/// <summary>
 	/// The Player data class that this controller is linked to.
 	/// </summary>
 	public Player Player { get; set;}
 
+	Dictionary<Axis, KeyBinding> axisBindings;
+
 	bool DampenersOn = true;
-	Vector3 acceleration;
+
 	Vector3 rotateTo;
 
 	void Update()
 	{
-		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
+		Update_DampenersController ();
+		Update_PlayerAcceleration ();
 
 		if (InventoryController.Instance.IsControllable)
 		{
-			Update_DampenersController ();
-
 			Update_PlayerRotation ();
 		}
 
-		Update_PlayerMovement ();
+		//Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
 	}
 
 	void Update_DampenersController()
@@ -39,59 +56,33 @@ public class MovementController : MonoBehaviour
 		}
 	} 
 
-	void Update_PlayerMovement()
+	void Update_PlayerAcceleration()
 	{
-		//Store changes to velocity this frame here.
-		acceleration = Vector3.zero;
+		Vector3 acceleration = Vector3.zero;
+		List<Vector3> directions = new List<Vector3> { transform.forward.normalized, transform.right.normalized, transform.up.normalized };
 
-		//For now, we'll use hardcoded inputs in 6 directions.
-		if (InventoryController.Instance.IsControllable)
+		int i = 0;
+		foreach (Axis axis in axisBindings.Keys)
 		{
-			if (Input.GetKey(KeyCode.W))
-				acceleration += this.transform.forward;
-			if (Input.GetKey(KeyCode.S))
-				acceleration -= this.transform.forward;
-			if (Input.GetKey(KeyCode.D))
-				acceleration += this.transform.right;
-			if (Input.GetKey(KeyCode.A))
-				acceleration -= this.transform.right;
-			if (Input.GetKey(KeyCode.Space))
-				acceleration += this.transform.up;
-			if (Input.GetKey(KeyCode.LeftControl))
-				acceleration -= this.transform.up;
+			float axisInput = axisBindings [axis].Magnitude;
+
+			//TODO: Re-implement velocity dampening system.
+
+			acceleration += directions[i] * axisInput;
+			i++;
 		}
 
-		//We need to factor in any deceleration that might be happening this frame.
-		//Does this player have their dampeners on?
-		if (DampenersOn)
-		{
-			if (Player.Velocity.magnitude != 0)
-			{
-				if (acceleration.x == 0)
-					acceleration.x -= Mathf.Clamp(Player.Velocity.x, -1f, 1f);
-				if (acceleration.y == 0)
-					acceleration.y -= Mathf.Clamp(Player.Velocity.y, -1f, 1f);
-				if (acceleration.z == 0)
-					acceleration.z -= Mathf.Clamp(Player.Velocity.z, -1f, 1f);
-			}
-		}
+		if (Input.GetKeyDown (KeyCode.Escape))
+			Player.Velocity = Vector3.zero;
 
-		//Scale and update our velocity.
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
-
-		//Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
-		//Update our position in our data.
 		Player.UpdatePosition ();
 	}
 
 	void Update_PlayerRotation()
 	{
-		//TODO: Fix rotation when "upside-down".
-	
-		//Find the difference between the mouse position this frame and last.
-		rotateTo += new Vector3 (Input.GetAxis("Mouse X") * 5f, -Input.GetAxis("Mouse Y") * 5f, rotateTo.z);
-
-		//Update the rotation in our data class.
-		Player.Rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler (rotateTo.y, rotateTo.x, rotateTo.z), 30f * Time.deltaTime);
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (new KeyBinding(KeyCode.Q, KeyCode.E).Magnitude * 2f, Vector3.forward);
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (-Input.GetAxis ("Mouse Y") * 5f, Vector3.right);
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (Input.GetAxis ("Mouse X") * 5f, Vector3.up);
 	}
 }

@@ -18,7 +18,7 @@ public class Entity
 	/// <summary>
 	/// The Position of this Entity from the map center in meters on each axis.
 	/// </summary>
-	public Vector3 Position { get; set; }
+	public Vector3 Position;
 
 	/// <summary>
 	/// The Velocity of this Entity in meters per second on each axis.
@@ -26,20 +26,14 @@ public class Entity
 	public Vector3 Velocity { get; set;}
 
 	/// <summary>
-	/// The Rotation of this Entity.
+	/// The Rotation of this Entity as a Quaternion.
 	/// </summary>
 	public Quaternion Rotation { get; set; }
 
 	/// <summary>
-	/// Returns the world-space position of this Entity.
+	/// The Angular velocity of this Entity.
 	/// </summary>
-	public Vector3 WorldPosition
-	{
-		get
-		{
-			return Position;
-		}
-	} 
+	public Vector3 AngularVelocity { get; set; }
 
 	/// <summary>
 	/// Updates the Position for this Entity.
@@ -47,5 +41,13 @@ public class Entity
 	public void UpdatePosition()
 	{
 		Position += (Velocity * Time.deltaTime);
+	}
+
+	/// <summary>
+	/// Updates the Rotation for this Entity.
+	/// </summary>
+	public void UpdateRotation()
+	{
+		Rotation = Quaternion.Euler (AngularVelocity * Time.deltaTime + Rotation.eulerAngles);
 	}
 }
