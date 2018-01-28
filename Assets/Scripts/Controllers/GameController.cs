@@ -39,7 +39,6 @@ public class GameController : MonoBehaviour
 	{
 		if (Galaxy != null)
 		{
-			//Uh-Oh! We shouldn't have a Galaxy loaded if we are on our title screen!
 			Debug.LogError("ERROR: A galaxy is loaded while on the title screen.");
 			return;
 		}

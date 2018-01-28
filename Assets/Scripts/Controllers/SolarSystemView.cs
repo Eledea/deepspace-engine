@@ -10,7 +10,7 @@ public class SolarSystemView : MonoBehaviour
 
 	void Start()
 	{
-		//TODO: Dramatic changed needed in this class to make it work with the (half-implemnented) Entity system.
+		//TODO: Dramatic changes needed in this class to make it work with the (half-implemnented) Entity system.
 
 		SetSolarSystem ();
 	}
@@ -65,7 +65,7 @@ public class SolarSystemView : MonoBehaviour
 	void SpawnGameObjectForPlayer(Player player)
 	{
 		GameObject go = (GameObject)Instantiate (gameObjects [1]);
-		go.transform.position = player.Position;
+		go.transform.position = player.Position.ToVector3();
 
 		playerGameObjectMap [player] = go;
 		go.GetComponentInChildren<MovementController>().Player = player;
@@ -106,7 +106,7 @@ public class SolarSystemView : MonoBehaviour
 	void UpdateGameObjectForPlayer(Player player)
 	{
 		GameObject go = playerGameObjectMap [player];
-		go.transform.position = player.Position;
+		go.transform.position = player.Position.ToVector3();
 		go.transform.rotation = player.Rotation;
 	}
 }

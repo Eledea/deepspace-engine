@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DeepSpace.Core;
+using System;
+using UnityEngine;
 
 /// <summary>
 /// The Entity class defines an Entity in a Galaxy.
@@ -18,12 +20,12 @@ public class Entity
 	/// <summary>
 	/// The Position of this Entity from the map center in meters on each axis.
 	/// </summary>
-	public Vector3 Position;
+	public Vector3D Position { get; set; }
 
 	/// <summary>
 	/// The Velocity of this Entity in meters per second on each axis.
 	/// </summary>
-	public Vector3 Velocity { get; set;}
+	public Vector3D Velocity { get; set;}
 
 	/// <summary>
 	/// The Rotation of this Entity as a Quaternion.
@@ -31,23 +33,10 @@ public class Entity
 	public Quaternion Rotation { get; set; }
 
 	/// <summary>
-	/// The Angular velocity of this Entity.
-	/// </summary>
-	public Vector3 AngularVelocity { get; set; }
-
-	/// <summary>
 	/// Updates the Position for this Entity.
 	/// </summary>
 	public void UpdatePosition()
-	{
-		Position += (Velocity * Time.deltaTime);
-	}
-
-	/// <summary>
-	/// Updates the Rotation for this Entity.
-	/// </summary>
-	public void UpdateRotation()
-	{
-		Rotation = Quaternion.Euler (AngularVelocity * Time.deltaTime + Rotation.eulerAngles);
+	{ 
+		Position += Velocity * Time.deltaTime;
 	}
 }

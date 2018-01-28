@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DeepSpace.Utility
+namespace DeepSpace.Core
 {
 	/// <summary>
 	/// Contains functions for carrying out general utility tasks that are not class specific.

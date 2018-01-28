@@ -1,5 +1,5 @@
+using DeepSpace.Core;
 using DeepSpace.InventorySystem;
-using DeepSpace.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -190,8 +190,6 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	public void StartInventoryView()
 	{
-		//TODO: Call this function from the InventoryManager class when a Player makes a change to an Inventory.
-
 		if (Player.IsUsingInventorySystem)
 		{
 			if (itemstackToGameObject != null)

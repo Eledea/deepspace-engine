@@ -1,4 +1,4 @@
-﻿using DeepSpace.Utility;
+﻿using DeepSpace.Core;
 using UnityEngine;
 
 /// <summary>

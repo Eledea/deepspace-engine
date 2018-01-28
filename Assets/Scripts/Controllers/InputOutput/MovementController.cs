@@ -1,4 +1,4 @@
-﻿using DeepSpace.Utility;
+﻿using DeepSpace.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +19,8 @@ public class MovementController : MonoBehaviour
 			{ Axis.Y, new KeyBinding(KeyCode.D, KeyCode.A) },
 			{ Axis.Z, new KeyBinding(KeyCode.Space, KeyCode.LeftControl) }
 		};
+
+		roll = new KeyBinding (KeyCode.Q, KeyCode.E);
 	}
 
 	/// <summary>
@@ -27,6 +29,7 @@ public class MovementController : MonoBehaviour
 	public Player Player { get; set;}
 
 	Dictionary<Axis, KeyBinding> axisBindings;
+	KeyBinding roll;
 
 	bool DampenersOn = true;
 
@@ -64,7 +67,7 @@ public class MovementController : MonoBehaviour
 		int i = 0;
 		foreach (Axis axis in axisBindings.Keys)
 		{
-			float axisInput = axisBindings [axis].Magnitude;
+			float axisInput = axisBindings [axis].magnitude;
 
 			//TODO: Re-implement velocity dampening system.
 
@@ -73,7 +76,7 @@ public class MovementController : MonoBehaviour
 		}
 
 		if (Input.GetKeyDown (KeyCode.Escape))
-			Player.Velocity = Vector3.zero;
+			Player.Velocity = Vector3D.zero;
 
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
 		Player.UpdatePosition ();
@@ -81,7 +84,7 @@ public class MovementController : MonoBehaviour
 
 	void Update_PlayerRotation()
 	{
-		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (new KeyBinding(KeyCode.Q, KeyCode.E).Magnitude * 2f, Vector3.forward);
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (roll.magnitude * 2f, Vector3.forward);
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (-Input.GetAxis ("Mouse Y") * 5f, Vector3.right);
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (Input.GetAxis ("Mouse X") * 5f, Vector3.up);
 	}
