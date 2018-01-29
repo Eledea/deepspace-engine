@@ -1,4 +1,4 @@
-﻿using DeepSpace.Core;
+﻿using DeepSpace.Core;		
 using DeepSpace.InventorySystem;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +41,7 @@ public class PlayerManager : MonoBehaviour
 		Player p = new Player();
 		p.Name = "Sam";
 		p.SolarSystem = mySolarSystem;
-		p.Position = new Vector3D (101, 0, 100);
+		p.Position = new Vector3D (100, 0, 98);
 		p.Rotation = Quaternion.Euler (0, 0, 0);
 		p.Health = 100;
 		p.Oxygen = 100;
@@ -69,6 +69,6 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public Player GetPlayerInManager(int i)
 	{
-		return Players [i];
+		return Players[i];
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using DeepSpace.Core;
-using UnityEngine;
 
 /// <summary>
 /// Sub-class of an Orbital for storing a Moon.

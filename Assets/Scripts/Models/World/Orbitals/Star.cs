@@ -1,14 +1,13 @@
 ﻿using DeepSpace.Core;
-using UnityEngine;
 
 /// <summary>
-/// Sub-class of an Orbital for storing a SolarSystem.
+/// Sub-class of an Orbital for storing a Star.
 /// </summary>
-public class SolarSystem : Orbital
+public class Star : Orbital
 {
-	public void GenerateSolarSystem(int numPlanets, int maxMoons)
+	public void GenerateStar(int numPlanets, int maxMoons)
 	{
-		OrbitalAngle = Utility.RandomizedPointAngle;
+		OrbitalAngle = 0;
 		OrbitalDistance = 0;
 
 		for (int i = 0; i < numPlanets; i++)

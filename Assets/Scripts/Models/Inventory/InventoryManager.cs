@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace.InventorySystem
 {
 	// <summary>
-	/// Manages the Inventories for the Galaxy that we have loaded.
+	/// Manages the myInventories for the Galaxy that we have loaded.
 	/// </summary>
 	public class InventoryManager : MonoBehaviour
 	{
@@ -14,80 +14,80 @@ namespace DeepSpace.InventorySystem
 		{
 			Instance = this;
 
-			inventoryToGameObject = new Dictionary<Inventory, GameObject>();
-			gameObjectToInventory = new Dictionary<GameObject, Inventory>();
+			InventoryToEntity = new Dictionary<Inventory, Entity>();
+			entityToInventory = new Dictionary<Entity, Inventory>();
 		}
 
-		Dictionary<Inventory, GameObject> inventoryToGameObject;
-		Dictionary<GameObject, Inventory> gameObjectToInventory;
+		Dictionary<Inventory, Entity> InventoryToEntity;
+		Dictionary<Entity, Inventory> entityToInventory;
 
 		/// <summary>
-		/// Adds an Inventory and it's respective GameObject to the InventoryManager.
+		/// Adds an Inventory and it's respective Entity to the InventoryManager.
 		/// </summary>
-		public void AddInventoryToManager(Inventory inv, GameObject go)
+		public void AddInventoryToManager(Inventory myInv, Entity myEntity)
 		{
-			inventoryToGameObject [inv] = go;
-			gameObjectToInventory [go] = inv;
-		}
-
-		/// <summary>
-		/// Removes an Inventory and it's respective GameObject from the InventoryManager.
-		/// </summary>
-		public void RemoveInventoryFromManager(Inventory inv)
-		{
-			GameObject myGO = inventoryToGameObject [inv];
-			gameObjectToInventory.Remove (myGO);
-
-			inventoryToGameObject.Remove (inv);
+			InventoryToEntity [myInv] = myEntity;
+			entityToInventory [myEntity] = myInv;
 		}
 
 		/// <summary>
-		/// Removes a GameObject and it's respective Inventory from the InventoryManager.
+		/// Removes an Inventory and it's respective Entity from the InventoryManager.
 		/// </summary>
-		public void RemoveGameObjectFromManager(GameObject go)
+		public void RemoveInventoryFromManager(Inventory myInv)
 		{
-			Inventory myInv = gameObjectToInventory [go];
-			inventoryToGameObject.Remove (myInv);
+			Entity myEntity = InventoryToEntity [myInv];
+			entityToInventory.Remove (myEntity);
 
-			gameObjectToInventory.Remove (go);
+			InventoryToEntity.Remove (myInv);
 		}
 
 		/// <summary>
-		/// Determines whether this GameObject has an Inventory paired with it.
+		/// Removes a Entity and it's respective Inventory from the InventoryManager.
 		/// </summary>
-		public bool IsInventoryAttachedTo(GameObject go)
+		public void RemoveInventoryFromManager(Entity myEntity)
 		{
-			if (gameObjectToInventory [go] != null)
+			Inventory mymyInv = entityToInventory [myEntity];
+			InventoryToEntity.Remove (mymyInv);
+
+			entityToInventory.Remove (myEntity);
+		}
+
+		/// <summary>
+		/// Determines whether this Entity has an Inventory paired with it.
+		/// </summary>
+		public bool IsInventoryAttachedTo(Entity myEntity)
+		{
+			if (entityToInventory [myEntity] != null)
 				return true;
 			else
 				return false;
 		}
 
 		/// <summary>
-		/// Determines whether this Inventory has a GameObject paired with it.
+		/// Determines whether this Inventory has an Entity paired with it.
 		/// </summary>
-		public bool IsGameObjectAttachedTo(Inventory inv)
+		public bool IsEntityAttachedTo(Inventory myInv)
 		{
-			if (inventoryToGameObject [inv] != null)
+			if (InventoryToEntity [myInv] != null)
 				return true;
 			else
 				return false;
 		}
 
 		/// <summary>
-		/// Gets the Inventory this GameObject is paired with.
+		/// Gets the Inventory this Entity is paired with.
 		/// </summary>
-		public Inventory GetInventoryAttachedTo(GameObject go)
+		public Inventory GetInventoryAttachedTo(Entity myEntity)
 		{
-			return gameObjectToInventory [go];
+			return entityToInventory [myEntity];
 		}
 
 		/// <summary>
-		/// Gets the Inventory this GameObject is paired with.
+		/// Gets the Entity this Inventory is paired with.
 		/// </summary>
-		public GameObject GetInventoryAttachedTo(Inventory inv)
+		public Entity GetInventoryAttachedTo(Inventory myInv)
 		{
-			return inventoryToGameObject [inv];
+			return InventoryToEntity [myInv];
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace DeepSpace.InventorySystem
 		{
 			for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
 			{
-				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the function to update Inventories.
+				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the function to update myInventories.
 
 				Player myPlayer = PlayerManager.Instance.GetPlayerInManager (i);
 

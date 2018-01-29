@@ -23,7 +23,7 @@ public class Orbital
 	public float OrbitalAngle { get; set; }
 
 	/// <summary>
-	/// The distance of this Orbital from it's parent Orbital. 
+	/// The distance of this Orbital from it's parent Orbital in meters. 
 	/// </summary>
 	public UInt64 OrbitalDistance { get; set; }
 

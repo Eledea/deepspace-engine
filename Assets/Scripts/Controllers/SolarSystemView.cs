@@ -2,23 +2,26 @@
 using UnityEngine;
 
 /// <summary>
-/// Graphical class responsible for visually displaying changes to data in our data classing.
+/// The SolarSystenView class manages the spawning, rendering and removing of GameObjects representing Orbitals
+/// and Entities for the SolarSystem that the Player is in.
 /// </summary>
 public class SolarSystemView : MonoBehaviour
 {
-	public GameObject[] gameObjects;
+	//TODO: Replace Prefab system with asset streaming later.
+
+	public GameObject[] prefabs;
 
 	void Start()
 	{
-		//TODO: Dramatic changes needed in this class to make it work with the (half-implemnented) Entity system.
+		//TODO: Implement floating point origin system.
 
 		SetSolarSystem ();
 	}
 
 	SolarSystem mySolarSystem;
 
-	Dictionary<Orbital, GameObject> orbitalGameObjectMap;
-	Dictionary<Player, GameObject> playerGameObjectMap;
+	Dictionary<Orbital, GameObject> orbitalToGameObject;
+	Dictionary<Player, GameObject> entityToGameObject;
 
 	/// <summary>
 	/// Sets a new SolarSystem to display.
@@ -32,12 +35,12 @@ public class SolarSystemView : MonoBehaviour
 			Destroy (child.gameObject);
 		}
 
-		orbitalGameObjectMap = new Dictionary<Orbital, GameObject> ();
-		playerGameObjectMap = new Dictionary<Player, GameObject> ();
+		orbitalToGameObject = new Dictionary<Orbital, GameObject> ();
+		entityToGameObject = new Dictionary<Player, GameObject> ();
 
 		mySolarSystem = GameController.Instance.Galaxy.CurrentSolarSystem;
 
-		SpawnGameObjectForOrbital (mySolarSystem, this.transform);
+		SpawnGameObjectForOrbital (mySolarSystem.Star, this.transform);
 
 		for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
 			SpawnGameObjectForPlayer(PlayerManager.Instance.GetPlayerInManager (i));
@@ -48,11 +51,11 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForOrbital(Orbital orbital, Transform parent)
 	{
-		GameObject go = (GameObject)Instantiate (gameObjects[0]);
+		GameObject go = (GameObject)Instantiate (prefabs[0]);
 		go.transform.position = orbital.Position;
 		go.transform.parent = parent;
 
-		orbitalGameObjectMap [orbital] = go;
+		orbitalToGameObject [orbital] = go;
 
 		if (orbital.Children != null)
 			for (int i = 0; i < orbital.Children.Count; i++)
@@ -64,10 +67,10 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForPlayer(Player player)
 	{
-		GameObject go = (GameObject)Instantiate (gameObjects [1]);
+		GameObject go = (GameObject)Instantiate (prefabs [1]);
 		go.transform.position = player.Position.ToVector3();
 
-		playerGameObjectMap [player] = go;
+		entityToGameObject [player] = go;
 		go.GetComponentInChildren<MovementController>().Player = player;
 		go.GetComponentInChildren<InventoryController>().Player = player;
 	}
@@ -77,7 +80,7 @@ public class SolarSystemView : MonoBehaviour
 		if (GameController.Instance.Galaxy != null)
 		{
 			if (mySolarSystem != null)
-				UpdateGameObjectForOrbital (mySolarSystem);
+				UpdateGameObjectForOrbital (mySolarSystem.Star);
 			else
 				Debug.LogError ("We have a Galaxy loaded, but no SolarSystem!");
 
@@ -105,7 +108,7 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void UpdateGameObjectForPlayer(Player player)
 	{
-		GameObject go = playerGameObjectMap [player];
+		GameObject go = entityToGameObject [player];
 		go.transform.position = player.Position.ToVector3();
 		go.transform.rotation = player.Rotation;
 	}

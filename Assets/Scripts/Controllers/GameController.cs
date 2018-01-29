@@ -25,8 +25,6 @@ public class GameController : MonoBehaviour
 	/// </summary>
 	public void NewGalaxy(string fileName)
 	{
-		//TODO: Move these functions to a seperate class for managing the world.
-
 		this.Galaxy = new Galaxy ();
 
 		Galaxy.GenerateGalaxy (1, 4, 3);
