@@ -85,7 +85,7 @@ public class SolarSystem
 	/// <summary>
 	/// Removes an Entity from this SolarSystem.
 	/// </summary>
-	public void RemoveInventoryFromSolarSystem(Entity entity)
+	public void RemoveEntityFromSolarSystem(Entity entity)
 	{
 		Entities.Remove (entity);
 	}

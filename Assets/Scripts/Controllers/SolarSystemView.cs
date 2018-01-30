@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class SolarSystemView : MonoBehaviour
 {
-	//TODO: Replace Prefab system with asset streaming later on.
+	//TODO: Replace hardcoded Prefabs with asset streaming later on.
 
 	public GameObject player;
 	public GameObject sphere;
@@ -37,7 +37,7 @@ public class SolarSystemView : MonoBehaviour
 	Dictionary<GameObject, Entity> gameObjectToEntity;
 
 	Vector3D floatingOrigin;
-	float loadRange;
+	double loadRange;
 
 	/// <summary>
 	/// Sets a new SolarSystem.
@@ -60,9 +60,12 @@ public class SolarSystemView : MonoBehaviour
 		mySolarSystem = GameController.Instance.Galaxy.CurrentSolarSystem;
 
 		floatingOrigin = Player.Position;
-		SpawnGameObjectForPlayer ();
+		UpdateGameObjectForPlayer ();
 
 		//TODO: Implement loading range.
+
+		//We want to only show Orbitals and Entities that are within a loading range.
+		//We'll need a way to determine if the position of an Orbital/Entity is within our load range...
 
 		foreach (Orbital o in mySolarSystem.OrbitalsInSystem)
 			SpawnGameObjectForOrbital (o);
@@ -73,7 +76,24 @@ public class SolarSystemView : MonoBehaviour
 
 	void Update()
 	{
-		UpdateGameObjectForPlayer ();
+		//TODO: Replace with an Event System so that we are not updating every frame.
+
+		foreach (Orbital o in mySolarSystem.OrbitalsInSystem)
+			UpdateGameObjectForOrbital (o);
+
+		foreach (Entity e in mySolarSystem.EntitiesInSystem)
+			UpdateGameObjectForEntity (e);
+	}
+
+	/// <summary>
+	/// Determines if this Orbital has a GameObject spawned.
+	/// </summary>
+	public bool GameObjectForOrbital(Orbital o)
+	{
+		if (orbitalToGameObject != null)
+			return true;
+		else
+			return false;
 	}
 
 	/// <summary>
@@ -93,6 +113,17 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Determines if this Entity has a GameObject spawned.
+	/// </summary>
+	public bool GameObjectForEntity(Entity e)
+	{
+		if (entityToGameObject != null)
+			return true;
+		else
+			return false;
+	}
+
+	/// <summary>
 	/// Returns an Entity from a GameObject.
 	/// </summary>
 	public Entity GameObjectToEntity(GameObject go)
@@ -109,6 +140,18 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Updates the GameObject for this Player.
+	/// </summary>
+	void UpdateGameObjectForPlayer()
+	{
+		if (playerGO == null)
+			SpawnGameObjectForPlayer ();
+
+		playerGO.transform.position = (Player.Position - floatingOrigin).ToVector3();
+		playerGO.transform.rotation = Player.Rotation;
+	}
+
+	/// <summary>
 	/// Spawns the GameObject for this Player.
 	/// </summary>
 	void SpawnGameObjectForPlayer()
@@ -116,18 +159,6 @@ public class SolarSystemView : MonoBehaviour
 		playerGO = (GameObject)Instantiate (player);
 		playerGO.GetComponentInChildren<MovementController>().Player = Player;
 		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
-
-		playerGO.transform.position = (Player.Position - floatingOrigin).ToVector3();
-		playerGO.transform.rotation = Player.Rotation;
-	}
-
-	/// <summary>
-	/// Updates the GameObject for this Player.
-	/// </summary>
-	void UpdateGameObjectForPlayer()
-	{
-		playerGO.transform.position = (Player.Position - floatingOrigin).ToVector3();
-		playerGO.transform.rotation = Player.Rotation;
 	}
 
 	/// <summary>
@@ -140,26 +171,28 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Updates the GameObject for this Orbital.
+	/// </summary>
+	void UpdateGameObjectForOrbital(Orbital o)
+	{
+		if (GameObjectForOrbital (o) == false)
+			SpawnGameObjectForOrbital (o);
+
+		GameObject myGO = OrbitalToGameObject (o);
+		myGO.transform.position = (o.Position - floatingOrigin).ToVector3();
+	}
+
+	/// <summary>
 	/// Spawns a GameObject for this Orbital.
 	/// </summary>
 	void SpawnGameObjectForOrbital(Orbital o)
 	{
 		GameObject myGO = (GameObject)Instantiate (sphere);
-		myGO.transform.position = (o.Position - floatingOrigin).ToVector3();
 		myGO.transform.parent = this.transform;
 		myGO.name = o.Name;
 
 		orbitalToGameObject [o] = myGO;
 		gameObjectToOrbital [myGO] = o;
-	}
-
-	/// <summary>
-	/// Updates the GameObject for this Orbital.
-	/// </summary>
-	void UpdateGameObjectForOrbital(Orbital o)
-	{
-		GameObject myGO = OrbitalToGameObject (o);
-		myGO.transform.position = (o.Position - floatingOrigin).ToVector3();
 	}
 
 	/// <summary>
@@ -175,25 +208,27 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Updates the GameObject for this Entity.
+	/// </summary>
+	void UpdateGameObjectForEntity(Entity e)
+	{
+		if (GameObjectForEntity (e) == false)
+			SpawnGameObjectForEntity (e);
+
+		GameObject myGO = EntityToGameObject (e);
+		myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
+	}
+
+	/// <summary>
 	/// Spawns a GameObject for this Entity.
 	/// </summary>
 	void SpawnGameObjectForEntity(Entity e)
 	{
 		GameObject myGO = (GameObject)Instantiate (cube);
-		myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
 		myGO.transform.parent = this.transform;
 
 		entityToGameObject [e] = myGO;
 		gameObjectToEntity [myGO] = e;
-	}
-
-	/// <summary>
-	/// Updates the GameObject for this Entity.
-	/// </summary>
-	void UpdateGameObjectForEntity(Entity e)
-	{
-		GameObject myGO = EntityToGameObject (e);
-		myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
 	}
 
 	/// <summary>
