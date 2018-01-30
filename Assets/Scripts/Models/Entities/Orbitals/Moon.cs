@@ -1,8 +1,5 @@
 ﻿using DeepSpace.Core;
 
-/// <summary>
-/// Sub-class of an Orbital for storing a Moon.
-/// </summary>
 public class Moon : Orbital
 {
 	public void GenerateMoon()
@@ -10,5 +7,6 @@ public class Moon : Orbital
 		Name = "Moon";
 		OrbitalAngle = Utility.RandomizedPointAngle;
 		OrbitalDistance = 10000;
+		Position = OrbitalPosition;
 	}
 }

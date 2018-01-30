@@ -30,9 +30,6 @@ public class SolarSystemView : MonoBehaviour
 
 	GameObject playerGO;
 
-	Dictionary<Orbital, GameObject> orbitalToGameObject;
-	Dictionary<GameObject, Orbital> gameObjectToOrbital;
-
 	Dictionary<Entity, GameObject> entityToGameObject;
 	Dictionary<GameObject, Entity> gameObjectToEntity;
 
@@ -50,9 +47,6 @@ public class SolarSystemView : MonoBehaviour
 			child.SetParent (null);
 			Destroy (child.gameObject);
 		}
-			
-		orbitalToGameObject = new Dictionary<Orbital, GameObject>();
-		gameObjectToOrbital = new Dictionary<GameObject, Orbital>();
 
 		entityToGameObject = new Dictionary<Entity, GameObject>();
 		gameObjectToEntity = new Dictionary<GameObject, Entity>();
@@ -60,56 +54,21 @@ public class SolarSystemView : MonoBehaviour
 		mySolarSystem = GameController.Instance.Galaxy.CurrentSolarSystem;
 
 		floatingOrigin = Player.Position;
-		UpdateGameObjectForPlayer ();
 
 		//TODO: Implement loading range.
 
 		//We want to only show Orbitals and Entities that are within a loading range.
 		//We'll need a way to determine if the position of an Orbital/Entity is within our load range...
-
-		foreach (Orbital o in mySolarSystem.OrbitalsInSystem)
-			SpawnGameObjectForOrbital (o);
-
-		foreach (Entity e in mySolarSystem.EntitiesInSystem)
-			SpawnGameObjectForEntity (e);
 	}
 
 	void Update()
 	{
 		//TODO: Replace with an Event System so that we are not updating every frame.
 
-		foreach (Orbital o in mySolarSystem.OrbitalsInSystem)
-			UpdateGameObjectForOrbital (o);
+		UpdateGameObjectForPlayer ();
 
 		foreach (Entity e in mySolarSystem.EntitiesInSystem)
 			UpdateGameObjectForEntity (e);
-	}
-
-	/// <summary>
-	/// Determines if this Orbital has a GameObject spawned.
-	/// </summary>
-	public bool GameObjectForOrbital(Orbital o)
-	{
-		if (orbitalToGameObject != null)
-			return true;
-		else
-			return false;
-	}
-
-	/// <summary>
-	/// Returns an Orbital from a GameObject.
-	/// </summary>
-	public Orbital GameObjectToOrbital(GameObject go)
-	{
-		return gameObjectToOrbital [go];
-	}
-
-	/// <summary>
-	/// Returns a GameObject from an Orbital.
-	/// </summary>
-	public GameObject OrbitalToGameObject(Orbital o)
-	{
-		return orbitalToGameObject [o];
 	}
 
 	/// <summary>
@@ -117,10 +76,7 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public bool GameObjectForEntity(Entity e)
 	{
-		if (entityToGameObject != null)
-			return true;
-		else
-			return false;
+		return entityToGameObject != null;
 	}
 
 	/// <summary>
@@ -156,7 +112,7 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForPlayer()
 	{
-		playerGO = (GameObject)Instantiate (player);
+		playerGO = Instantiate (player);
 		playerGO.GetComponentInChildren<MovementController>().Player = Player;
 		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
 	}
@@ -171,48 +127,11 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Updates the GameObject for this Orbital.
-	/// </summary>
-	void UpdateGameObjectForOrbital(Orbital o)
-	{
-		if (GameObjectForOrbital (o) == false)
-			SpawnGameObjectForOrbital (o);
-
-		GameObject myGO = OrbitalToGameObject (o);
-		myGO.transform.position = (o.Position - floatingOrigin).ToVector3();
-	}
-
-	/// <summary>
-	/// Spawns a GameObject for this Orbital.
-	/// </summary>
-	void SpawnGameObjectForOrbital(Orbital o)
-	{
-		GameObject myGO = (GameObject)Instantiate (sphere);
-		myGO.transform.parent = this.transform;
-		myGO.name = o.Name;
-
-		orbitalToGameObject [o] = myGO;
-		gameObjectToOrbital [myGO] = o;
-	}
-
-	/// <summary>
-	/// Destroys the GameObject for an Orbital using a GameObject reference.
-	/// </summary>
-	void DestroyGameObjectForOrbital(GameObject go)
-	{
-		Orbital o = GameObjectToOrbital (go);
-		orbitalToGameObject.Remove (o);
-		gameObjectToOrbital.Remove (go);
-
-		Destroy (go);
-	}
-
-	/// <summary>
 	/// Updates the GameObject for this Entity.
 	/// </summary>
 	void UpdateGameObjectForEntity(Entity e)
 	{
-		if (GameObjectForEntity (e) == false)
+		if (GameObjectForEntity (e))
 			SpawnGameObjectForEntity (e);
 
 		GameObject myGO = EntityToGameObject (e);
@@ -224,7 +143,7 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForEntity(Entity e)
 	{
-		GameObject myGO = (GameObject)Instantiate (cube);
+		GameObject myGO = Instantiate (cube);
 		myGO.transform.parent = this.transform;
 
 		entityToGameObject [e] = myGO;

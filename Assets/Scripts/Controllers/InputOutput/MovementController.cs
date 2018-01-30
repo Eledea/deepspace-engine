@@ -33,7 +33,7 @@ public class MovementController : MonoBehaviour
 
 	bool DampenersOn = true;
 
-	Vector3 rotateTo;
+	Quaternion rotateTo;
 
 	void Update()
 	{
@@ -85,12 +85,14 @@ public class MovementController : MonoBehaviour
 
 	void Update_PlayerRotation()
 	{
-		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (-Input.GetAxis ("Mouse Y") * 5f, Vector3.right);
+		//TODO: Consider adding interpolation to smooth Player rotation.
+
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 5f, Vector3.right);
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (Input.GetAxis ("Mouse X") * 5f, Vector3.up);
 	}
 
 	void Update_PlayerRoll()
 	{
-		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (roll.magnitude * 2f, Vector3.forward);
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis(roll.magnitude * 2f, Vector3.forward);
 	}
 }

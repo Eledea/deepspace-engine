@@ -57,10 +57,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public bool IsInventoryAttachedTo(Entity myEntity)
 		{
-			if (entityToInventory [myEntity] != null)
-				return true;
-			else
-				return false;
+			return entityToInventory[myEntity] != null;
 		}
 
 		/// <summary>
@@ -68,10 +65,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public bool IsEntityAttachedTo(Inventory myInv)
 		{
-			if (InventoryToEntity [myInv] != null)
-				return true;
-			else
-				return false;
+			return InventoryToEntity[myInv] != null;
 		}
 
 		/// <summary>

@@ -1,15 +1,13 @@
 ﻿using DeepSpace.Core;
 
-/// <summary>
-/// Sub-class of an Orbital for storing a Star.
-/// </summary>
 public class Star : Orbital
 {
 	public void GenerateStar(int numPlanets, int maxMoons)
 	{
 		Name = "Star";
-		OrbitalAngle = 0;
+		OrbitalAngle = Utility.RandomizedPointAngle;
 		OrbitalDistance = 0;
+		Position = OrbitalPosition;
 
 		for (int i = 0; i < numPlanets; i++)
 		{

@@ -1,8 +1,5 @@
 ﻿using DeepSpace.Core;
 
-/// <summary>
-/// Sub-class of an Orbital for storing a Planet.
-/// </summary>
 public class Planet : Orbital
 {
 	public void GeneratePlanet(int i, int maxMoons)
@@ -10,6 +7,7 @@ public class Planet : Orbital
 		Name = "Planet";
 		OrbitalAngle = Utility.RandomizedPointAngle;
 		OrbitalDistance = (ulong)(50000 * (i + 1));
+		Position = OrbitalPosition;
 
 		int numMoons = UnityEngine.Random.Range (0, maxMoons + 1);
 

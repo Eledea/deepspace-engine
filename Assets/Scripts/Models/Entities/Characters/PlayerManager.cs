@@ -40,8 +40,7 @@ public class PlayerManager : MonoBehaviour
 		Debug.Log ("Created a new player!");
 
 		Player p = new Player();
-		p.DisplayName = "Sam";
-		p.SolarSystem = mySolarSystem;
+		p.Name = "Sam";
 		p.Position = new Vector3D (100, 0, 98);
 		p.Rotation = Quaternion.Euler (0, 0, 0);
 

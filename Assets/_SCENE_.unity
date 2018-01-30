@@ -192,8 +192,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3d6494853d9d046a32f92fb82aa63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphere: {fileID: 1316545316231452, guid: 7acb28dd3697a074cbe0db023058deaa, type: 2}
   player: {fileID: 1461051600675060, guid: f802ac56594a3ba409b7ce7649d69b94, type: 2}
+  sphere: {fileID: 1316545316231452, guid: 7acb28dd3697a074cbe0db023058deaa, type: 2}
+  cube: {fileID: 0}
 --- !u!1 &1172678764
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +480,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1924907890}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: 0, z: 100}
+  m_LocalPosition: {x: 1, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
