@@ -22,9 +22,8 @@ public class Galaxy
 	/// </summary>
 	public List<SolarSystem> SolarSystems { get; set; }
 
-	/// <summary>
-	/// The SolarSystem we are currently showing.
-	/// </summary>
+	//TODO: Make this use the Player's current SolarSystem instead.
+
 	public SolarSystem CurrentSolarSystem { get; set; }
 
 	/// <summary>
@@ -43,6 +42,11 @@ public class Galaxy
 		CurrentSolarSystem = SolarSystems [0];
 
 		PlayerManager.Instance.CreatePlayerInManager (CurrentSolarSystem);
+
+		//TODO; Wtf is this doing? Fix it asap!
+		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayerInManager (37331);
+
+		SolarSystemView.Instance.SetSolarSystem ();
 	}
 
 	/// <summary>
@@ -53,21 +57,25 @@ public class Galaxy
 		CurrentSolarSystem = SolarSystems [id];
 	}
 
-	/// <summary>
-	/// Advances game time by a number of seconds.
-	/// </summary>
-	void AdvanceTime(int numSeconds)
-	{
-		//TODO: Make this work in REAL seconds.
+	float advanceTimeTimer = 1f;
 
-		timeSinceStart += (uint)numSeconds;
+	/// <summary>
+	/// Updates the time timer.
+	/// </summary>
+	public void UpdateTime()
+	{
+		advanceTimeTimer -= Time.deltaTime;
+
+		if (advanceTimeTimer < 0)
+			AdvanceTime ();
 	}
 
 	/// <summary>
-	/// Updates all the SolarSystem in this Galaxy.
+	/// Advances the time in this Galaxy by 1 second.
 	/// </summary>
-	public void UpdateGalaxy()
+	public void AdvanceTime()
 	{
-		AdvanceTime (1);
+		timeSinceStart += (uint)1;
+		advanceTimeTimer = 0f;
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeepSpace.Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,11 @@ using UnityEngine;
 /// </summary>
 public class Orbital
 {
+	/// <summary>
+	/// The name of this Orbital.
+	/// </summary>
+	public string Name { get; set; }
+
 	/// <summary>
 	/// The parent Orbital of this Orbital.
 	/// </summary>
@@ -30,14 +36,14 @@ public class Orbital
 	/// <summary>
 	/// Returns the world-space position of this Orbital.
 	/// </summary>
-	public Vector3 Position
+	public Vector3D Position
 	{
 		get
 		{
-			Vector3 Position = new Vector3 (
-				(float)(Math.Sin (OrbitalAngle) * OrbitalDistance),
+			Vector3D Position = new Vector3D (
+				Math.Sin (OrbitalAngle) * OrbitalDistance,
 				0,
-				(float)(-Math.Cos (OrbitalAngle) * OrbitalDistance)
+				-Math.Cos (OrbitalAngle) * OrbitalDistance
 			);
 
 			if (Parent != null)

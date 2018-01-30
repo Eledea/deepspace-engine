@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DeepSpace.Core;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,24 +8,39 @@ using UnityEngine;
 /// </summary>
 public class SolarSystemView : MonoBehaviour
 {
-	//TODO: Replace Prefab system with asset streaming later.
+	//TODO: Replace Prefab system with asset streaming later on.
 
-	public GameObject[] prefabs;
+	public GameObject player;
+	public GameObject sphere;
+	public GameObject cube;
 
-	void Start()
+	public static SolarSystemView Instance;
+
+	void OnEnable()
 	{
-		//TODO: Implement floating point origin system.
-
-		SetSolarSystem ();
+		Instance = this;
 	}
+
+	/// <summary>
+	/// The Player data class that this controller is linked to.
+	/// </summary>
+	public Player Player { get; set;}
 
 	SolarSystem mySolarSystem;
 
+	GameObject playerGO;
+
 	Dictionary<Orbital, GameObject> orbitalToGameObject;
-	Dictionary<Player, GameObject> entityToGameObject;
+	Dictionary<GameObject, Orbital> gameObjectToOrbital;
+
+	Dictionary<Entity, GameObject> entityToGameObject;
+	Dictionary<GameObject, Entity> gameObjectToEntity;
+
+	Vector3D floatingOrigin;
+	float loadRange;
 
 	/// <summary>
-	/// Sets a new SolarSystem to display.
+	/// Sets a new SolarSystem.
 	/// </summary>
 	public void SetSolarSystem()
 	{
@@ -34,82 +50,161 @@ public class SolarSystemView : MonoBehaviour
 			child.SetParent (null);
 			Destroy (child.gameObject);
 		}
+			
+		orbitalToGameObject = new Dictionary<Orbital, GameObject>();
+		gameObjectToOrbital = new Dictionary<GameObject, Orbital>();
 
-		orbitalToGameObject = new Dictionary<Orbital, GameObject> ();
-		entityToGameObject = new Dictionary<Player, GameObject> ();
+		entityToGameObject = new Dictionary<Entity, GameObject>();
+		gameObjectToEntity = new Dictionary<GameObject, Entity>();
 
 		mySolarSystem = GameController.Instance.Galaxy.CurrentSolarSystem;
 
-		SpawnGameObjectForOrbital (mySolarSystem.Star, this.transform);
+		floatingOrigin = Player.Position;
+		SpawnGameObjectForPlayer ();
 
-		for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
-			SpawnGameObjectForPlayer(PlayerManager.Instance.GetPlayerInManager (i));
-	}
+		//TODO: Implement loading range.
 
-	/// <summary>
-	/// Spawn a GameObject for this Orbital.
-	/// </summary>
-	void SpawnGameObjectForOrbital(Orbital orbital, Transform parent)
-	{
-		GameObject go = (GameObject)Instantiate (prefabs[0]);
-		go.transform.position = orbital.Position;
-		go.transform.parent = parent;
+		foreach (Orbital o in mySolarSystem.OrbitalsInSystem)
+			SpawnGameObjectForOrbital (o);
 
-		orbitalToGameObject [orbital] = go;
-
-		if (orbital.Children != null)
-			for (int i = 0; i < orbital.Children.Count; i++)
-				SpawnGameObjectForOrbital (orbital.Children[i], go.transform);
-	}
-
-	/// <summary>
-	/// Spawns a GameObject for this player.
-	/// </summary>
-	void SpawnGameObjectForPlayer(Player player)
-	{
-		GameObject go = (GameObject)Instantiate (prefabs [1]);
-		go.transform.position = player.Position.ToVector3();
-
-		entityToGameObject [player] = go;
-		go.GetComponentInChildren<MovementController>().Player = player;
-		go.GetComponentInChildren<InventoryController>().Player = player;
+		foreach (Entity e in mySolarSystem.EntitiesInSystem)
+			SpawnGameObjectForEntity (e);
 	}
 
 	void Update()
 	{
-		if (GameController.Instance.Galaxy != null)
-		{
-			if (mySolarSystem != null)
-				UpdateGameObjectForOrbital (mySolarSystem.Star);
-			else
-				Debug.LogError ("We have a Galaxy loaded, but no SolarSystem!");
-
-			for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
-				UpdateGameObjectForPlayer(PlayerManager.Instance.GetPlayerInManager (i));
-		}
+		UpdateGameObjectForPlayer ();
 	}
 
 	/// <summary>
-	/// Updates the GameObject for this Orbital.
+	/// Returns an Orbital from a GameObject.
 	/// </summary>
-	void UpdateGameObjectForOrbital (Orbital orbital)
+	public Orbital GameObjectToOrbital(GameObject go)
 	{
-		//TODO: Right now this function does nothing. Later we'll use it for Dynamic Rendering.
+		return gameObjectToOrbital [go];
+	}
 
-		/*GameObject go = orbitalGameObjectMap [orbital];
+	/// <summary>
+	/// Returns a GameObject from an Orbital.
+	/// </summary>
+	public GameObject OrbitalToGameObject(Orbital o)
+	{
+		return orbitalToGameObject [o];
+	}
 
-		if (orbital.Children != null)
-			for (int i = 0; i < orbital.Children.Count; i++)
-				UpdateGameObjectForOrbital (orbital.Children[i]);*/
+	/// <summary>
+	/// Returns an Entity from a GameObject.
+	/// </summary>
+	public Entity GameObjectToEntity(GameObject go)
+	{
+		return gameObjectToEntity [go];
+	}
+
+	/// <summary>
+	/// Returns a GameObject from an Entity.
+	/// </summary>
+	public GameObject EntityToGameObject(Entity e)
+	{
+		return entityToGameObject [e];
+	}
+
+	/// <summary>
+	/// Spawns the GameObject for this Player.
+	/// </summary>
+	void SpawnGameObjectForPlayer()
+	{
+		playerGO = (GameObject)Instantiate (player);
+		playerGO.GetComponentInChildren<MovementController>().Player = Player;
+		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
+
+		playerGO.transform.position = (Player.Position - floatingOrigin).ToVector3();
+		playerGO.transform.rotation = Player.Rotation;
 	}
 
 	/// <summary>
 	/// Updates the GameObject for this Player.
 	/// </summary>
-	void UpdateGameObjectForPlayer(Player player)
+	void UpdateGameObjectForPlayer()
 	{
-		GameObject go = entityToGameObject [player];
-		go.transform.position = player.Position.ToVector3();
-		go.transform.rotation = player.Rotation;
+		playerGO.transform.position = (Player.Position - floatingOrigin).ToVector3();
+		playerGO.transform.rotation = Player.Rotation;
+	}
+
+	/// <summary>
+	/// Destroys the GameObject for a Player using a GameObject reference.
+	/// </summary>
+	void DestroyGameObjectForPlayer()
+	{
+		Destroy (playerGO);
+		playerGO = null;
+	}
+
+	/// <summary>
+	/// Spawns a GameObject for this Orbital.
+	/// </summary>
+	void SpawnGameObjectForOrbital(Orbital o)
+	{
+		GameObject myGO = (GameObject)Instantiate (sphere);
+		myGO.transform.position = (o.Position - floatingOrigin).ToVector3();
+		myGO.transform.parent = this.transform;
+		myGO.name = o.Name;
+
+		orbitalToGameObject [o] = myGO;
+		gameObjectToOrbital [myGO] = o;
+	}
+
+	/// <summary>
+	/// Updates the GameObject for this Orbital.
+	/// </summary>
+	void UpdateGameObjectForOrbital(Orbital o)
+	{
+		GameObject myGO = OrbitalToGameObject (o);
+		myGO.transform.position = (o.Position - floatingOrigin).ToVector3();
+	}
+
+	/// <summary>
+	/// Destroys the GameObject for an Orbital using a GameObject reference.
+	/// </summary>
+	void DestroyGameObjectForOrbital(GameObject go)
+	{
+		Orbital o = GameObjectToOrbital (go);
+		orbitalToGameObject.Remove (o);
+		gameObjectToOrbital.Remove (go);
+
+		Destroy (go);
+	}
+
+	/// <summary>
+	/// Spawns a GameObject for this Entity.
+	/// </summary>
+	void SpawnGameObjectForEntity(Entity e)
+	{
+		GameObject myGO = (GameObject)Instantiate (cube);
+		myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
+		myGO.transform.parent = this.transform;
+
+		entityToGameObject [e] = myGO;
+		gameObjectToEntity [myGO] = e;
+	}
+
+	/// <summary>
+	/// Updates the GameObject for this Entity.
+	/// </summary>
+	void UpdateGameObjectForEntity(Entity e)
+	{
+		GameObject myGO = EntityToGameObject (e);
+		myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
+	}
+
+	/// <summary>
+	/// Destroys the GameObject for an Entity using a GameObject reference.
+	/// </summary>
+	void DestroyGameObjectForEntity(GameObject go)
+	{
+		Entity e = GameObjectToEntity(go);
+		entityToGameObject.Remove (e);
+		gameObjectToEntity.Remove (go);
+
+		Destroy (go);
 	}
 }

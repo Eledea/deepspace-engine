@@ -43,9 +43,11 @@ public class MovementController : MonoBehaviour
 		if (InventoryController.Instance.IsControllable)
 		{
 			Update_PlayerRotation ();
+			Update_PlayerRoll ();
 		}
 
-		//Debug.Log (Player.Velocity + " " + Player.Velocity.magnitude);
+		if (Player.Velocity.magnitude != 0)
+			Player.UpdatePosition ();
 	}
 
 	void Update_DampenersController()
@@ -79,13 +81,16 @@ public class MovementController : MonoBehaviour
 			Player.Velocity = Vector3D.zero;
 
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
-		Player.UpdatePosition ();
 	}
 
 	void Update_PlayerRotation()
 	{
-		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (roll.magnitude * 2f, Vector3.forward);
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (-Input.GetAxis ("Mouse Y") * 5f, Vector3.right);
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (Input.GetAxis ("Mouse X") * 5f, Vector3.up);
+	}
+
+	void Update_PlayerRoll()
+	{
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (roll.magnitude * 2f, Vector3.forward);
 	}
 }

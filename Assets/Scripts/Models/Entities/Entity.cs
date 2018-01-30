@@ -7,10 +7,24 @@ using UnityEngine;
 /// </summary>
 public class Entity
 {
+	string Name;
+
 	/// <summary>
-	/// The Name of this Entity.
+	/// Returns or sets the DisplayName of this Entity.
 	/// </summary>
-	public string Name { get; set; }
+	/// <value>The display name.</value>
+	public string DisplayName
+	{
+		get
+		{
+			return Name;
+		}
+
+		set
+		{
+			Name = value;
+		}
+	}
 
 	/// <summary>
 	/// The SolarSystem that this Entity is currently in.

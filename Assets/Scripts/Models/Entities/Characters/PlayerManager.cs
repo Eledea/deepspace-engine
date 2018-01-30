@@ -14,10 +14,12 @@ public class PlayerManager : MonoBehaviour
 	{
 		Instance = this;
 
-		Players = new List<Player>();
+		playersToID = new Dictionary<Player, int>();
+		IDToPlayers = new Dictionary<int, Player>();
 	}
 
-	List<Player> Players;
+	Dictionary<Player, int> playersToID;
+	Dictionary<int, Player> IDToPlayers;
 
 	/// <summary>
 	/// Returns the number of Players being mananged.
@@ -26,7 +28,7 @@ public class PlayerManager : MonoBehaviour
 	{
 		get
 		{
-			return Players.Count;
+			return playersToID.Count;
 		}
 	}
 
@@ -35,18 +37,18 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void CreatePlayerInManager(SolarSystem mySolarSystem)
 	{
-		if (Players == null)
-			Players = new List<Player> ();
+		Debug.Log ("Created a new player!");
 
 		Player p = new Player();
-		p.Name = "Sam";
+		p.DisplayName = "Sam";
 		p.SolarSystem = mySolarSystem;
 		p.Position = new Vector3D (100, 0, 98);
 		p.Rotation = Quaternion.Euler (0, 0, 0);
-		p.Health = 100;
-		p.Oxygen = 100;
 
-		Players.Add (p);
+		//TODO: Figure out a way to assign a Player an ID and consider if the Player class should be self aware.
+		int id = 37331;
+
+		AddPlayerToManager (p, id);
 
 		WoodStack w = new WoodStack (p, 5);
 		StoneStack s = new StoneStack (p, 11);
@@ -56,19 +58,27 @@ public class PlayerManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Removes an Inventory from the InventoryManager.
+	/// Adds the player to the PlayerManager.
 	/// </summary>
-	public void RemovePlayerFromManager(Player p)
+	public void AddPlayerToManager(Player p, int id)
 	{
-		if (Players != null)
-			Players.Remove (p);
+		playersToID [p] = id;
+		IDToPlayers [id] = p;
 	}
 
 	/// <summary>
-	/// Returns a Player at an array index. 
+	/// Returns a Player from an id. 
 	/// </summary>
-	public Player GetPlayerInManager(int i)
+	public Player GetPlayerInManager(int id)
 	{
-		return Players[i];
+		return IDToPlayers [id];
+	}
+
+	/// <summary>
+	/// Returns an ID from a Player. 
+	/// </summary>
+	public int GetPlayerID(Player p)
+	{
+		return playersToID [p];
 	}
 }

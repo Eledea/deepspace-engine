@@ -7,6 +7,7 @@ public class Planet : Orbital
 {
 	public void GeneratePlanet(int i, int maxMoons)
 	{
+		Name = "Planet";
 		OrbitalAngle = Utility.RandomizedPointAngle;
 		OrbitalDistance = (ulong)(50000 * (i + 1));
 

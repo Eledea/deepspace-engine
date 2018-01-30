@@ -45,6 +45,6 @@ public class GameController : MonoBehaviour
 	void Update()
 	{
 		if (Galaxy != null)
-			Galaxy.UpdateGalaxy();
+			Galaxy.AdvanceTime();
 	}
 }

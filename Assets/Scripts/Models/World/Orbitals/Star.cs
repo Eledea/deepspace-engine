@@ -7,6 +7,7 @@ public class Star : Orbital
 {
 	public void GenerateStar(int numPlanets, int maxMoons)
 	{
+		Name = "Star";
 		OrbitalAngle = 0;
 		OrbitalDistance = 0;
 

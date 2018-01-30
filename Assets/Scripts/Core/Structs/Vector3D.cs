@@ -8,17 +8,19 @@ namespace DeepSpace.Core
 	/// </summary>
 	public struct Vector3D
 	{
-		/// Constructors
+		//Constructors
 		public Vector3D (double X, double Y, double Z) { x = X; y = Y; z = Z; }
 
 		public Vector3D (double X, double Y) { x = X; y = Y; z = 0; }
 
-		/// Components
-		public double x { get; set; }
-		public double y { get; set; }
-		public double z { get; set; }
+		//Components
+		public double x;
 
-		/// Properties.
+		public double y;
+
+		public double z;
+
+		//Properties.
 		public static Vector3D back {
 			get { return new Vector3D (0, 0, -1); }
 		}
@@ -68,7 +70,7 @@ namespace DeepSpace.Core
 			return new Vector3 ((float)x, (float)y, (float)z);
 		}
 
-		/// Operators.
+		//Operators
 		public static Vector3D operator + (Vector3D v1, Vector3D v2) {
 			return new Vector3D (v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 		}
@@ -81,14 +83,14 @@ namespace DeepSpace.Core
 		}
 
 		public static Vector3D operator * (Vector3D v1, double d) {
-			return new Vector3D(v1.x * d, v1.y * d, v1.z * d);
+			return new Vector3D (v1.x * d, v1.y * d, v1.z * d);
 		}
 		public static Vector3D operator * (double d ,Vector3D v1) {
-			return new Vector3D(v1.x * d, v1.y * d, v1.z * d);
+			return new Vector3D (v1.x * d, v1.y * d, v1.z * d);
 		}
 
 		public static Vector3D operator - (Vector3D v1, Vector3D v2) {
-			return new Vector3D(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+			return new Vector3D (v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 		}
 	}
 }
