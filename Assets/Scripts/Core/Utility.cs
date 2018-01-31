@@ -8,6 +8,17 @@ namespace DeepSpace.Core
 	public sealed class Utility
 	{
 		/// <summary>
+		/// Returns the absolute value of a double.
+		/// </summary>
+		public static double Abs(double d)
+		{
+			if (d < 0)
+				return -d;
+			else
+				return d;
+		}
+
+		/// <summary>
 		/// Returns a random floating-point number representing an angle in radians around a point.
 		/// </summary>
 		public static float RandomizedPointAngle

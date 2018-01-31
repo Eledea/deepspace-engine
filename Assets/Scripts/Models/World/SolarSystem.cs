@@ -60,6 +60,9 @@ public class SolarSystem
 		myStar.GenerateStar (numPlanets, maxMoons);
 
 		AddOrbitalToList (myStar);
+
+		foreach (Orbital o in Orbitals)
+			Entities.Add (o);
 	}
 
 	/// <summary>

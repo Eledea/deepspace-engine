@@ -27,7 +27,7 @@ public class GameController : MonoBehaviour
 	{
 		this.Galaxy = new Galaxy ();
 
-		Galaxy.GenerateGalaxy (1, 4, 3);
+		Galaxy.GenerateGalaxy (1, 0, 0);
 	}
 
 	/// <summary>

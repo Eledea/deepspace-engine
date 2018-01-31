@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// The Entity class defines an Entity in a Galaxy.
+/// The Entity class defines an Entity in a SolarSystem.
 /// </summary>
 public class Entity
 {

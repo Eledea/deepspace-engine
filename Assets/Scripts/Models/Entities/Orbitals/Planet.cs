@@ -1,5 +1,8 @@
 ﻿using DeepSpace.Core;
 
+/// <summary>
+/// The Planet class defines a Planet in a SolarSystem.
+/// </summary>
 public class Planet : Orbital
 {
 	public void GeneratePlanet(int i, int maxMoons)

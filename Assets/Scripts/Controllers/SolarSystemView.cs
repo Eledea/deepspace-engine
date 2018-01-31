@@ -19,6 +19,9 @@ public class SolarSystemView : MonoBehaviour
 	void OnEnable()
 	{
 		Instance = this;
+
+		//TODO: Make this not hardcoded.
+		loadRange = 200;
 	}
 
 	/// <summary>
@@ -55,10 +58,7 @@ public class SolarSystemView : MonoBehaviour
 
 		floatingOrigin = Player.Position;
 
-		//TODO: Implement loading range.
-
-		//We want to only show Orbitals and Entities that are within a loading range.
-		//We'll need a way to determine if the position of an Orbital/Entity is within our load range...
+		Debug.Log(string.Format("There are {0} Entity(s) in this SolarSystem.", mySolarSystem.EntitiesInSystem.Length));
 	}
 
 	void Update()
@@ -76,7 +76,7 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public bool GameObjectForEntity(Entity e)
 	{
-		return entityToGameObject != null;
+		return entityToGameObject.ContainsKey (e);
 	}
 
 	/// <summary>
@@ -131,11 +131,21 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void UpdateGameObjectForEntity(Entity e)
 	{
-		if (GameObjectForEntity (e))
-			SpawnGameObjectForEntity (e);
+		//TODO: Consider whether it is more effecient to just disable the Meshes for Object or to merely remove and spawn new GameObjects.
 
-		GameObject myGO = EntityToGameObject (e);
-		myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
+		if (Utility.Abs((Vector3D.Distance(e.Position, Player.Position))) < loadRange)
+		{
+			if (GameObjectForEntity(e) == false)
+				SpawnGameObjectForEntity(e);
+				
+			GameObject myGO = EntityToGameObject(e);
+			myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
+		}
+		else
+		{
+			if (GameObjectForEntity(e))
+				DestroyGameObjectForEntity(e);
+		}
 	}
 
 	/// <summary>
@@ -143,7 +153,13 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForEntity(Entity e)
 	{
-		GameObject myGO = Instantiate (cube);
+		GameObject myGO;
+
+		if (e is Orbital)
+			myGO = Instantiate(sphere);
+		else
+			myGO = Instantiate(cube);
+
 		myGO.transform.parent = this.transform;
 
 		entityToGameObject [e] = myGO;
@@ -153,12 +169,12 @@ public class SolarSystemView : MonoBehaviour
 	/// <summary>
 	/// Destroys the GameObject for an Entity using a GameObject reference.
 	/// </summary>
-	void DestroyGameObjectForEntity(GameObject go)
+	void DestroyGameObjectForEntity(Entity e)
 	{
-		Entity e = GameObjectToEntity(go);
-		entityToGameObject.Remove (e);
-		gameObjectToEntity.Remove (go);
+		GameObject go = EntityToGameObject(e);
+		Destroy(go);
 
-		Destroy (go);
+		gameObjectToEntity.Remove (go);
+		entityToGameObject.Remove(e);
 	}
 }

@@ -1,5 +1,8 @@
 ﻿using DeepSpace.Core;
 
+/// <summary>
+/// The Star class defines a Star in a SolarSystem.
+/// </summary>
 public class Star : Orbital
 {
 	public void GenerateStar(int numPlanets, int maxMoons)

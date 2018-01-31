@@ -65,6 +65,11 @@ namespace DeepSpace.Core
 		}
 
 		//Methods
+		public static double Distance(Vector3D a, Vector3D b)
+		{
+			return (a - b).magnitude;
+		}
+
 		public Vector3 ToVector3()
 		{
 			return new Vector3 ((float)x, (float)y, (float)z);

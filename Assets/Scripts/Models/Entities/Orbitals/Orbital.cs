@@ -2,14 +2,17 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// The Orbital class defines an Orbital in a SolarSystem.
+/// </summary>
 public class Orbital : Entity
 {
 	public Orbital Parent;
 
 	public List<Orbital> Children;
 
-	public float OrbitalAngle;
-	public UInt64 OrbitalDistance;
+	protected float OrbitalAngle;
+	protected UInt64 OrbitalDistance;
 
 	protected Vector3D OrbitalPosition
 	{

@@ -12,19 +12,10 @@ public class Galaxy
 		SolarSystems = new List<SolarSystem> ();
 	}
 
-	/// <summary>
-	/// The elapsed time in game since Galaxy creation in seconds.
-	/// </summary>
-	public UInt64 timeSinceStart { get; set; }
+	public UInt64 timeSinceStart;
 
-	/// <summary>
-	/// The SolarSystems in this Galaxy.
-	/// </summary>
-	public List<SolarSystem> SolarSystems { get; set; }
-
-	//TODO: Make this use the Player's current SolarSystem instead.
-
-	public SolarSystem CurrentSolarSystem { get; set; }
+	public List<SolarSystem> SolarSystems;
+	public SolarSystem CurrentSolarSystem;
 
 	/// <summary>
 	/// Generate a new galaxy with number of solar systems.
@@ -43,7 +34,7 @@ public class Galaxy
 
 		PlayerManager.Instance.CreatePlayerInManager (CurrentSolarSystem);
 
-		//TODO; Wtf is this doing? Fix it asap!
+		//TODO: Wtf is this doing? Fix it asap!
 		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayerInManager (37331);
 
 		SolarSystemView.Instance.SetSolarSystem ();
