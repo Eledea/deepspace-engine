@@ -60,8 +60,7 @@ namespace DeepSpace.InventorySystem
 				Inv [x, y] = s;
 
 			s.Inv = this;
-			s.Inv_x = x;
-			s.Inv_y = y;
+			s.InventoryIndex = new Vector2(x, y);
 		}
 
 		/// <summary>

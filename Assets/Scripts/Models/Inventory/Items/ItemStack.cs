@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DeepSpace.InventorySystem
 {
@@ -8,55 +7,51 @@ namespace DeepSpace.InventorySystem
 	/// </summary>
 	public class ItemStack
 	{
-		/// <summary>
-		/// The Inventory this ItemStack is located.
-		/// </summary>
-		public Inventory Inv { get; set; }
+		public Inventory Inv;
+
+		private int inv_x;
+		private int inv_y;
+
+		protected int itemCount;
+		protected int itemLimit;
+
+		protected IType IType;
 
 		/// <summary>
-		/// The x index of this ItemStack in it's array.
-		/// </summary>
-		public int Inv_x;
-
-		/// <summary>
-		/// The y index of this ItemStack in it's array.
-		/// </summary>
-		public int Inv_y;
-
-		/// <summary>
-		/// The number of items currently held by this ItemStack.
-		/// </summary>
-		public int StackedItems { get; set; }
-
-		/// <summary>
-		/// The maximum number of items that this ItemStack can hold.
-		/// </summary>
-		public int MaxItems { get; set; }
-
-		/// <summary>
-		/// The type of this ItemStack.
-		/// </summary>
-		public IType IType { get; set; }
-
-		/// <summary>
-		/// Returns the array index of this ItemStack in it's Inventory.
+		/// Returns or sets the array index of this ItemStack in it's Inventory.
 		/// </summary>
 		public Vector2 InventoryIndex
 		{
 			get
 			{
-				return new Vector2 (Inv_x, Inv_y);
+				return new Vector2 (inv_x, inv_y);
+			}
+
+			set
+			{
+				inv_x = Mathf.FloorToInt (value.x); inv_y = Mathf.FloorToInt (value.y);
 			}
 		}
 
 		/// <summary>
-		/// Gets the number of Items in this ItemStack.
+		/// Returns the number of Items in this ItemStack.
 		/// </summary>
-		public string ItemCount
+		public int NumItems
 		{
 			get
 			{
-				return StackedItems.ToString ();
+				return itemCount;
+			}
+		}
+
+		/// <summary>
+		/// Returns the maximum number of Items this ItemStack can hold.
+		/// </summary>
+		public int MaxItems
+		{
+			get
+			{
+				return itemLimit;
 			}
 		}
 
@@ -74,7 +69,7 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Returns the Type integer of this ItemStack.
 		/// </summary>
-		public int ITypeInt
+		public int ITypeId
 		{
 			get
 			{
@@ -83,19 +78,19 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Adds an item to this ItemStack.
+		/// Increments the ItemCount for this ItemStack.
 		/// </summary>
-		public void AddItemsToStack(int n)
+		public void AddItem()
 		{
-			StackedItems += n;
+			itemCount++;
 		}
 
 		/// <summary>
-		/// Removes an item from this ItemStack.
+		/// Decrements the ItemCount for this ItemStack.
 		/// </summary>
-		public void RemoveItemsFromStack(int n)
+		public void RemoveItem()
 		{
-			StackedItems -= n;
+			itemCount--;
 		}
 	}
 }

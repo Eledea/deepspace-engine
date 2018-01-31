@@ -1,5 +1,4 @@
 ﻿using DeepSpace.InventorySystem;
-using UnityEngine;
 
 /// <summary>
 /// Independent data class for storing a Player.
@@ -8,18 +7,13 @@ public class Player : Inventory
 {
 	public Player()
 	{
+		//TODO: Serialise this from encoded XML rather than hardcoding.
+
 		Inv = new ItemStack [4,4];
 	}
 
-	/// <summary>
-	/// The Health of this Player (out of 100).
-	/// </summary>
-	public float Health { get; set; }
-
-	/// <summary>
-	/// The Oxygen level of this Player (out of 100).
-	/// </summary>
-	public float Oxygen { get; set; }
+	public float Health { get; private set; }
+	public float Oxygen { get; private set; }
 
 	/// <summary>
 	/// Returns a value indicating whether this Player is using the Inventory system.

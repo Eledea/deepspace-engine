@@ -223,7 +223,7 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	GameObject SpawnItemStackGraphic(ItemStack s, Vector3 position)
 	{
-		GameObject myGraphic = (GameObject)Instantiate(ItemGraphic, inventoryUI.transform);
+		GameObject myGraphic = Instantiate(ItemGraphic, inventoryUI.transform);
 		myGraphic.transform.localPosition = position;
 
 		Image myImage = myGraphic.GetComponentInChildren<Image>();
@@ -235,8 +235,8 @@ public class InventoryController : MonoBehaviour
 			gameObjectToItemStack [myGraphic] = s;
 
 			myGraphic.name = s.InventoryIndex.ToString ();
-			myImage.sprite = Sprites [s.ITypeInt];
-			myGraphic.GetComponentInChildren<Text> ().text = s.ItemCount;
+			myImage.sprite = Sprites [s.ITypeId];
+			myGraphic.GetComponentInChildren<Text> ().text = s.NumItems.ToString();
 		}
 
 		return myGraphic;

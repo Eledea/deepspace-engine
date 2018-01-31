@@ -7,6 +7,7 @@ using UnityEngine;
 public class Entity
 {
 	public string Name;
+	public long EntityId;
 
 	public SolarSystem SolarSystem;
 	public Vector3D Position;
@@ -15,7 +16,7 @@ public class Entity
 	public Quaternion Rotation;
 
 	/// <summary>
-	/// Updates the Position for this Entity.
+	/// Updates the Position for this Entity based on it's Velocity.
 	/// </summary>
 	public void UpdatePosition()
 	{ 

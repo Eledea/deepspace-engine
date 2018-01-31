@@ -1,5 +1,6 @@
 ﻿using DeepSpace.Core;		
 using DeepSpace.InventorySystem;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,15 +16,11 @@ public class PlayerManager : MonoBehaviour
 		Instance = this;
 
 		players = new List<Player>();
-
-		playersToID = new Dictionary<Player, long>();
-		IDToPlayers = new Dictionary<long, Player>();
+		playerId = new Dictionary<long, Player>();
 	}
 
 	List<Player> players;
-
-	Dictionary<Player, long> playersToID;
-	Dictionary<long, Player> IDToPlayers;
+	Dictionary<long, Player> playerId;
 
 	/// <summary>
 	/// Returns all the Players being managed as an array.
@@ -50,52 +47,56 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Creates a Player to the InventoryManager.
 	/// </summary>
-	public void CreatePlayerInManager(SolarSystem mySolarSystem)
+	public void CreatePlayerInManager(SolarSystem ss)
 	{
-		Debug.Log ("Created a new player!");
-
 		Player p = new Player();
 		p.Name = "Sam";
-		p.Position = new Vector3D (100, 0, 98);
-		p.Rotation = Quaternion.Euler (0, 0, 0);
+		p.EntityId = 37331;
+		p.Position = new Vector3D(0, 0, -2);
+		p.Rotation = Quaternion.Euler(0, 0, 0);
 
-		//TODO: Figure out a way to assign a Player an ID and consider if the Player class should be self aware.
-		long id = (long)37331;
+		AddPlayerToManager(p);
+		MovePlayerToSolarSystem(p, ss);
 
-		AddPlayerToManager (p, id);
+		Wood w = new Wood(p, 37);
+		Stone s = new Stone(p, 22);
 
-		WoodStack w = new WoodStack (p, 5);
-		StoneStack s = new StoneStack (p, 11);
-
-		p.AddItemStackAt (w, 0, 0);
-		p.AddItemStackAt (s, 2, 3);
-	}
-
-	/// <summary>
-	/// Adds a player to the PlayerManager.
-	/// </summary>
-	public void AddPlayerToManager(Player p, long id)
-	{
-		players.Add (p);
-
-		playersToID [p] = id;
-		IDToPlayers [id] = p;
+		p.AddItemStackAt(w, 1, 0);
+		p.AddItemStackAt(s, 2, 3);
 	}
 
 	/// <summary>
 	/// Returns a Player from an id. 
 	/// </summary>
-	public Player GetPlayerInManager(long id)
+	public Player GetPlayerWithId(long id)
 	{
-		return IDToPlayers [id];
+		return playerId [id];
 	}
 
 	/// <summary>
 	/// Returns an ID from a Player. 
 	/// </summary>
-	public long GetPlayerID(Player p)
+	public long PlayerId(Player p)
 	{
-		return playersToID [p];
+		return p.EntityId;
+	}
+
+	/// <summary>
+	/// Adds a player to the PlayerManager.
+	/// </summary>
+	public void AddPlayerToManager(Player p)
+	{
+		players.Add(p);
+		playerId[p.EntityId] = p;
+	}
+
+	/// <summary>
+	/// Moves a Player to a new SolarSystem.
+	/// </summary>
+	public void MovePlayerToSolarSystem(Player p, SolarSystem ss)
+	{
+		p.SolarSystem = ss;
+		ss.AddEntityToSolarSystem(p);
 	}
 
 	/// <summary>
@@ -103,9 +104,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void RemovePlayerFromManager(Player p)
 	{
-		IDToPlayers.Remove (GetPlayerID(p));
-		playersToID.Remove (p);
-
+		playerId.Remove (p.EntityId);
 		players.Remove(p);
 	}
 }

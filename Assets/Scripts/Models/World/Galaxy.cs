@@ -35,9 +35,9 @@ public class Galaxy
 		PlayerManager.Instance.CreatePlayerInManager (CurrentSolarSystem);
 
 		//TODO: Wtf is this doing? Fix it asap!
-		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayerInManager (37331);
+		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayerWithId (37331);
 
-		SolarSystemView.Instance.SetSolarSystem ();
+		SolarSystemView.Instance.OnSolarSystemChange ();
 	}
 
 	/// <summary>
@@ -66,7 +66,7 @@ public class Galaxy
 	/// </summary>
 	public void AdvanceTime()
 	{
-		timeSinceStart += (uint)1;
+		timeSinceStart += 1;
 		advanceTimeTimer = 0f;
 	}
 }

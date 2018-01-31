@@ -1,44 +1,11 @@
-﻿using DeepSpace.Core;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 /// <summary>
 /// The SolarSystem class defines a SolarSystem and the Orbitals and Entities within it.
 /// </summary>
 public class SolarSystem
 {
-	public SolarSystem()
-	{
-		Orbitals = new List<Orbital> ();
-		Entities = new List<Entity> ();
-	}
-
-	Star myStar;
-
-	List <Orbital> Orbitals;
 	List <Entity> Entities;
-
-	/// <summary>
-	/// Returns the Star for this SolarSystem.
-	/// </summary>
-	public Star Star
-	{
-		get
-		{
-			return myStar;
-		}
-	}
-
-	/// <summary>
-	/// Returns the Orbitals in this SolarSystem as an array.
-	/// </summary>
-	public Orbital[] OrbitalsInSystem
-	{
-		get
-		{
-			return Orbitals.ToArray ();
-		}
-	}
 
 	/// <summary>
 	/// Returns the Entities in this SolarSystem as an array.
@@ -47,6 +14,9 @@ public class SolarSystem
 	{
 		get
 		{
+			if (Entities == null)
+				Entities = new List<Entity>();
+
 			return Entities.ToArray ();
 		}
 	}
@@ -56,25 +26,12 @@ public class SolarSystem
 	/// </summary>
 	public void GenerateSolarSystem(int numPlanets, int maxMoons)
 	{
-		myStar = new Star ();
+		Star myStar = new Star ();
 		myStar.GenerateStar (numPlanets, maxMoons);
+		AddEntityToSolarSystem(myStar);
 
-		AddOrbitalToList (myStar);
-
-		foreach (Orbital o in Orbitals)
-			Entities.Add (o);
-	}
-
-	/// <summary>
-	/// Adds an Orbital to this SolarSystem's list of Orbitals.
-	/// </summary>
-	public void AddOrbitalToList(Orbital o)
-	{
-		Orbitals.Add (o);
-
-		if (o.Children != null)
-			for (int i = 0; i < o.Children.Count; i++)
-				AddOrbitalToList (o.Children [i]);
+		foreach (Orbital child in myStar.ChildOrbitals)
+			AddEntityToSolarSystem(child);
 	}
 
 	/// <summary>
@@ -82,6 +39,9 @@ public class SolarSystem
 	/// </summary>
 	public void AddEntityToSolarSystem(Entity entity)
 	{
+		if (Entities == null)
+			Entities = new List<Entity>();
+
 		Entities.Add (entity);
 	}
 
@@ -90,6 +50,7 @@ public class SolarSystem
 	/// </summary>
 	public void RemoveEntityFromSolarSystem(Entity entity)
 	{
-		Entities.Remove (entity);
+		if (Entities != null)
+			Entities.Remove (entity);
 	}
 }

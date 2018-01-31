@@ -19,9 +19,10 @@ public class SolarSystemView : MonoBehaviour
 	void OnEnable()
 	{
 		Instance = this;
+		floatingRange = 50;
 
-		//TODO: Make this not hardcoded.
-		loadRange = 5000;
+		//TODO: Make this not hardcoded. eg: Make controllable from settings UI.
+		loadRange = 100;
 	}
 
 	/// <summary>
@@ -37,19 +38,18 @@ public class SolarSystemView : MonoBehaviour
 	Dictionary<GameObject, Entity> gameObjectToEntity;
 
 	Vector3D floatingOrigin;
+
+	double floatingRange;
 	double loadRange;
 
 	/// <summary>
 	/// Sets a new SolarSystem.
 	/// </summary>
-	public void SetSolarSystem()
+	public void OnSolarSystemChange()
 	{
-		while (transform.childCount > 0)
-		{
-			Transform child = transform.GetChild (0);
-			child.SetParent (null);
-			Destroy (child.gameObject);
-		}
+		if (mySolarSystem != null)
+			foreach (Entity e in mySolarSystem.EntitiesInSystem)
+				DestroyGameObjectForEntity(e);
 
 		entityToGameObject = new Dictionary<Entity, GameObject>();
 		gameObjectToEntity = new Dictionary<GameObject, Entity>();
@@ -63,12 +63,20 @@ public class SolarSystemView : MonoBehaviour
 
 	void Update()
 	{
+		if (playerGO != null)
+		{
+			if (playerGO.transform.position.magnitude > floatingRange)
+			{
+				floatingOrigin = Player.Position;
+				Debug.Log("Player exceeded defined distance from floating origin. Setting a new floating origin...");
+			}
+		}
+
 		//TODO: Replace with an Event System so that we are not updating every frame.
 
-		UpdateGameObjectForPlayer ();
-
-		foreach (Entity e in mySolarSystem.EntitiesInSystem)
-			UpdateGameObjectForEntity (e);
+		if (mySolarSystem != null)
+			foreach (Entity e in mySolarSystem.EntitiesInSystem)
+				UpdateGameObjectForEntity(e);
 	}
 
 	/// <summary>
@@ -96,50 +104,20 @@ public class SolarSystemView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Updates the GameObject for this Player.
-	/// </summary>
-	void UpdateGameObjectForPlayer()
-	{
-		if (playerGO == null)
-			SpawnGameObjectForPlayer ();
-
-		playerGO.transform.position = (Player.Position - floatingOrigin).ToVector3();
-		playerGO.transform.rotation = Player.Rotation;
-	}
-
-	/// <summary>
-	/// Spawns the GameObject for this Player.
-	/// </summary>
-	void SpawnGameObjectForPlayer()
-	{
-		playerGO = Instantiate (player);
-		playerGO.GetComponentInChildren<MovementController>().Player = Player;
-		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
-	}
-
-	/// <summary>
-	/// Destroys the GameObject for a Player using a GameObject reference.
-	/// </summary>
-	void DestroyGameObjectForPlayer()
-	{
-		Destroy (playerGO);
-		playerGO = null;
-	}
-
-	/// <summary>
 	/// Updates the GameObject for this Entity.
 	/// </summary>
 	void UpdateGameObjectForEntity(Entity e)
 	{
-		//TODO: Consider whether it is more effecient to just disable the Meshes for Object or to merely remove and spawn new GameObjects.
+		//TODO: Consider whether it is more efficient to just disable the Meshes for Object or to merely remove and spawn new GameObjects.
 
-		if (Utility.Abs((Vector3D.Distance(e.Position, Player.Position))) < loadRange)
+		if ((Vector3D.Distance(e.Position, Player.Position)) < loadRange)
 		{
 			if (GameObjectForEntity(e) == false)
 				SpawnGameObjectForEntity(e);
 				
 			GameObject myGO = EntityToGameObject(e);
 			myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
+			myGO.transform.rotation = Player.Rotation;
 		}
 		else
 		{
@@ -155,8 +133,12 @@ public class SolarSystemView : MonoBehaviour
 	{
 		GameObject myGO;
 
+		//TODO: This sucks. Make it better!
+
 		if (e is Orbital)
 			myGO = Instantiate(sphere);
+		else if (e is Player)
+			myGO = SpawnGameObjectForPlayer();
 		else
 			myGO = Instantiate(cube);
 
@@ -164,6 +146,20 @@ public class SolarSystemView : MonoBehaviour
 
 		entityToGameObject [e] = myGO;
 		gameObjectToEntity [myGO] = e;
+
+		Debug.Log(string.Format("Loading a GameObject for {0}...", e.Name));
+	}
+
+	/// <summary>
+	/// Spawns the GameObject for this Player.
+	/// </summary>
+	GameObject SpawnGameObjectForPlayer()
+	{
+		playerGO = Instantiate(player);
+		playerGO.GetComponentInChildren<MovementController>().Player = Player;
+		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
+
+		return playerGO;
 	}
 
 	/// <summary>
@@ -171,10 +167,23 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void DestroyGameObjectForEntity(Entity e)
 	{
-		GameObject go = EntityToGameObject(e);
-		Destroy(go);
+		GameObject myGO;
 
-		gameObjectToEntity.Remove (go);
+		if (e is Player)
+		{
+			myGO = playerGO;
+			playerGO = null;
+		}
+		else
+		{
+			myGO = EntityToGameObject(e);
+		}
+
+		Destroy(myGO);
+
+		gameObjectToEntity.Remove (myGO);
 		entityToGameObject.Remove(e);
+
+		Debug.Log(string.Format("Unloading a GameObject for {0}...", e.Name));
 	}
 }

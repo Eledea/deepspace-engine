@@ -7,21 +7,45 @@ using System.Collections.Generic;
 /// </summary>
 public class Orbital : Entity
 {
-	public Orbital Parent;
-
-	public List<Orbital> Children;
+	private Orbital Parent;
+	private List<Orbital> Children;
 
 	protected float OrbitalAngle;
 	protected UInt64 OrbitalDistance;
 
+	/// <summary>
+	/// Returns the Child Orbitals for this Orbital as an array.
+	/// </summary>
+	public Orbital[] ChildOrbitals
+	{
+		get
+		{
+			List<Orbital> childOrbitals = new List<Orbital>();
+
+			if (Children != null)
+			{
+				foreach (Orbital o in Children)
+				{
+					childOrbitals.Add(o);
+					childOrbitals.AddRange(o.ChildOrbitals);
+				}
+			}
+
+			return childOrbitals.ToArray();
+		}
+	}
+
+	/// <summary>
+	/// Returns a calculated Position of this Orbital as a Vector3D.
+	/// </summary>
 	protected Vector3D OrbitalPosition
 	{
 		get
 		{
-			Vector3D OrbitalPosition = new Vector3D (
-				Math.Sin (OrbitalAngle) * OrbitalDistance,
+			Vector3D OrbitalPosition = new Vector3D(
+				Math.Sin(OrbitalAngle) * OrbitalDistance,
 				0,
-				-Math.Cos (OrbitalAngle) * OrbitalDistance
+				-Math.Cos(OrbitalAngle) * OrbitalDistance
 			);
 
 			if (Parent != null)
@@ -37,9 +61,9 @@ public class Orbital : Entity
 	public void AddChild(Orbital child)
 	{
 		if (Children == null)
-			Children = new List<Orbital> ();
-		
-		Children.Add (child);
+			Children = new List<Orbital>();
+
+		Children.Add(child);
 		child.Parent = this;
 	}
 
