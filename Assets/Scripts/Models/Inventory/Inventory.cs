@@ -9,6 +9,8 @@ namespace DeepSpace.InventorySystem
 	/// </summary>
 	public class Inventory : Entity
 	{
+		//TODO: Should this be an Interface instead of a class???
+
 		//What is the best way of storing the data for Items in an Inventory???
 		//We have a few options...
 

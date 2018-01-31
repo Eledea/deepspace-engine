@@ -14,12 +14,27 @@ public class PlayerManager : MonoBehaviour
 	{
 		Instance = this;
 
-		playersToID = new Dictionary<Player, int>();
-		IDToPlayers = new Dictionary<int, Player>();
+		players = new List<Player>();
+
+		playersToID = new Dictionary<Player, long>();
+		IDToPlayers = new Dictionary<long, Player>();
 	}
 
-	Dictionary<Player, int> playersToID;
-	Dictionary<int, Player> IDToPlayers;
+	List<Player> players;
+
+	Dictionary<Player, long> playersToID;
+	Dictionary<long, Player> IDToPlayers;
+
+	/// <summary>
+	/// Returns all the Players being managed as an array.
+	/// </summary>
+	public Player[] GetPlayersInManager
+	{
+		get
+		{
+			return players.ToArray();
+		}
+	}
 
 	/// <summary>
 	/// Returns the number of Players being mananged.
@@ -28,7 +43,7 @@ public class PlayerManager : MonoBehaviour
 	{
 		get
 		{
-			return playersToID.Count;
+			return players.Count;
 		}
 	}
 
@@ -45,7 +60,7 @@ public class PlayerManager : MonoBehaviour
 		p.Rotation = Quaternion.Euler (0, 0, 0);
 
 		//TODO: Figure out a way to assign a Player an ID and consider if the Player class should be self aware.
-		int id = 37331;
+		long id = (long)37331;
 
 		AddPlayerToManager (p, id);
 
@@ -57,10 +72,12 @@ public class PlayerManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Adds the player to the PlayerManager.
+	/// Adds a player to the PlayerManager.
 	/// </summary>
-	public void AddPlayerToManager(Player p, int id)
+	public void AddPlayerToManager(Player p, long id)
 	{
+		players.Add (p);
+
 		playersToID [p] = id;
 		IDToPlayers [id] = p;
 	}
@@ -68,7 +85,7 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Returns a Player from an id. 
 	/// </summary>
-	public Player GetPlayerInManager(int id)
+	public Player GetPlayerInManager(long id)
 	{
 		return IDToPlayers [id];
 	}
@@ -76,8 +93,19 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Returns an ID from a Player. 
 	/// </summary>
-	public int GetPlayerID(Player p)
+	public long GetPlayerID(Player p)
 	{
 		return playersToID [p];
+	}
+
+	/// <summary>
+	/// Removes a player to the PlayerManager.
+	/// </summary>
+	public void RemovePlayerFromManager(Player p)
+	{
+		IDToPlayers.Remove (GetPlayerID(p));
+		playersToID.Remove (p);
+
+		players.Remove(p);
 	}
 }

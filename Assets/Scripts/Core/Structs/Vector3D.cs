@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace.Core
 {
 	/// <summary>
-	/// DeepSpace engine struct dor working with doubles in the same way as Unity's Vector3. 
+	/// DeepSpace engine struct for working with doubles in the same way as Unity's Vector3. 
 	/// </summary>
 	public struct Vector3D
 	{

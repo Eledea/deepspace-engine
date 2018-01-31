@@ -78,12 +78,12 @@ public class InventoryController : MonoBehaviour
 			if (Player.IsUsingInventorySystem) 
 			{
 				Player.IsUsingInventorySystem = false;
-				CloseInventory();
+				OnInventoryClose();
 			} 
 			else
 			{
 				Player.IsUsingInventorySystem = true;
-				OpenInventory();
+				OnInventoryOpen();
 			}
 		}
 	}
@@ -95,10 +95,13 @@ public class InventoryController : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown (0))
 		{
-			selectedStack_GO = i.gameObject;
+			GameObject myGO = i.gameObject;
 
-			if (gameObjectToItemStack.ContainsKey (selectedStack_GO))
-				Debug.Log ("Selected ItemGraphic with name: " + selectedStack_GO.name);
+			if (gameObjectToItemStack.ContainsKey (myGO))
+			{
+				selectedStack_GO = myGO;
+				Debug.Log("Selected ItemGraphic with name: " + selectedStack_GO.name);
+			}
 		}
 	}
 
@@ -160,7 +163,7 @@ public class InventoryController : MonoBehaviour
 	/// <summary>
 	/// Opens this Player's inventory.
 	/// </summary>
-	private void OpenInventory()
+	private void OnInventoryOpen()
 	{
 		Player.IsUsingInventorySystem = true;
 
@@ -173,9 +176,9 @@ public class InventoryController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Closes this PLayer's inventory.
+	/// Closes this Player's inventory.
 	/// </summary>
-	private void CloseInventory()
+	private void OnInventoryClose()
 	{
 		Player.IsUsingInventorySystem = false;
 

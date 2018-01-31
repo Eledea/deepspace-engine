@@ -21,7 +21,7 @@ public class SolarSystemView : MonoBehaviour
 		Instance = this;
 
 		//TODO: Make this not hardcoded.
-		loadRange = 200;
+		loadRange = 5000;
 	}
 
 	/// <summary>

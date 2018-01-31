@@ -89,14 +89,12 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public void UpdateItemStackGraphicsForPlayers()
 		{
-			for (int i = 0; i < PlayerManager.Instance.PlayerCount; i++)
+			foreach (Player p in PlayerManager.Instance.GetPlayersInManager)
 			{
 				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the function to update myInventories.
 
-				Player myPlayer = PlayerManager.Instance.GetPlayerInManager (i);
-
-				if (myPlayer.IsUsingInventorySystem)
-					myPlayer.InventoryUpdateFlag = true;
+				if (p.IsUsingInventorySystem)
+					p.InventoryUpdateFlag = true;
 			}
 		}
 	}
