@@ -1,4 +1,5 @@
 ﻿using DeepSpace.Core;
+using DeepSpace.InventorySystem;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,19 @@ public class Entity
 
 	public Vector3D Velocity;
 	public Quaternion Rotation;
+
+	public Inventory Inventory;
+
+	/// <summary>
+	/// Determines if this Entity has an Inventory or not.
+	/// </summary>
+	public bool HasInventory
+	{
+		get
+		{
+			return Inventory != null;
+		}
+	}
 
 	/// <summary>
 	/// Updates the Position for this Entity based on it's Velocity.

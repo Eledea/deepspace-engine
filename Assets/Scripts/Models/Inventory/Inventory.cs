@@ -7,10 +7,8 @@ namespace DeepSpace.InventorySystem
 	/// <summary>
 	/// The Inventory class defines an Inventory of an Entity.
 	/// </summary>
-	public class Inventory : Entity
+	public class Inventory
 	{
-		//TODO: Should this be an Interface instead of a class???
-
 		//What is the best way of storing the data for Items in an Inventory???
 		//We have a few options...
 
@@ -25,9 +23,19 @@ namespace DeepSpace.InventorySystem
 		//how many of an item we have in each slot.
 
 		/// <summary>
+		/// Constructs a new Inventory.
+		/// </summary>
+		public Inventory (Entity e, int x, int y)
+		{
+			Inv = new ItemStack[x, y];
+
+			InventoryManager.Instance.AddInventoryToManager(this, e);
+		}
+
+		/// <summary>
 		/// The Inventory of this Inventory.
 		/// </summary>
-		protected ItemStack[,] Inv { get; set; }
+		ItemStack[,] Inv;
 
 		/// <summary>
 		/// Returns the length of the x axis of this Inventory.
@@ -79,10 +87,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public bool IsItemStackAt(int x, int y)
 		{
-			if (GetItemStackAt (x, y) != null)
-				return true;
-			else
-				return false;
+			return GetItemStackAt(x, y) != null;
 		}
 
 		/// <summary>
@@ -98,12 +103,12 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public void MoveItemStackTo(int x, int y, Inventory inventory, int a, int b)
 		{
-			if (Inv [x, y] != null)
+			if (IsItemStackAt(x, y))
 			{
-				ItemStack s = GetItemStackAt (x, y);
+				ItemStack s = GetItemStackAt(x, y);
 
-				this.RemoveItemStackFrom (x, y);
-				inventory.AddItemStackAt (s, a, b);
+				this.RemoveItemStackFrom(x, y);
+				inventory.AddItemStackAt(s, a, b);
 			}
 		}
 	}

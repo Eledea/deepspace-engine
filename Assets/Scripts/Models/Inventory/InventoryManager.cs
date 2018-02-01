@@ -92,7 +92,7 @@ namespace DeepSpace.InventorySystem
 			foreach (Player p in PlayerManager.Instance.GetPlayersInManager)
 			{
 				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the
-				//function to update myInventories.
+				//function to update the Inventories currently being managed.
 
 				if (p.IsUsingInventorySystem)
 					p.InventoryUpdateFlag = true;

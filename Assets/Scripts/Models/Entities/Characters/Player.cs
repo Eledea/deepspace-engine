@@ -3,13 +3,11 @@
 /// <summary>
 /// Independent data class for storing a Player.
 /// </summary>
-public class Player : Inventory
+public class Player : Entity
 {
 	public Player()
 	{
-		//TODO: Serialise this from encoded XML rather than hardcoding.
-
-		Inv = new ItemStack [4,4];
+		Inventory = new Inventory(this, 4, 4);
 	}
 
 	public float Health { get; private set; }

@@ -58,11 +58,11 @@ public class PlayerManager : MonoBehaviour
 		AddPlayerToManager(p);
 		MovePlayerToSolarSystem(p, ss);
 
-		Wood w = new Wood(p, 37);
-		Stone s = new Stone(p, 22);
+		Wood w = new Wood(p.Inventory, 37);
+		Stone s = new Stone(p.Inventory, 22);
 
-		p.AddItemStackAt(w, 1, 0);
-		p.AddItemStackAt(s, 2, 3);
+		p.Inventory.AddItemStackAt(w, 1, 0);
+		p.Inventory.AddItemStackAt(s, 2, 3);
 	}
 
 	/// <summary>

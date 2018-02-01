@@ -117,7 +117,7 @@ public class SolarSystemView : MonoBehaviour
 				
 			GameObject myGO = EntityToGameObject(e);
 			myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
-			myGO.transform.rotation = Player.Rotation;
+			myGO.transform.rotation = e.Rotation;
 		}
 		else
 		{

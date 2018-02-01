@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DeepSpace.Core;
+using System.Collections.Generic;
 
 /// <summary>
 /// The SolarSystem class defines a SolarSystem and the Orbitals and Entities within it.
@@ -32,6 +33,11 @@ public class SolarSystem
 
 		foreach (Orbital child in myStar.ChildOrbitals)
 			AddEntityToSolarSystem(child);
+
+		Storage s = new Storage();
+		s.Name = "Storage";
+		s.Position = new Vector3D(15, 0, 10);
+		AddEntityToSolarSystem(s);
 	}
 
 	/// <summary>
