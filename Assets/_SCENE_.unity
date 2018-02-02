@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1461051600675060, guid: f802ac56594a3ba409b7ce7649d69b94, type: 2}
   sphere: {fileID: 1316545316231452, guid: 7acb28dd3697a074cbe0db023058deaa, type: 2}
-  cube: {fileID: 1164121629156980, guid: cfe38bfe6e05ba64ea1999d86f5cac85, type: 2}
+  cube: {fileID: 1366969380253264, guid: a1985c6411b285d4490754a9a1b3d837, type: 2}
 --- !u!1 &1172678764
 GameObject:
   m_ObjectHideFlags: 0

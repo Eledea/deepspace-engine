@@ -52,9 +52,9 @@ namespace DeepSpace.Core
 		/// <summary>
 		/// Returns a world-space position from an array index.
 		/// </summary>
-		public static Vector2 IndexToWorldSpacePosition(int x, int y, int s, int a, int b, Vector2 offset)
+		public static Vector2 IndexToWorldSpacePosition(int x, int y, int s, int a, int b)
 		{
-			return new Vector2(x * s + s / 2 - a * s / 2 + offset.x * s, y * s + s / 2 - b * s / 2 + offset.y * s);
+			return new Vector2(x * s + s / 2 - a * s / 2 * s, y * s + s / 2 - b * s / 2 * s);
 		}
 	}
 }
