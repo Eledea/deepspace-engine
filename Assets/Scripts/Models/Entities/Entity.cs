@@ -11,12 +11,46 @@ public class Entity
 	public long EntityId;
 
 	public SolarSystem SolarSystem;
-	public Vector3D Position;
-
 	public Vector3D Velocity;
-	public Quaternion Rotation;
+
+	Vector3D position;
+	Quaternion rotation;
 
 	public Inventory Inventory;
+
+	/// <summary>
+	/// Gets or sets the Position of this Player in it's SolarSystem.
+	/// </summary>
+	public Vector3D Position
+	{
+		get
+		{
+			return position;
+		}
+
+		set
+		{
+			position = value;
+			PlayerManager.Instance.UpdateEntitiesForPlayersInSystem(SolarSystem);
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets the Rotation of this Player in it's SolarSystem.
+	/// </summary>
+	public Quaternion Rotation
+	{
+		get
+		{
+			return rotation;
+		}
+
+		set
+		{
+			rotation = value;
+			PlayerManager.Instance.UpdateEntitiesForPlayersInSystem(SolarSystem);
+		}
+	}
 
 	/// <summary>
 	/// Determines if this Entity has an Inventory or not.

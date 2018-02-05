@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace.InventorySystem
 {
 	// <summary>
-	/// Manages the myInventories for the Galaxy that we have loaded.
+	/// Manages Inventory operations for the Galaxy that we have loaded.
 	/// </summary>
 	public class InventoryManager : MonoBehaviour
 	{
@@ -62,18 +62,26 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Updates the ItemStack graphics for players who are using the Inventory system.
+		/// Updates the ItemStack graphics for all players who are using the Inventory system in a SolarSystem.
 		/// </summary>
-		public void UpdateItemStackGraphicsForPlayers()
+		public void UpdateItemStackGraphicsForPlayersInSolarSystem(SolarSystem ss)
 		{
-			foreach (Player p in PlayerManager.Instance.GetPlayersInManager)
+			foreach (Player p in ss.PlayersInSystem)
 			{
 				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the
 				//function to update the Inventories currently being managed.
 
-				if (p.IsUsingInventorySystem)
-					p.InventoryUpdateFlag = true;
+				UpdateItemStackGraphicsForPlayer(p);
 			}
+		}
+
+		/// <summary>
+		/// Updates the ItemStack graphics for a player.
+		/// </summary>
+		public void UpdateItemStackGraphicsForPlayer(Player p)
+		{
+			if (p.IsUsingInventorySystem)
+				p.inventoryController.OnInventoryUpdate();
 		}
 	}
 }

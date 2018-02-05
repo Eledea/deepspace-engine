@@ -8,7 +8,22 @@ using UnityEngine;
 /// </summary>
 public class SolarSystem
 {
-	List <Entity> Entities;
+	List<Player> Players;
+	List<Entity> Entities;
+
+	/// <summary>
+	/// Returns the Players in this SolarSystem as an array.
+	/// </summary>
+	public Player[] PlayersInSystem
+	{
+		get
+		{
+			if (Players == null)
+				Players = new List<Player>();
+
+			return Players.ToArray();
+		}
+	}
 
 	/// <summary>
 	/// Returns the Entities in this SolarSystem as an array.
@@ -43,6 +58,19 @@ public class SolarSystem
 	}
 
 	/// <summary>
+	/// Adds a Player to this SolarSystem.
+	/// </summary>
+	public void AddPlayerToSolarSystem(Player player)
+	{
+		if (Players == null)
+			Players = new List<Player>();
+
+		Players.Add(player);
+
+		AddEntityToSolarSystem(player);
+	}
+
+	/// <summary>
 	/// Adds an Entity to this SolarSystem.
 	/// </summary>
 	public void AddEntityToSolarSystem(Entity entity)
@@ -52,6 +80,19 @@ public class SolarSystem
 
 		Entities.Add (entity);
 		entity.SolarSystem = this;
+	}
+
+	/// <summary>
+	/// Removes a Player from this SolarSystem.
+	/// </summary>
+	public void RemovePlayerFromSolarSystem(Player player)
+	{
+		if (Players == null)
+			return;
+
+		Players.Remove(player);
+
+		RemoveEntityFromSolarSystem(player);
 	}
 
 	/// <summary>

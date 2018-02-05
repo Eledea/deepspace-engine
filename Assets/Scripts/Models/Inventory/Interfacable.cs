@@ -3,23 +3,25 @@ using UnityEngine.EventSystems;
 
 public class Interfacable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+	public InventoryController myController;
+
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		InventoryController.Instance.OnPointerDown (this);
+		myController.OnPointerDown (this);
 	}
 
 	public void OnBeginDrag (PointerEventData eventData)
 	{
-		InventoryController.Instance.OnBeginDrag (this);
+		myController.OnBeginDrag (this);
 	}
 
 	public void OnDrag (PointerEventData eventData)
 	{
-		InventoryController.Instance.OnDrag (eventData.position);
+		myController.OnDrag (eventData.position);
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
-		InventoryController.Instance.OnEndDrag();
+		myController.OnEndDrag();
 	}
 }

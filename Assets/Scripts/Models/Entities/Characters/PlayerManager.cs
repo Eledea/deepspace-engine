@@ -64,11 +64,31 @@ public class PlayerManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Updates the local Entity representation for all Players in a SolarSystem.
+	/// </summary>
+	public void UpdateEntitiesForPlayersInSystem(SolarSystem ss)
+	{
+		if (ss == null)
+			return;
+
+		foreach(Player p in ss.PlayersInSystem)
+			UpdateEntitiesForPlayer(p);
+	}
+
+	/// <summary>
+	/// Updates the local Entity representation for a Player.
+	/// </summary>
+	public void UpdateEntitiesForPlayer(Player p)
+	{
+		SolarSystemView.Instance.UpdateAllEntities();
+	}
+
+	/// <summary>
 	/// Moves a Player to a new SolarSystem.
 	/// </summary>
 	public void MovePlayerToSolarSystem(Player p, SolarSystem ss)
 	{
-		ss.AddEntityToSolarSystem(p);
+		ss.AddPlayerToSolarSystem(p);
 	}
 
 	/// <summary>

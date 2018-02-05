@@ -1,5 +1,6 @@
 ﻿using DeepSpace.Core;
 using DeepSpace.InventorySystem;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -17,16 +18,55 @@ public class Player : Entity
 		InventoryManager.Instance.AddInventoryToEntity(this, 4, 4);
 	}
 
-	public float Health { get; private set; }
-	public float Oxygen { get; private set; }
+	//NonSerialised fields.
+	public MovementController movementController;
+	public InventoryController inventoryController;
+
+	public bool InventoryUpdateFlag;
+
+	protected int healthPoints;
+	protected float oxygenLevel;
 
 	/// <summary>
 	/// Returns a value indicating whether this Player is using the Inventory system.
 	/// </summary>
-	public bool IsUsingInventorySystem { get; set; }
+	public bool IsUsingInventorySystem
+	{
+		get
+		{
+			return inventoryController.ShowingOverlay == false;
+		}
+	}
 
 	/// <summary>
-	/// Specifies whether or not this Player should update it's Inventory view.
+	/// Gets or sets the Health of this Player.
 	/// </summary>
-	public bool InventoryUpdateFlag { get; set; }
+	public int Health
+	{
+		get
+		{
+			return healthPoints;
+		}
+
+		set
+		{
+			healthPoints = value;
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets the suit Oxygen level for this Player.
+	/// </summary>
+	public float Oxygen
+	{
+		get
+		{
+			return oxygenLevel;
+		}
+
+		set
+		{
+			oxygenLevel = value;
+		}
+	}
 }

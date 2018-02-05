@@ -38,7 +38,7 @@ public class MovementController : MonoBehaviour
 		Update_DampenersController ();
 		Update_PlayerAcceleration ();
 
-		if (InventoryController.Instance.IsControllable)
+		if (Player.IsUsingInventorySystem == false)
 		{
 			Update_PlayerRotation ();
 			Update_PlayerRoll ();

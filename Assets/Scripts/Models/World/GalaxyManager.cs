@@ -1,12 +1,11 @@
 using UnityEngine;
 
 /// <summary>
-/// The central core of the game. Responsible for managing server side operations that
-/// are not done within individual data classes.
+/// Server side class that manages data based operations for the Galaxy we are currently in.
 /// </summary>
-public class GameController : MonoBehaviour
+public class GalaxyManager : MonoBehaviour
 {
-	public static GameController Instance { get; protected set; }
+	public static GalaxyManager Instance { get; protected set; }
 
 	void OnEnable()
 	{

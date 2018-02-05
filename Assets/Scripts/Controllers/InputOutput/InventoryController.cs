@@ -9,16 +9,12 @@ using UnityEngine.UI;
 /// </summary>
 public class InventoryController : MonoBehaviour
 {
-	public static InventoryController Instance { get; protected set; }
-
 	public GameObject[] interfaces;
 	public Sprite[] Sprites;
 	public int graphicSize = 50;
 
 	void OnEnable()
 	{
-		Instance = this;
-
 		myCamera = transform.parent.GetComponentInChildren<Camera>();
 		dragType = InventoryDragType.None;
 	}
@@ -36,6 +32,8 @@ public class InventoryController : MonoBehaviour
 	enum InventoryDragType { None, Left, Middle, Right}
 	InventoryDragType dragType;
 
+	bool showingOverlay;
+
 	Queue<GameObject> overlayGraphics;
 
 	Entity target;
@@ -48,11 +46,11 @@ public class InventoryController : MonoBehaviour
 	/// <summary>
 	/// Determines whether this Player should be able to use movement controls.
 	/// </summary>
-	public bool IsControllable
+	public bool ShowingOverlay
 	{
 		get
 		{
-			return !Player.IsUsingInventorySystem;
+			return showingOverlay == false;
 		}
 	}
 
@@ -62,7 +60,7 @@ public class InventoryController : MonoBehaviour
 
 		if (Player.InventoryUpdateFlag)
 		{
-			UpdateInventoryView();
+			OnInventoryUpdate();
 
 			Player.InventoryUpdateFlag = false;
 		}
@@ -76,7 +74,7 @@ public class InventoryController : MonoBehaviour
 			{
 				myShowMode = InventoryShowMode.None;
 
-				Player.IsUsingInventorySystem = false;
+				showingOverlay = false;
 				HideInventory();
 			}
 			else
@@ -96,8 +94,8 @@ public class InventoryController : MonoBehaviour
 					}
 				}
 
-				Player.IsUsingInventorySystem = true;
-				UpdateInventoryView();
+				showingOverlay = true;
+				OnInventoryUpdate();
 			}
 		}
 	}
@@ -105,7 +103,7 @@ public class InventoryController : MonoBehaviour
 	/// <summary>
 	/// Updates the Graphics for the Inventories that this Player is looking at when it called.
 	/// </summary>
-	public void UpdateInventoryView()
+	public void OnInventoryUpdate()
 	{
 		if (overlayGraphics != null)
 			HideInventory();
@@ -154,6 +152,7 @@ public class InventoryController : MonoBehaviour
 				drop.name = string.Format("{0}:{1}", x, y);
 				Dropzone d = drop.GetComponentInParent<Dropzone>();
 				d.Inventory = e.Inventory; d.Index = new Vector2(x, y);
+				d.myController = this;
 
 				if (e.Inventory.IsItemStackAt(x, y))
 				{
@@ -161,6 +160,7 @@ public class InventoryController : MonoBehaviour
 					GameObject graphic = Instantiate(interfaces[2], drop.transform);
 					graphic.transform.localPosition = Vector2.zero;
 					graphic.name = string.Format(s.TypeName);
+					graphic.GetComponentInChildren<Interfacable>().myController = this;
 					graphic.GetComponentInChildren<Image>().sprite = Sprites[s.TypeId];
 					graphic.GetComponentInChildren<Text>().text = e.Inventory.GetItemStackAt(x, y).NumItems.ToString();
 					overlayGraphics.Enqueue(graphic);
@@ -236,6 +236,8 @@ public class InventoryController : MonoBehaviour
 			ItemStack currentToTargetStack = null;
 			ItemStack targetToCurrentStack = null;
 
+			//TODO: How about using delegates/ lambdas to massively simplify the logic for this Sam?
+
 			if (currentInv.GetItemStackAt(my_x, my_y) != targetInv.GetItemStackAt(new_x, new_y))
 			{
 				currentToTargetStack = currentInv.RemoveItemStackFrom(my_x, my_y);
@@ -267,7 +269,11 @@ public class InventoryController : MonoBehaviour
 						if (currentToTargetStack.Type == targetToCurrentStack.Type)
 						{
 							//TODO: Figure out what's going on here. Looks like we've confused stacks somehow...
+
 							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
+							ItemStack s = currentToTargetStack;
+							currentToTargetStack = targetToCurrentStack;
+							targetToCurrentStack = s;
 						}
 					}
 					else
@@ -275,7 +281,7 @@ public class InventoryController : MonoBehaviour
 						InventoryManager.Instance.SpawnNewItemStackAt(currentToTargetStack.Type, 0, targetInv, new_x, new_y);
 						targetToCurrentStack = targetInv.GetItemStackAt(new_x, new_y);
 
-						InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
+						InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.FloorToInt(currentToTargetStack.NumItems / 2));
 					}
 				}
 				if (dragType == InventoryDragType.Right)
@@ -283,14 +289,14 @@ public class InventoryController : MonoBehaviour
 
 				}
 
-				//TODO: Add a better way to do this. Intergrate within the upcoming Inventory action system.
+				//TODO: Add a better way to do this. Intergrate within the upcoming Inventory action system?
 
 				if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
 					targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
 				if (targetToCurrentStack != null && currentToTargetStack.NumItems != 0)
 					currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
 
-				InventoryManager.Instance.UpdateItemStackGraphicsForPlayers();
+				InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Player.SolarSystem);
 			}
 		}
 

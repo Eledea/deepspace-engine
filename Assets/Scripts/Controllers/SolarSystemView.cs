@@ -12,7 +12,9 @@ public class SolarSystemView : MonoBehaviour
 	public GameObject sphere;
 	public GameObject cube;
 
-	public static SolarSystemView Instance;
+	//TODO: Replace static instancing when we start networking.
+
+	public static SolarSystemView Instance { get; protected set; }
 
 	void OnEnable()
 	{
@@ -51,9 +53,11 @@ public class SolarSystemView : MonoBehaviour
 		entityToGameObject = new Dictionary<Entity, GameObject>();
 		gameObjectToEntity = new Dictionary<GameObject, Entity>();
 
-		mySolarSystem = GameController.Instance.Galaxy.CurrentSolarSystem;
+		mySolarSystem = GalaxyManager.Instance.Galaxy.CurrentSolarSystem;
 
 		floatingOrigin = Player.Position;
+
+		UpdateAllEntities();
 
 		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", mySolarSystem.EntitiesInSystem.Length));
 	}
@@ -65,12 +69,16 @@ public class SolarSystemView : MonoBehaviour
 			if (playerGO.transform.position.magnitude > floatingRange)
 			{
 				floatingOrigin = Player.Position;
-				Debug.Log("Player exceeded defined distance from floating origin. Setting a new floating origin...");
+				Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
 			}
 		}
+	}
 
-		//TODO: Replace with an Event System so that we are not updating every frame.
-
+	/// <summary>
+	/// Update for all the Entities in the SolarSystem this player is in.
+	/// </summary>
+	public void UpdateAllEntities()
+	{
 		if (mySolarSystem != null)
 			foreach (Entity e in mySolarSystem.EntitiesInSystem)
 				UpdateGameObjectForEntity(e);
@@ -152,6 +160,9 @@ public class SolarSystemView : MonoBehaviour
 		playerGO = Instantiate(player);
 		playerGO.GetComponentInChildren<MovementController>().Player = Player;
 		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
+
+		Player.movementController = playerGO.GetComponentInChildren<MovementController>();
+		Player.inventoryController = playerGO.GetComponentInChildren<InventoryController>();
 
 		return playerGO;
 	}
