@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DeepSpace.InventorySystem
 {
@@ -25,17 +23,15 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Constructs a new Inventory.
 		/// </summary>
-		public Inventory (Entity e, int x, int y)
+		public Inventory(Entity e, int x, int y)
 		{
 			Inv = new ItemStack[x, y];
-
-			InventoryManager.Instance.AddInventoryToManager(this, e);
+			myEntity = e;
 		}
 
-		/// <summary>
-		/// The Inventory of this Inventory.
-		/// </summary>
 		ItemStack[,] Inv;
+
+		Entity myEntity;
 
 		/// <summary>
 		/// Returns the length of the x axis of this Inventory.
@@ -44,7 +40,7 @@ namespace DeepSpace.InventorySystem
 		{
 			get
 			{
-				return Inv.GetLength (0);
+				return Inv.GetLength(0);
 			}
 		}
 
@@ -55,7 +51,18 @@ namespace DeepSpace.InventorySystem
 		{
 			get
 			{
-				return Inv.GetLength (1);
+				return Inv.GetLength(1);
+			}
+		}
+
+		/// <summary>
+		/// Returns the Entity that this Invenntory is attached to.
+		/// </summary>
+		public Entity Entity
+		{
+			get
+			{
+				return myEntity;
 			}
 		}
 
@@ -64,8 +71,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public void AddItemStackAt(ItemStack s, int x, int y)
 		{
-			if (Inv [x, y] == null)
-				Inv [x, y] = s;
+			Inv [x, y] = s;
 
 			s.Inv = this;
 			s.InventoryIndex = new Vector2(x, y);
@@ -74,12 +80,14 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Removes an ItemStack from this array position.
 		/// </summary>
-		public void RemoveItemStackFrom(int x, int y)
+		public ItemStack RemoveItemStackFrom(int x, int y)
 		{
 			ItemStack s = GetItemStackAt (x, y);
 			s.Inv = null;
 
 			Inv [x, y] = null;
+
+			return s;
 		}
 
 		/// <summary>
@@ -91,25 +99,11 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Gets an ItemStack at this array position.
+		/// Gets an ItemStack at this array index.
 		/// </summary>
 		public ItemStack GetItemStackAt(int x, int y)
 		{
 			return Inv [x, y];
-		}
-
-		/// <summary>
-		/// Moves an ItemStack to another Inventory slot.
-		/// </summary>
-		public void MoveItemStackTo(int x, int y, Inventory inventory, int a, int b)
-		{
-			if (IsItemStackAt(x, y))
-			{
-				ItemStack s = GetItemStackAt(x, y);
-
-				this.RemoveItemStackFrom(x, y);
-				inventory.AddItemStackAt(s, a, b);
-			}
 		}
 	}
 }

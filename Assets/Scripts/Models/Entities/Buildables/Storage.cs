@@ -7,8 +7,13 @@ using UnityEngine;
 /// </summary>
 public class Storage : Buildable
 {
-	public Storage()
+	public Storage(string name, long id, Vector3D position, Quaternion rotation)
 	{
-		Inventory = new Inventory(this, 4, 4);
+		Name = name;
+		EntityId = id;
+		Position = position;
+		Rotation = rotation;
+
+		InventoryManager.Instance.AddInventoryToEntity(this, 8, 4);
 	}
 }

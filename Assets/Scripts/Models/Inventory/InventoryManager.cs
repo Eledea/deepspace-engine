@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace DeepSpace.InventorySystem
@@ -13,75 +13,52 @@ namespace DeepSpace.InventorySystem
 		void OnEnable()
 		{
 			Instance = this;
-
-			InventoryToEntity = new Dictionary<Inventory, Entity>();
-			entityToInventory = new Dictionary<Entity, Inventory>();
-		}
-
-		Dictionary<Inventory, Entity> InventoryToEntity;
-		Dictionary<Entity, Inventory> entityToInventory;
-
-		/// <summary>
-		/// Adds an Inventory and it's respective Entity to the InventoryManager.
-		/// </summary>
-		public void AddInventoryToManager(Inventory myInv, Entity myEntity)
-		{
-			InventoryToEntity [myInv] = myEntity;
-			entityToInventory [myEntity] = myInv;
 		}
 
 		/// <summary>
-		/// Removes an Inventory and it's respective Entity from the InventoryManager.
+		/// Adds an Inventory to an Entity.
 		/// </summary>
-		public void RemoveInventoryFromManager(Inventory myInv)
+		public void AddInventoryToEntity(Entity e, int x, int y)
 		{
-			Entity myEntity = InventoryToEntity [myInv];
-			entityToInventory.Remove (myEntity);
-
-			InventoryToEntity.Remove (myInv);
+			Inventory inv = new Inventory(e, x, y);
+			e.Inventory = inv;
 		}
 
 		/// <summary>
-		/// Removes a Entity and it's respective Inventory from the InventoryManager.
+		/// Removes an Inventory from an Entity.
 		/// </summary>
-		public void RemoveInventoryFromManager(Entity myEntity)
+		public void RemoveInventoryFromEntity(Entity e)
 		{
-			Inventory mymyInv = entityToInventory [myEntity];
-			InventoryToEntity.Remove (mymyInv);
-
-			entityToInventory.Remove (myEntity);
+			e.Inventory = null;
 		}
 
 		/// <summary>
-		/// Determines whether this Entity has an Inventory paired with it.
+		/// Spawns a new ItemStack for an IType.
 		/// </summary>
-		public bool IsInventoryAttachedTo(Entity myEntity)
+		public void SpawnNewItemStackAt(IType type, int numItems, Inventory inv, int x, int y)
 		{
-			return entityToInventory[myEntity] != null;
+			//TODO: Check to see if we exceed the number of items this stack can hold.
+
+			var t = Type.GetType(string.Format("DeepSpace.InventorySystem.{0}", type.ToString()));
+			ItemStack s = (ItemStack)Activator.CreateInstance(t, numItems, inv, x, y);
+
+			inv.AddItemStackAt(s, x, y);
 		}
 
 		/// <summary>
-		/// Determines whether this Inventory has an Entity paired with it.
+		/// Moves n Items from one ItemStack to another.
 		/// </summary>
-		public bool IsEntityAttachedTo(Inventory myInv)
+		public void MoveItemsToStack(ItemStack s1, ItemStack s2, int n)
 		{
-			return InventoryToEntity[myInv] != null;
-		}
-
-		/// <summary>
-		/// Gets the Inventory this Entity is paired with.
-		/// </summary>
-		public Inventory GetInventoryAttachedTo(Entity myEntity)
-		{
-			return entityToInventory [myEntity];
-		}
-
-		/// <summary>
-		/// Gets the Entity this Inventory is paired with.
-		/// </summary>
-		public Entity GetInventoryAttachedTo(Inventory myInv)
-		{
-			return InventoryToEntity [myInv];
+			if (s1.Type == s2.Type)
+			{
+				s1.RemoveItems(n);
+				s2.AddItems(n);
+			}
+			else
+			{
+				Debug.LogError("ERROR: Cannot move Items between two stacks with different Item Ids.");
+			}
 		}
 
 		/// <summary>

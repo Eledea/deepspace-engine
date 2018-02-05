@@ -7,10 +7,11 @@ namespace DeepSpace.Core
 	/// </summary>
 	public struct KeyBinding
 	{
+		/// Constructors
 		public KeyBinding (KeyCode Positive) {positive = Positive; negative = KeyCode.None;}
-
 		public KeyBinding (KeyCode Positive, KeyCode Negative) { positive = Positive; negative = Negative; }
 
+		/// Fields
 		KeyCode positive;
 		KeyCode negative;
 

@@ -5,9 +5,8 @@
 	/// </summary>
 	public class Wood : ItemStack
 	{
-		public Wood(Inventory inv, int n)
+		public Wood(int n, Inventory inv, int x, int y)
 		{
-			Inv = inv;
 			IType = IType.Wood;
 
 			itemLimit = 50;
@@ -16,6 +15,8 @@
 				itemCount = itemLimit;
 			else
 				itemCount = n;
+
+			inv.AddItemStackAt(this, x, y);
 		}
 	}
 }

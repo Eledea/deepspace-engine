@@ -1,20 +1,19 @@
-﻿using UnityEngine;
+﻿using DeepSpace.InventorySystem;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Dropzone : MonoBehaviour, IDropHandler
+public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	Vector2 myIndex;
+	public Inventory Inventory;
+	public Vector2 Index;
 
-	public Vector2 Index
+	public void OnPointerEnter(PointerEventData eventData)
 	{
-		get
-		{
-			return myIndex;
-		}
+		InventoryController.Instance.OnPointerEnter(this);
 	}
 
-	public void OnDrop(PointerEventData eventData)
+	public void OnPointerExit(PointerEventData eventData)
 	{
-		Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
+		InventoryController.Instance.OnPointerExit();
 	}
 }

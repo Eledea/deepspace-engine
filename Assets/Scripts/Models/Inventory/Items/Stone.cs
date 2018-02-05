@@ -5,21 +5,18 @@
 	/// </summary>
 	public class Stone : ItemStack
 	{
-		public Stone(Inventory inv, int n)
+		public Stone(int n, Inventory inv, int x, int y)
 		{
-			//TODO: Serialise property assignment from encoded XML rather than hardcoding.
-
-			Inv = inv;
 			IType = IType.Stone;
 
 			itemLimit = 50;
-
-			//TODO: Check this before instantiating a new instance of this class.
 
 			if (n > itemLimit)
 				itemCount = itemLimit;
 			else
 				itemCount = n;
+
+			inv.AddItemStackAt(this, x, y);
 		}
 	}
 }

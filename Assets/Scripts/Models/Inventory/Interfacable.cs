@@ -15,11 +15,11 @@ public class Interfacable : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
 
 	public void OnDrag (PointerEventData eventData)
 	{
-		InventoryController.Instance.OnDrag (this, eventData.position);
+		InventoryController.Instance.OnDrag (eventData.position);
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
-		InventoryController.Instance.OnEndDrag (this);
+		InventoryController.Instance.OnEndDrag();
 	}
 }

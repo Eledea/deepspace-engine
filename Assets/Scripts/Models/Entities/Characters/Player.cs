@@ -1,13 +1,20 @@
-﻿using DeepSpace.InventorySystem;
+﻿using DeepSpace.Core;
+using DeepSpace.InventorySystem;
+using UnityEngine;
 
 /// <summary>
 /// Independent data class for storing a Player.
 /// </summary>
 public class Player : Entity
 {
-	public Player()
+	public Player(string name, long id, Vector3D position, Quaternion rotation)
 	{
-		Inventory = new Inventory(this, 4, 4);
+		Name = name;
+		EntityId = id;
+		Position = position;
+		Rotation = rotation;
+
+		InventoryManager.Instance.AddInventoryToEntity(this, 4, 4);
 	}
 
 	public float Health { get; private set; }

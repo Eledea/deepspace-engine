@@ -8,8 +8,6 @@ using UnityEngine;
 /// </summary>
 public class SolarSystemView : MonoBehaviour
 {
-	//TODO: Replace hardcoded Prefabs with asset streaming later on.
-
 	public GameObject player;
 	public GameObject sphere;
 	public GameObject cube;
@@ -21,7 +19,6 @@ public class SolarSystemView : MonoBehaviour
 		Instance = this;
 		floatingRange = 50;
 
-		//TODO: Make this not hardcoded. eg: Make controllable from settings UI.
 		loadRange = 100;
 	}
 
@@ -58,10 +55,10 @@ public class SolarSystemView : MonoBehaviour
 
 		floatingOrigin = Player.Position;
 
-		Debug.Log(string.Format("There are {0} Entity(s) in this SolarSystem.", mySolarSystem.EntitiesInSystem.Length));
+		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", mySolarSystem.EntitiesInSystem.Length));
 	}
 
-	void Update()
+	void LateUpdate()
 	{
 		if (playerGO != null)
 		{
@@ -108,8 +105,6 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void UpdateGameObjectForEntity(Entity e)
 	{
-		//TODO: Consider whether it is more efficient to just disable the Meshes for Object or to merely remove and spawn new GameObjects.
-
 		if ((Vector3D.Distance(e.Position, Player.Position)) < loadRange)
 		{
 			if (GameObjectForEntity(e) == false)
@@ -133,7 +128,7 @@ public class SolarSystemView : MonoBehaviour
 	{
 		GameObject myGO;
 
-		//TODO: This sucks. Make it better!
+		//TODO: Clean this eyesore up :/ 
 
 		if (e is Orbital)
 			myGO = Instantiate(sphere);
@@ -143,11 +138,10 @@ public class SolarSystemView : MonoBehaviour
 			myGO = Instantiate(cube);
 
 		myGO.transform.parent = this.transform;
+		myGO.name = e.Name;
 
 		entityToGameObject [e] = myGO;
 		gameObjectToEntity [myGO] = e;
-
-		Debug.Log(string.Format("Loading a GameObject for {0}...", e.Name));
 	}
 
 	/// <summary>
@@ -183,7 +177,5 @@ public class SolarSystemView : MonoBehaviour
 
 		gameObjectToEntity.Remove (myGO);
 		entityToGameObject.Remove(e);
-
-		Debug.Log(string.Format("Unloading a GameObject for {0}...", e.Name));
 	}
 }

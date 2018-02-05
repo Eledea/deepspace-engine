@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114437888701464514}
   - component: {fileID: 114716694017894866}
   m_Layer: 0
-  m_Name: InventoryOverlay
+  m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -257,12 +257,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b132c4f62f8c9224ca99ae3e8be6ab0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  c: {fileID: 20933681968688556}
   interfaces:
   - {fileID: 1874577171245302, guid: 151ad761489c76a4fa673af5017e8f26, type: 2}
-  dropZone: {fileID: 1642425850876146, guid: 14cd4736107b3134a8ab45ff28b4358d, type: 2}
-  ItemGraphic: {fileID: 1880470963982012, guid: bbaa8ab904bbaa94293d71569af035a2,
-    type: 2}
+  - {fileID: 1384236002794270, guid: 3aeebd4c1abf0bb4ab40b9a36a3c5cf5, type: 2}
+  - {fileID: 1880470963982012, guid: bbaa8ab904bbaa94293d71569af035a2, type: 2}
+  - {fileID: 1316846741875388, guid: 567a34e758743b7418bb0482e56fee9b, type: 2}
   Sprites:
   - {fileID: 21300000, guid: 3a8f297de3da4dc459fca9b06b111d42, type: 3}
   - {fileID: 21300000, guid: 8244f224d518ea941aba5bcfffad7c1d, type: 3}

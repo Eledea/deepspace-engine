@@ -11,8 +11,6 @@ public class MovementController : MonoBehaviour
 
 	void OnEnable()
 	{
-		//TODO: Make Keyboard inputs not harcoded (eg: Move to a KeyboardManager class).
-
 		axisBindings = new Dictionary<Axis, KeyBinding>()
 		{
 			{ Axis.X, new KeyBinding(KeyCode.W, KeyCode.S) },
@@ -71,7 +69,7 @@ public class MovementController : MonoBehaviour
 		{
 			float axisInput = axisBindings [axis].magnitude;
 
-			//TODO: Re-implement velocity dampening system.
+			//TODO: Implement velocity dampening.
 
 			acceleration += directions[i] * axisInput;
 			i++;
@@ -85,8 +83,6 @@ public class MovementController : MonoBehaviour
 
 	void Update_PlayerRotation()
 	{
-		//TODO: Consider adding interpolation to smooth Player rotation.
-
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 5f, Vector3.right);
 		Player.Rotation = Player.Rotation * Quaternion.AngleAxis (Input.GetAxis ("Mouse X") * 5f, Vector3.up);
 	}

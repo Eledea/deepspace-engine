@@ -34,9 +34,9 @@ public class Galaxy
 
 		PlayerManager.Instance.CreatePlayerInManager (CurrentSolarSystem);
 
-		//TODO: Wtf is this doing? Fix it asap!
-		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayerWithId (37331);
-
+		//TODO: Fix this when we start Networking stuff.
+		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayersInManager[0];
+	
 		SolarSystemView.Instance.OnSolarSystemChange ();
 	}
 

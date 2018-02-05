@@ -34,6 +34,28 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
+		/// Returns the x component of the array index of this ItemStack.
+		/// </summary>
+		public int Index_x
+		{
+			get
+			{
+				return inv_x;
+			}
+		}
+
+		/// <summary>
+		/// Returns the y component of the array index of this ItemStack.
+		/// </summary>
+		public int Index_y
+		{
+			get
+			{
+				return inv_y;
+			}
+		}
+
+		/// <summary>
 		/// Returns the number of Items in this ItemStack.
 		/// </summary>
 		public int NumItems
@@ -56,9 +78,20 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Returns the Type name of this ItemStack.
+		/// Returns the IType of this ItemStack 
 		/// </summary>
-		public string ITypeName
+		public IType Type
+		{
+			get
+			{
+				return IType;
+			}
+		}
+
+		/// <summary>
+		/// Returns the IType name of this ItemStack.
+		/// </summary>
+		public string TypeName
 		{
 			get
 			{
@@ -67,9 +100,9 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Returns the Type integer of this ItemStack.
+		/// Returns the IType integer of this ItemStack.
 		/// </summary>
-		public int ITypeId
+		public int TypeId
 		{
 			get
 			{
@@ -78,19 +111,30 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
-		/// Increments the ItemCount for this ItemStack.
+		/// Returns the number of Items that this ItemStack can add before it exceeds it reaches it's limit.
 		/// </summary>
-		public void AddItem()
+		public int ItemAddability
 		{
-			itemCount++;
+			get
+			{
+				return itemLimit - itemCount;
+			}
 		}
 
 		/// <summary>
-		/// Decrements the ItemCount for this ItemStack.
+		/// Increments the ItemCount for this ItemStack by n.
 		/// </summary>
-		public void RemoveItem()
+		public void AddItems(int n)
 		{
-			itemCount--;
+			itemCount += n;
+		}
+
+		/// <summary>
+		/// Decrements the ItemCount for this ItemStack by n.
+		/// </summary>
+		public void RemoveItems(int n)
+		{
+			itemCount -= n;
 		}
 	}
 }

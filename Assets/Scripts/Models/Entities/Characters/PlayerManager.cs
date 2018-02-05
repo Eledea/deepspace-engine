@@ -1,6 +1,5 @@
 ﻿using DeepSpace.Core;		
 using DeepSpace.InventorySystem;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,11 +15,9 @@ public class PlayerManager : MonoBehaviour
 		Instance = this;
 
 		players = new List<Player>();
-		playerId = new Dictionary<long, Player>();
 	}
 
 	List<Player> players;
-	Dictionary<long, Player> playerId;
 
 	/// <summary>
 	/// Returns all the Players being managed as an array.
@@ -49,45 +46,21 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void CreatePlayerInManager(SolarSystem ss)
 	{
-		Player p = new Player();
-		p.Name = "Sam";
-		p.EntityId = 37331;
-		p.Position = new Vector3D(0, 0, -2);
-		p.Rotation = Quaternion.Euler(0, 0, 0);
+		Player p = new Player("Sam", 37331, new Vector3D(0, 0, -2), Quaternion.identity);
+		AddPlayerToManager(p, ss);
 
-		AddPlayerToManager(p);
-		MovePlayerToSolarSystem(p, ss);
-
-		Wood w = new Wood(p.Inventory, 37);
-		Stone s = new Stone(p.Inventory, 22);
-
-		p.Inventory.AddItemStackAt(w, 1, 0);
-		p.Inventory.AddItemStackAt(s, 2, 3);
-	}
-
-	/// <summary>
-	/// Returns a Player from an id. 
-	/// </summary>
-	public Player GetPlayerWithId(long id)
-	{
-		return playerId [id];
-	}
-
-	/// <summary>
-	/// Returns an ID from a Player. 
-	/// </summary>
-	public long PlayerId(Player p)
-	{
-		return p.EntityId;
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Inventory, 0, 2);
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Inventory, 3, 1);
 	}
 
 	/// <summary>
 	/// Adds a player to the PlayerManager.
 	/// </summary>
-	public void AddPlayerToManager(Player p)
+	public void AddPlayerToManager(Player p, SolarSystem ss)
 	{
 		players.Add(p);
-		playerId[p.EntityId] = p;
+
+		MovePlayerToSolarSystem(p, ss);
 	}
 
 	/// <summary>
@@ -95,7 +68,6 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void MovePlayerToSolarSystem(Player p, SolarSystem ss)
 	{
-		p.SolarSystem = ss;
 		ss.AddEntityToSolarSystem(p);
 	}
 
@@ -104,7 +76,6 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void RemovePlayerFromManager(Player p)
 	{
-		playerId.Remove (p.EntityId);
 		players.Remove(p);
 	}
 }

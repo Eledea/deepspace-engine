@@ -30,15 +30,6 @@ namespace DeepSpace.Core
 		}
 
 		/// <summary>
-		/// Returns the center of a 1D line from it's length.
-		/// </summary>
-		/// <returns></returns>
-		public static float SizeToCenter(int x)
-		{
-			return x / 2;
-		}
-
-		/// <summary>
 		/// Returns 1 if true, 0 is false.
 		/// </summary>
 		public static int BoolToInt(bool b)
@@ -52,9 +43,9 @@ namespace DeepSpace.Core
 		/// <summary>
 		/// Returns a world-space position from an array index.
 		/// </summary>
-		public static Vector2 IndexToWorldSpacePosition(int x, int y, int s, int a, int b)
+		public static Vector3 IndexToWorldSpacePosition(int x, int y, int s, int a, int b)
 		{
-			return new Vector2(x * s + s / 2 - a * s / 2 * s, y * s + s / 2 - b * s / 2 * s);
+			return new Vector3(x * s + s / 2 - a * s / 2, y * s + s / 2 - b * s / 2, 0);
 		}
 	}
 }

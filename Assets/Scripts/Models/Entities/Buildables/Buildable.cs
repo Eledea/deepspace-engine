@@ -6,5 +6,4 @@ using UnityEngine;
 /// </summary>
 public class Buildable : Entity
 {
-	//TODO: Consider using Interfaces over Sub-classing for Inheritence.
 }

@@ -11,18 +11,16 @@ public class InventoryController : MonoBehaviour
 {
 	public static InventoryController Instance { get; protected set; }
 
-	public Camera c;
-
 	public GameObject[] interfaces;
-	public GameObject dropZone;
-
-	public GameObject ItemGraphic;
 	public Sprite[] Sprites;
 	public int graphicSize = 50;
 
 	void OnEnable()
 	{
 		Instance = this;
+
+		myCamera = transform.parent.GetComponentInChildren<Camera>();
+		dragType = InventoryDragType.None;
 	}
 
 	/// <summary>
@@ -30,20 +28,22 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	public Player Player { get; set; }
 
-	enum InventoryShowMode { None, Internal, External}
+	Camera myCamera;
+
+	enum InventoryShowMode { None, Internal, External }
 	InventoryShowMode myShowMode;
 
-	//bool showingInventoryOverlay;
+	enum InventoryDragType { None, Left, Middle, Right}
+	InventoryDragType dragType;
 
-	Dictionary<GameObject, ItemStack> gameObjectToItemStack;
 	Queue<GameObject> overlayGraphics;
 
 	Entity target;
 
-	GameObject selectedStack_GO;
-	Vector2 currentIndex;
+	Dropzone startDragDrop;
+	Dropzone mouseOverDrop;
 
-	RectTransform dragObject;
+	RectTransform dragGraphic;
 
 	/// <summary>
 	/// Determines whether this Player should be able to use movement controls.
@@ -58,8 +58,8 @@ public class InventoryController : MonoBehaviour
 
 	void Update()
 	{
-		Update_OverlayController ();
-			
+		Update_OverlayController();
+
 		if (Player.InventoryUpdateFlag)
 		{
 			UpdateInventoryView();
@@ -70,23 +70,22 @@ public class InventoryController : MonoBehaviour
 
 	void Update_OverlayController()
 	{
-		if (Input.GetKeyDown (KeyCode.I))
+		if (Input.GetKeyDown(KeyCode.I))
 		{
-			if (Player.IsUsingInventorySystem) 
+			if (Player.IsUsingInventorySystem)
 			{
 				myShowMode = InventoryShowMode.None;
 
 				Player.IsUsingInventorySystem = false;
-				OnInventoryClose();
-			} 
+				HideInventory();
+			}
 			else
 			{
-				//TOOD: Move this to a new class? Partial class this class?
-
-				Ray center = new Ray(c.transform.position, c.transform.forward);
+				Ray center = new Ray(myCamera.transform.position, myCamera.transform.forward);
 				RaycastHit hitInfo;
 
 				myShowMode = InventoryShowMode.Internal;
+				target = Player;
 
 				if (Physics.Raycast(center, out hitInfo, 3))
 				{
@@ -98,25 +97,9 @@ public class InventoryController : MonoBehaviour
 				}
 
 				Player.IsUsingInventorySystem = true;
-				OnInventoryOpen();
+				UpdateInventoryView();
 			}
 		}
-	}
-
-	/// <summary>
-	/// Opens this Player's inventory.
-	/// </summary>
-	private void OnInventoryOpen()
-	{
-		UpdateInventoryView();
-	}
-
-	/// <summary>
-	/// Closes this Player's inventory.
-	/// </summary>
-	private void OnInventoryClose()
-	{
-		DestroyAllItemStackGraphics();
 	}
 
 	/// <summary>
@@ -124,10 +107,9 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	public void UpdateInventoryView()
 	{
-		if (gameObjectToItemStack != null)
-			DestroyAllItemStackGraphics();
+		if (overlayGraphics != null)
+			HideInventory();
 
-		gameObjectToItemStack = new Dictionary<GameObject, ItemStack>();
 		overlayGraphics = new Queue<GameObject>();
 
 		if (myShowMode == InventoryShowMode.Internal)
@@ -136,43 +118,51 @@ public class InventoryController : MonoBehaviour
 		}
 		else if (myShowMode == InventoryShowMode.External)
 		{
-			ShowInventoryForEntity(Player, new Vector2(0, -Utility.SizeToCenter(Player.Inventory.InvSize_y)));
-			ShowInventoryForEntity(target, new Vector2(0, Utility.SizeToCenter(target.Inventory.InvSize_y)));
+			ShowInventoryForEntity(Player, new Vector2(0, -2.5f * graphicSize));
+			ShowInventoryForEntity(target, new Vector2(0, 2.5f * graphicSize));
 		}
 	}
 
 	/// <summary>
-	/// Spawns the InventorySlots for an Entity
+	/// Hide the Inventory for this Player.
 	/// </summary>
-	public void ShowInventoryForEntity(Entity e, Vector2 screenPosition)
+	private void HideInventory()
 	{
-		//First we need an Overlay...
+		while (this.transform.childCount > 0)
+		{
+			Transform child = transform.GetChild(0);
+			child.SetParent(null);
+			Destroy(child.gameObject);
+		}
+	}
+
+	/// <summary>
+	/// Spawns the Inventory for an Entity.
+	/// </summary>
+	private void ShowInventoryForEntity(Entity e, Vector2 screenPosition)
+	{
 		GameObject overlay = Instantiate(interfaces[0], this.transform);
 		overlay.transform.localPosition = screenPosition;
+		overlay.name = string.Format("Inventory: {0}", e.Name.ToString());
 
-		//Spawn a Dropzone for each Inventory slot.
-		//Spawn graphics for each ItemStack in this Inventory.
 		for (int x = 0; x < e.Inventory.InvSize_x; x++)
 		{
 			for (int y = 0; y < e.Inventory.InvSize_y; y++)
 			{
-				GameObject drop = Instantiate(dropZone, overlay.transform);
-				drop.transform.position = Utility.IndexToWorldSpacePosition(x, y, graphicSize, e.Inventory.InvSize_x, e.Inventory.InvSize_y);
+				GameObject drop = Instantiate(interfaces[1], overlay.transform);
+				drop.transform.localPosition = Utility.IndexToWorldSpacePosition(x, y, graphicSize, e.Inventory.InvSize_x, e.Inventory.InvSize_y);
+				drop.name = string.Format("{0}:{1}", x, y);
+				Dropzone d = drop.GetComponentInParent<Dropzone>();
+				d.Inventory = e.Inventory; d.Index = new Vector2(x, y);
 
 				if (e.Inventory.IsItemStackAt(x, y))
 				{
 					ItemStack s = e.Inventory.GetItemStackAt(x, y);
-
-					GameObject graphic = Instantiate(ItemGraphic, drop.transform);
-					graphic.name = string.Format("ItemGraphic: {0}", s.ITypeName);
-					graphic.GetComponentInChildren<Text>().text = s.NumItems.ToString();
-
-					Image myImage = graphic.GetComponentInChildren<Image>();
-					myImage.rectTransform.sizeDelta = new Vector2(graphicSize, graphicSize);
-					myImage.sprite = Sprites[s.ITypeId];
-
-					gameObjectToItemStack[graphic] = s;
-
+					GameObject graphic = Instantiate(interfaces[2], drop.transform);
+					graphic.transform.localPosition = Vector2.zero;
+					graphic.name = string.Format(s.TypeName);
+					graphic.GetComponentInChildren<Image>().sprite = Sprites[s.TypeId];
+					graphic.GetComponentInChildren<Text>().text = e.Inventory.GetItemStackAt(x, y).NumItems.ToString();
 					overlayGraphics.Enqueue(graphic);
 				}
 			}
@@ -180,19 +170,21 @@ public class InventoryController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Destroys all ItemStack graphics.
+	/// Called by Dropzone when this Player moves their move into a new InventorySlot.
 	/// </summary>
-	private void DestroyAllItemStackGraphics()
+	public void OnPointerEnter(Dropzone d)
 	{
-		while (overlayGraphics.Count > 0)
-		{
-			GameObject myGraphic = overlayGraphics.Dequeue();
+		//Debug.Log("Mouse pointer entered a Dropzone.");
+		mouseOverDrop = d;
+	}
 
-			if (gameObjectToItemStack.ContainsKey(myGraphic))
-				gameObjectToItemStack.Remove(myGraphic);
-
-			Destroy (myGraphic);
-		}
+	/// <summary>
+	/// Called by Dropzone when this Player moves their move into a new InventorySlot.
+	/// </summary>
+	public void OnPointerExit()
+	{
+		//Debug.Log("Mouse pointer left a Dropzone.");
+		mouseOverDrop = null;
 	}
 
 	/// <summary>
@@ -200,16 +192,7 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	public void OnPointerDown(Interfacable i)
 	{
-		if (Input.GetMouseButtonDown(0))
-		{
-			GameObject myGO = i.gameObject;
-
-			if (gameObjectToItemStack.ContainsKey(myGO))
-			{
-				selectedStack_GO = myGO;
-				Debug.Log("Selected ItemGraphic with name: " + selectedStack_GO.name);
-			}
-		}
+		startDragDrop = i.gameObject.GetComponentInParent<Dropzone>();
 	}
 
 	/// <summary>
@@ -218,42 +201,101 @@ public class InventoryController : MonoBehaviour
 	public void OnBeginDrag(Interfacable i)
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
-		{
-			currentIndex = i.gameObject.transform.GetComponent<Dropzone>().Index;
+			dragType = InventoryDragType.Left;
+		else if (Input.GetMouseButtonDown(2) || Input.GetMouseButton(2))
+			dragType = InventoryDragType.Middle;
+		else if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1))
+			dragType = InventoryDragType.Right;
 
-			//TODO: Implement a dragging visual.
-		}
+		dragGraphic = Instantiate(interfaces[3], this.transform).GetComponent<RectTransform>();
+		dragGraphic.gameObject.transform.localPosition = Vector2.zero;
+		//dragGraphic.gameObject.GetComponent<Image>().sprite = Sprites[startDragDrop.Inventory.GetItemStackAt((int)startDragDrop.Index.x, (int)startDragDrop.Index.y).TypeId];
 	}
 
 	/// <summary>
 	/// Called by Interfacable when this Player is moving their mouse.
 	/// </summary>
-	public void OnDrag(Interfacable i, Vector2 mousePosition)
+	public void OnDrag(Vector2 mousePosition)
 	{
+		dragGraphic.position = mousePosition;
 	}
 
 	/// <summary>
-	/// Called by Interfacable when this Player clicks up while dragging.
+	/// Called by Interfacable when this Player ends an ItemStack drag.
 	/// </summary>
-	public void OnEndDrag(Interfacable i)
+	public void OnEndDrag()
 	{
-		if (Input.GetMouseButtonUp(0))
+		if (mouseOverDrop != null)
 		{
-			if (selectedStack_GO != null)
+			Inventory currentInv = startDragDrop.Inventory;
+			Inventory targetInv = mouseOverDrop.Inventory;
+
+			int my_x = (int)startDragDrop.Index.x; int my_y = (int)startDragDrop.Index.y;
+			int new_x = (int)mouseOverDrop.Index.x; int new_y = (int)mouseOverDrop.Index.y;
+
+			ItemStack currentToTargetStack = null;
+			ItemStack targetToCurrentStack = null;
+
+			if (currentInv.GetItemStackAt(my_x, my_y) != targetInv.GetItemStackAt(new_x, new_y))
 			{
-				Inventory inv = gameObjectToItemStack[selectedStack_GO].Inv;
+				currentToTargetStack = currentInv.RemoveItemStackFrom(my_x, my_y);
 
-				Vector2 newIndex = i.gameObject.transform.GetComponent<Dropzone>().Index;
+				if (dragType == InventoryDragType.Left)
+				{
+					if (targetInv.IsItemStackAt(new_x, new_y))
+					{
+						targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
 
-				inv.MoveItemStackTo((int)currentIndex.x, (int)currentIndex.y, inv, (int)newIndex.x, (int)newIndex.y);
-				Debug.Log("We moved an ItemStack from " + currentIndex + " to " + newIndex);
+						if (currentToTargetStack.Type == targetToCurrentStack.Type)
+						{
+							if (currentToTargetStack.ItemAddability >= targetToCurrentStack.NumItems)
+							{
+								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, targetToCurrentStack.NumItems);
+								targetToCurrentStack = null;
+							}
+							else
+								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, currentToTargetStack.ItemAddability);
+						}
+					}
+				}
+				if (dragType == InventoryDragType.Middle)
+				{
+					if (targetInv.IsItemStackAt(new_x, new_y))
+					{
+						targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
+
+						if (currentToTargetStack.Type == targetToCurrentStack.Type)
+						{
+							//TODO: Figure out what's going on here. Looks like we've confused stacks somehow...
+							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
+						}
+					}
+					else
+					{
+						InventoryManager.Instance.SpawnNewItemStackAt(currentToTargetStack.Type, 0, targetInv, new_x, new_y);
+						targetToCurrentStack = targetInv.GetItemStackAt(new_x, new_y);
+
+						InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
+					}
+				}
+				if (dragType == InventoryDragType.Right)
+				{
+
+				}
+
+				//TODO: Add a better way to do this. Intergrate within the upcoming Inventory action system.
+
+				if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
+					targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
+				if (targetToCurrentStack != null && currentToTargetStack.NumItems != 0)
+					currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
 
 				InventoryManager.Instance.UpdateItemStackGraphicsForPlayers();
-
-				Destroy(dragObject.gameObject);
-
-				selectedStack_GO = null;
 			}
 		}
+
+		Destroy(dragGraphic.gameObject);
+
+		dragType = InventoryDragType.None;
 	}
 }
