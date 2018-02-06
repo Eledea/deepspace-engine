@@ -19,13 +19,34 @@ namespace DeepSpace.Core
 		}
 
 		/// <summary>
+		/// Returns a double clamped to a minimum and maximum.
+		/// </summary>
+		public static double ClampD(double value, double min, double max)
+		{
+			if (value < min)
+				value = min;
+			if (value > max)
+				value = max;
+
+			return value;
+		}
+
+		/// <summary>
+		/// Returns a clamped float between -1 and 1 from a double.
+		/// </summary>
+		public static float DoubleToFloatClamp(double value)
+		{
+			return Mathf.Clamp((float)value, -1f, 1f);
+		}
+
+		/// <summary>
 		/// Returns a random floating-point number representing an angle in radians around a point.
 		/// </summary>
 		public static float RandomizedPointAngle
 		{
 			get
 			{
-				return Random.Range(0, Mathf.PI * 2);
+				return UnityEngine.Random.Range(0, Mathf.PI * 2);
 			}
 		}
 

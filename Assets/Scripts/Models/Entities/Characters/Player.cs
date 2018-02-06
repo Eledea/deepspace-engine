@@ -19,6 +19,7 @@ public class Player : Entity
 	}
 
 	//NonSerialised fields.
+	public SolarSystemView solarSystemView;
 	public MovementController movementController;
 	public InventoryController inventoryController;
 

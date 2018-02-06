@@ -29,7 +29,7 @@ public class InventoryController : MonoBehaviour
 	enum InventoryShowMode { None, Internal, External }
 	InventoryShowMode myShowMode;
 
-	enum InventoryDragType { None, Left, Middle, Right}
+	enum InventoryDragType { None, Left, Right}
 	InventoryDragType dragType;
 
 	bool showingOverlay;
@@ -87,10 +87,10 @@ public class InventoryController : MonoBehaviour
 
 				if (Physics.Raycast(center, out hitInfo, 3))
 				{
-					if (SolarSystemView.Instance.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
+					if (Player.solarSystemView.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
 					{
 						myShowMode = InventoryShowMode.External;
-						target = SolarSystemView.Instance.GameObjectToEntity(hitInfo.transform.gameObject);
+						target = Player.solarSystemView.GameObjectToEntity(hitInfo.transform.gameObject);
 					}
 				}
 
@@ -174,7 +174,6 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	public void OnPointerEnter(Dropzone d)
 	{
-		//Debug.Log("Mouse pointer entered a Dropzone.");
 		mouseOverDrop = d;
 	}
 
@@ -183,7 +182,6 @@ public class InventoryController : MonoBehaviour
 	/// </summary>
 	public void OnPointerExit()
 	{
-		//Debug.Log("Mouse pointer left a Dropzone.");
 		mouseOverDrop = null;
 	}
 
@@ -202,8 +200,6 @@ public class InventoryController : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
 			dragType = InventoryDragType.Left;
-		else if (Input.GetMouseButtonDown(2) || Input.GetMouseButton(2))
-			dragType = InventoryDragType.Middle;
 		else if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1))
 			dragType = InventoryDragType.Right;
 
@@ -238,65 +234,60 @@ public class InventoryController : MonoBehaviour
 
 			//TODO: How about using delegates/ lambdas to massively simplify the logic for this Sam?
 
-			if (currentInv.GetItemStackAt(my_x, my_y) != targetInv.GetItemStackAt(new_x, new_y))
+			if (dragType != InventoryDragType.None)
 			{
-				currentToTargetStack = currentInv.RemoveItemStackFrom(my_x, my_y);
-
-				if (dragType == InventoryDragType.Left)
+				if (currentInv.GetItemStackAt(my_x, my_y) != targetInv.GetItemStackAt(new_x, new_y))
 				{
-					if (targetInv.IsItemStackAt(new_x, new_y))
-					{
-						targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
+					currentToTargetStack = currentInv.RemoveItemStackFrom(my_x, my_y);
 
-						if (currentToTargetStack.Type == targetToCurrentStack.Type)
+					if (dragType == InventoryDragType.Left)
+					{
+						if (targetInv.IsItemStackAt(new_x, new_y))
 						{
-							if (currentToTargetStack.ItemAddability >= targetToCurrentStack.NumItems)
+							targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
+
+							if (currentToTargetStack.Type == targetToCurrentStack.Type)
 							{
-								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, targetToCurrentStack.NumItems);
-								targetToCurrentStack = null;
+								if (currentToTargetStack.ItemAddability >= targetToCurrentStack.NumItems)
+								{
+									InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, targetToCurrentStack.NumItems);
+									targetToCurrentStack = null;
+								}
+								else
+									InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, currentToTargetStack.ItemAddability);
 							}
-							else
-								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, currentToTargetStack.ItemAddability);
 						}
 					}
-				}
-				if (dragType == InventoryDragType.Middle)
-				{
-					if (targetInv.IsItemStackAt(new_x, new_y))
+					if (dragType == InventoryDragType.Right)
 					{
-						targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
-
-						if (currentToTargetStack.Type == targetToCurrentStack.Type)
+						if (targetInv.IsItemStackAt(new_x, new_y))
 						{
-							//TODO: Figure out what's going on here. Looks like we've confused stacks somehow...
+							targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
 
-							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
-							ItemStack s = currentToTargetStack;
-							currentToTargetStack = targetToCurrentStack;
-							targetToCurrentStack = s;
+							if (currentToTargetStack.Type == targetToCurrentStack.Type)
+							{
+								InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.RoundToInt(currentToTargetStack.NumItems / 2));
+								ItemStack s = currentToTargetStack;
+								currentToTargetStack = targetToCurrentStack;
+								targetToCurrentStack = s;
+							}
+						}
+						else
+						{
+							InventoryManager.Instance.SpawnNewItemStackAt(currentToTargetStack.Type, 0, targetInv, new_x, new_y);
+							targetToCurrentStack = targetInv.GetItemStackAt(new_x, new_y);
+
+							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.RoundToInt(currentToTargetStack.NumItems / 2));
 						}
 					}
-					else
-					{
-						InventoryManager.Instance.SpawnNewItemStackAt(currentToTargetStack.Type, 0, targetInv, new_x, new_y);
-						targetToCurrentStack = targetInv.GetItemStackAt(new_x, new_y);
 
-						InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.FloorToInt(currentToTargetStack.NumItems / 2));
-					}
+					if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
+						targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
+					if (targetToCurrentStack != null && currentToTargetStack.NumItems != 0)
+						currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
+
+					InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Player.SolarSystem);
 				}
-				if (dragType == InventoryDragType.Right)
-				{
-
-				}
-
-				//TODO: Add a better way to do this. Intergrate within the upcoming Inventory action system?
-
-				if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
-					targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
-				if (targetToCurrentStack != null && currentToTargetStack.NumItems != 0)
-					currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
-
-				InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Player.SolarSystem);
 			}
 		}
 

@@ -29,6 +29,8 @@ public class MovementController : MonoBehaviour
 	Dictionary<Axis, KeyBinding> axisBindings;
 	KeyBinding roll;
 
+	List<Vector3> lastDirections;
+
 	bool DampenersOn = true;
 
 	Quaternion rotateTo;
@@ -64,18 +66,15 @@ public class MovementController : MonoBehaviour
 		Vector3 acceleration = Vector3.zero;
 		List<Vector3> directions = new List<Vector3> { transform.forward.normalized, transform.right.normalized, transform.up.normalized };
 
-		int i = 0;
-		foreach (Axis axis in axisBindings.Keys)
+		int i = 0; foreach (Axis axis in axisBindings.Keys)
 		{
-			float axisInput = axisBindings [axis].magnitude;
-
-			//TODO: Implement velocity dampening.
-
-			acceleration += directions[i] * axisInput;
-			i++;
+			float axisInput = axisBindings[axis].Magnitude;
+			acceleration += directions[i] * axisInput; i++;
 		}
 
-		if (Input.GetKeyDown (KeyCode.Escape))
+		//TODO: Re-implement dampeners.
+
+		if (Input.GetKeyDown(KeyCode.Escape))
 			Player.Velocity = Vector3D.zero;
 
 		Player.Velocity += acceleration * 10f * Time.deltaTime;
@@ -89,6 +88,6 @@ public class MovementController : MonoBehaviour
 
 	void Update_PlayerRoll()
 	{
-		Player.Rotation = Player.Rotation * Quaternion.AngleAxis(roll.magnitude * 2f, Vector3.forward);
+		Player.Rotation = Player.Rotation * Quaternion.AngleAxis(roll.Magnitude * 2f, Vector3.forward);
 	}
 }

@@ -12,15 +12,9 @@ public class SolarSystemView : MonoBehaviour
 	public GameObject sphere;
 	public GameObject cube;
 
-	//TODO: Replace static instancing when we start networking.
-
-	public static SolarSystemView Instance { get; protected set; }
-
 	void OnEnable()
 	{
-		Instance = this;
 		floatingRange = 50;
-
 		loadRange = 100;
 	}
 
@@ -28,8 +22,6 @@ public class SolarSystemView : MonoBehaviour
 	/// The Player data class that this controller is linked to.
 	/// </summary>
 	public Player Player { get; set;}
-
-	SolarSystem mySolarSystem;
 
 	GameObject playerGO;
 
@@ -46,20 +38,20 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public void OnSolarSystemChange()
 	{
-		if (mySolarSystem != null)
-			foreach (Entity e in mySolarSystem.EntitiesInSystem)
+		if (entityToGameObject != null)
+		{
+			foreach (Entity e in Player.SolarSystem.EntitiesInSystem)
 				DestroyGameObjectForEntity(e);
+		}
 
 		entityToGameObject = new Dictionary<Entity, GameObject>();
 		gameObjectToEntity = new Dictionary<GameObject, Entity>();
-
-		mySolarSystem = GalaxyManager.Instance.Galaxy.CurrentSolarSystem;
 
 		floatingOrigin = Player.Position;
 
 		UpdateAllEntities();
 
-		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", mySolarSystem.EntitiesInSystem.Length));
+		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", Player.SolarSystem.EntitiesInSystem.Length));
 	}
 
 	void LateUpdate()
@@ -79,9 +71,11 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public void UpdateAllEntities()
 	{
-		if (mySolarSystem != null)
-			foreach (Entity e in mySolarSystem.EntitiesInSystem)
-				UpdateGameObjectForEntity(e);
+		if (Player.SolarSystem == null)
+			return;
+
+		foreach (Entity e in Player.SolarSystem.EntitiesInSystem)
+			UpdateGameObjectForEntity(e);
 	}
 
 	/// <summary>
@@ -136,8 +130,6 @@ public class SolarSystemView : MonoBehaviour
 	{
 		GameObject myGO;
 
-		//TODO: Clean this eyesore up :/ 
-
 		if (e is Orbital)
 			myGO = Instantiate(sphere);
 		else if (e is Player)
@@ -172,6 +164,9 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void DestroyGameObjectForEntity(Entity e)
 	{
+		if (GameObjectForEntity(e) == false)
+			return;
+
 		GameObject myGO;
 
 		if (e is Player)

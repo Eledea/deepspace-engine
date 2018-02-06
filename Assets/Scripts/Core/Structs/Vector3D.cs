@@ -37,6 +37,10 @@ namespace DeepSpace.Core
 			get { return new Vector3D (-1, 0, 0); }
 		}
 
+		public static Vector3D one {
+			get { return new Vector3D (1, 1, 1); }
+		}
+
 		public static Vector3D right {
 			get { return new Vector3D (1, 0, 0); }
 		}
@@ -64,15 +68,20 @@ namespace DeepSpace.Core
 			get { return x * x + y * y + z * z; }
 		}
 
+		public Vector3 ToVector3()
+		{
+			return new Vector3((float)x, (float)y, (float)z);
+		}
+
 		//Methods
+		public static Vector3D Clamp(Vector3D value, Vector3D min, Vector3D max)
+		{
+			return new Vector3D(Utility.ClampD(value.x, min.x, max.x), Utility.ClampD(value.y, min.y, max.y), Utility.ClampD(value.z, min.z, max.z));
+		}
+
 		public static double Distance(Vector3D a, Vector3D b)
 		{
 			return (a - b).magnitude;
-		}
-
-		public Vector3 ToVector3()
-		{
-			return new Vector3 ((float)x, (float)y, (float)z);
 		}
 
 		//Operators
@@ -96,6 +105,10 @@ namespace DeepSpace.Core
 
 		public static Vector3D operator - (Vector3D v1, Vector3D v2) {
 			return new Vector3D (v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+		}
+
+		public static Vector3D operator - (Vector3D v1) {
+			return new Vector3D(v1.x, v1.y, v1.z);
 		}
 	}
 }

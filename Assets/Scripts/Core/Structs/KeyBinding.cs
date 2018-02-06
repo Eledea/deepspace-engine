@@ -16,9 +16,20 @@ namespace DeepSpace.Core
 		KeyCode negative;
 
 		/// <summary>
+		/// Returns true if either of the keys on this axis are down. False is not.
+		/// </summary>
+		public bool AxisDown
+		{
+			get
+			{
+				return (Input.GetKey(positive) || Input.GetKey(negative));
+			}
+		}
+
+		/// <summary>
 		/// Return the current magnitude of this Axis this frame.
 		/// </summary>
-		public float magnitude
+		public float Magnitude
 		{
 			get
 			{

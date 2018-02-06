@@ -15,7 +15,6 @@ public class Galaxy
 	public UInt64 timeSinceStart;
 
 	public List<SolarSystem> SolarSystems;
-	public SolarSystem CurrentSolarSystem;
 
 	/// <summary>
 	/// Generate a new galaxy with number of solar systems.
@@ -30,22 +29,7 @@ public class Galaxy
 			SolarSystems.Add (ss);
 		}
 
-		CurrentSolarSystem = SolarSystems [0];
-
-		PlayerManager.Instance.CreatePlayerInManager (CurrentSolarSystem);
-
-		//TODO: Fix this when we start Networking stuff.
-		SolarSystemView.Instance.Player = PlayerManager.Instance.GetPlayersInManager[0];
-	
-		SolarSystemView.Instance.OnSolarSystemChange ();
-	}
-
-	/// <summary>
-	/// Sets the current SolarSystem we are showing.
-	/// </summary>
-	public void SetSolarSystem(int id)
-	{
-		CurrentSolarSystem = SolarSystems [id];
+		PlayerManager.Instance.CreatePlayer("Sam", SolarSystems[UnityEngine.Random.Range(0, SolarSystems.Count)]);
 	}
 
 	float advanceTimeTimer = 1f;

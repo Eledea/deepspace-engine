@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
 {
 	public static PlayerManager Instance { get; protected set; }
 
+	public GameObject GlobalPlayer;
+
 	void OnEnable()
 	{
 		Instance = this;
@@ -44,10 +46,19 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Creates a Player to the InventoryManager.
 	/// </summary>
-	public void CreatePlayerInManager(SolarSystem ss)
+	public void CreatePlayer(string name, SolarSystem ss)
 	{
-		Player p = new Player("Sam", 37331, new Vector3D(0, 0, -2), Quaternion.identity);
+		GameObject global = Instantiate(GlobalPlayer);
+		global.name = name;
+
+		Player p = new Player(name, 37331, new Vector3D(0, 0, -2), Quaternion.identity);
 		AddPlayerToManager(p, ss);
+
+		SolarSystemView myView = global.GetComponent<SolarSystemView>();
+		myView.Player = p;
+		p.solarSystemView = myView;
+
+		myView.OnSolarSystemChange();
 
 		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Inventory, 0, 2);
 		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Inventory, 3, 1);
@@ -80,7 +91,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void UpdateEntitiesForPlayer(Player p)
 	{
-		SolarSystemView.Instance.UpdateAllEntities();
+		p.solarSystemView.UpdateAllEntities();
 	}
 
 	/// <summary>

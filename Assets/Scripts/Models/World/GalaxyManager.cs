@@ -7,7 +7,7 @@ public class GalaxyManager : MonoBehaviour
 {
 	public static GalaxyManager Instance { get; protected set; }
 
-	void OnEnable()
+	void Start()
 	{
 		Instance = this;
 
