@@ -93,6 +93,21 @@ namespace DeepSpace.Core
 		}
 
 		//Operators
+		public static bool operator == (Vector3D v1, Vector3D v2)
+		{
+			if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z)
+				return true;
+			else
+				return false;
+		}
+		public static bool operator != (Vector3D v1, Vector3D v2)
+		{
+			if (v1.x != v2.x && v1.y != v2.y && v1.z != v2.z)
+				return true;
+			else
+				return false;
+		}
+
 		public static Vector3D operator + (Vector3D v1, Vector3D v2) {
 			return new Vector3D (v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 		}
@@ -114,7 +129,6 @@ namespace DeepSpace.Core
 		public static Vector3D operator - (Vector3D v1, Vector3D v2) {
 			return new Vector3D (v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 		}
-
 		public static Vector3D operator - (Vector3D v1) {
 			return new Vector3D(v1.x, v1.y, v1.z);
 		}

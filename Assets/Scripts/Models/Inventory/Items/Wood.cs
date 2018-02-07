@@ -7,14 +7,14 @@
 	{
 		public Wood(int n, Inventory inv, int x, int y)
 		{
-			IType = IType.Wood;
+			m_type = IType.Wood;
 
-			itemLimit = 50;
+			m_itemLimit = 50;
 
-			if (n > itemLimit)
-				itemCount = itemLimit;
+			if (n > m_itemLimit)
+				m_itemCount = m_itemLimit;
 			else
-				itemCount = n;
+				m_itemCount = n;
 
 			inv.AddItemStackAt(this, x, y);
 		}

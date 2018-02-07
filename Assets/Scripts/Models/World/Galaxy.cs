@@ -13,7 +13,6 @@ public class Galaxy
 	}
 
 	public UInt64 timeSinceStart;
-
 	public List<SolarSystem> SolarSystems;
 
 	/// <summary>
@@ -29,19 +28,19 @@ public class Galaxy
 			SolarSystems.Add (ss);
 		}
 
-		PlayerManager.Instance.CreatePlayer("Sam", SolarSystems[UnityEngine.Random.Range(0, SolarSystems.Count)]);
+		PlayerManager.Instance.OnNewPlayerConnect("Sam", SolarSystems[UnityEngine.Random.Range(0, SolarSystems.Count)]);
 	}
 
-	float advanceTimeTimer = 1f;
+	float m_advanceTimeTimer = 1f;
 
 	/// <summary>
 	/// Updates the time timer.
 	/// </summary>
 	public void UpdateTime()
 	{
-		advanceTimeTimer -= Time.deltaTime;
+		m_advanceTimeTimer -= Time.deltaTime;
 
-		if (advanceTimeTimer < 0)
+		if (m_advanceTimeTimer < 0)
 			AdvanceTime ();
 	}
 
@@ -51,6 +50,6 @@ public class Galaxy
 	public void AdvanceTime()
 	{
 		timeSinceStart += 1;
-		advanceTimeTimer = 0f;
+		m_advanceTimeTimer = 0f;
 	}
 }

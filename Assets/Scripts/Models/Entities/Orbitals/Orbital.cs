@@ -7,8 +7,8 @@ using System.Collections.Generic;
 /// </summary>
 public class Orbital : Entity
 {
-	private Orbital Parent;
-	private List<Orbital> Children;
+	Orbital m_parent;
+	List<Orbital> m_children;
 
 	protected float OrbitalAngle;
 	protected UInt64 OrbitalDistance;
@@ -22,9 +22,9 @@ public class Orbital : Entity
 		{
 			List<Orbital> childOrbitals = new List<Orbital>();
 
-			if (Children != null)
+			if (m_children != null)
 			{
-				foreach (Orbital o in Children)
+				foreach (Orbital o in m_children)
 				{
 					childOrbitals.Add(o);
 					childOrbitals.AddRange(o.ChildOrbitals);
@@ -48,8 +48,8 @@ public class Orbital : Entity
 				-Math.Cos(OrbitalAngle) * OrbitalDistance
 			);
 
-			if (Parent != null)
-				OrbitalPosition += Parent.OrbitalPosition;
+			if (m_parent != null)
+				OrbitalPosition += m_parent.OrbitalPosition;
 
 			return OrbitalPosition;
 		}
@@ -60,11 +60,11 @@ public class Orbital : Entity
 	/// </summary>
 	public void AddChild(Orbital child)
 	{
-		if (Children == null)
-			Children = new List<Orbital>();
+		if (m_children == null)
+			m_children = new List<Orbital>();
 
-		Children.Add(child);
-		child.Parent = this;
+		m_children.Add(child);
+		child.m_parent = this;
 	}
 
 	/// <summary>
@@ -72,9 +72,9 @@ public class Orbital : Entity
 	/// </summary>
 	public void RemoveChild(Orbital child)
 	{
-		if (Children != null)
-			Children.Remove (child);
+		if (m_children != null)
+			m_children.Remove (child);
 
-		child.Parent = null;
+		child.m_parent = null;
 	}
 }

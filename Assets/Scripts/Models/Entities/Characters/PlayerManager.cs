@@ -16,10 +16,10 @@ public class PlayerManager : MonoBehaviour
 	{
 		Instance = this;
 
-		players = new List<Player>();
+		m_players = new List<Player>();
 	}
 
-	List<Player> players;
+	List<Player> m_players;
 
 	/// <summary>
 	/// Returns all the Players being managed as an array.
@@ -28,7 +28,7 @@ public class PlayerManager : MonoBehaviour
 	{
 		get
 		{
-			return players.ToArray();
+			return m_players.ToArray();
 		}
 	}
 
@@ -39,14 +39,14 @@ public class PlayerManager : MonoBehaviour
 	{
 		get
 		{
-			return players.Count;
+			return m_players.Count;
 		}
 	}
 
 	/// <summary>
 	/// Creates a Player to the InventoryManager.
 	/// </summary>
-	public void CreatePlayer(string name, SolarSystem ss)
+	public void OnNewPlayerConnect(string name, SolarSystem ss)
 	{
 		GameObject global = Instantiate(GlobalPlayer);
 		global.name = name;
@@ -69,7 +69,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void AddPlayerToManager(Player p, SolarSystem ss)
 	{
-		players.Add(p);
+		m_players.Add(p);
 
 		MovePlayerToSolarSystem(p, ss);
 	}
@@ -107,6 +107,6 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void RemovePlayerFromManager(Player p)
 	{
-		players.Remove(p);
+		m_players.Remove(p);
 	}
 }

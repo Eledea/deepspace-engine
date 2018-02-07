@@ -142,8 +142,9 @@ public class SolarSystemView : MonoBehaviour
 			go.GetComponentInChildren<EntityController>().Player = Player;
 			go.GetComponentInChildren<OverlayController>().Player = Player;
 
-			Player.movementController = go.GetComponentInChildren<EntityController>();
-			Player.inventoryController = go.GetComponentInChildren<OverlayController>();
+			Player.entityController = go.GetComponentInChildren<EntityController>();
+			Player.overlayController = go.GetComponentInChildren<OverlayController>();
+			Player.RegisterInventoryUpdateCallback(() => { Player.overlayController.OnInventoryUpdate(); });
 		}
 		else
 			go = Instantiate(cube);

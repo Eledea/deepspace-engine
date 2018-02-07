@@ -26,12 +26,12 @@ namespace DeepSpace.InventorySystem
 		public Inventory(Entity e, int x, int y)
 		{
 			Inv = new ItemStack[x, y];
-			myEntity = e;
+			m_entity = e;
 		}
 
 		ItemStack[,] Inv;
 
-		Entity myEntity;
+		Entity m_entity;
 
 		/// <summary>
 		/// Returns the length of the x axis of this Inventory.
@@ -62,7 +62,7 @@ namespace DeepSpace.InventorySystem
 		{
 			get
 			{
-				return myEntity;
+				return m_entity;
 			}
 		}
 

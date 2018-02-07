@@ -9,13 +9,13 @@ namespace DeepSpace.InventorySystem
 	{
 		public Inventory Inv;
 
-		private int inv_x;
-		private int inv_y;
+		private int m_inv_x;
+		private int m_inv_y;
 
-		protected int itemCount;
-		protected int itemLimit;
+		protected int m_itemCount;
+		protected int m_itemLimit;
 
-		protected IType IType;
+		protected IType m_type;
 
 		/// <summary>
 		/// Returns or sets the array index of this ItemStack in it's Inventory.
@@ -24,12 +24,12 @@ namespace DeepSpace.InventorySystem
 		{
 			get
 			{
-				return new Vector2 (inv_x, inv_y);
+				return new Vector2 (m_inv_x, m_inv_y);
 			}
 
 			set
 			{
-				inv_x = Mathf.FloorToInt (value.x); inv_y = Mathf.FloorToInt (value.y);
+				m_inv_x = Mathf.FloorToInt (value.x); m_inv_y = Mathf.FloorToInt (value.y);
 			}
 		}
 
@@ -38,10 +38,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public int Index_x
 		{
-			get
-			{
-				return inv_x;
-			}
+			get { return m_inv_x; }
 		}
 
 		/// <summary>
@@ -49,10 +46,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public int Index_y
 		{
-			get
-			{
-				return inv_y;
-			}
+			get { return m_inv_y; }
 		}
 
 		/// <summary>
@@ -60,10 +54,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public int NumItems
 		{
-			get
-			{
-				return itemCount;
-			}
+			get { return m_itemCount; }
 		}
 
 		/// <summary>
@@ -71,10 +62,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public int MaxItems
 		{
-			get
-			{
-				return itemLimit;
-			}
+			get { return m_itemLimit; }
 		}
 
 		/// <summary>
@@ -82,10 +70,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public IType Type
 		{
-			get
-			{
-				return IType;
-			}
+			get { return m_type; }
 		}
 
 		/// <summary>
@@ -93,10 +78,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public string TypeName
 		{
-			get
-			{
-				return IType.ToString ();
-			}
+			get { return m_type.ToString (); }
 		}
 
 		/// <summary>
@@ -104,10 +86,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public int TypeId
 		{
-			get
-			{
-				return (int)IType;
-			}
+			get { return (int)m_type; }
 		}
 
 		/// <summary>
@@ -115,10 +94,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public int ItemAddability
 		{
-			get
-			{
-				return itemLimit - itemCount;
-			}
+			get { return m_itemLimit - m_itemCount; }
 		}
 
 		/// <summary>
@@ -126,7 +102,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public void AddItems(int n)
 		{
-			itemCount += n;
+			m_itemCount += n;
 		}
 
 		/// <summary>
@@ -134,7 +110,7 @@ namespace DeepSpace.InventorySystem
 		/// </summary>
 		public void RemoveItems(int n)
 		{
-			itemCount -= n;
+			m_itemCount -= n;
 		}
 	}
 }

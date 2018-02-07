@@ -7,14 +7,14 @@
 	{
 		public Stone(int n, Inventory inv, int x, int y)
 		{
-			IType = IType.Stone;
+			m_type = IType.Stone;
 
-			itemLimit = 50;
+			m_itemLimit = 50;
 
-			if (n > itemLimit)
-				itemCount = itemLimit;
+			if (n > m_itemLimit)
+				m_itemCount = m_itemLimit;
 			else
-				itemCount = n;
+				m_itemCount = n;
 
 			inv.AddItemStackAt(this, x, y);
 		}

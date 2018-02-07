@@ -11,9 +11,9 @@ public class Entity
 	public long EntityId;
 	public SolarSystem SolarSystem;
 
-	Vector3D velocity;
-	Vector3D position;
-	Quaternion rotation;
+	Vector3D m_velocity;
+	Vector3D m_position;
+	Quaternion m_rotation;
 
 	public Inventory Inventory;
 
@@ -26,40 +26,43 @@ public class Entity
 	}
 
 	/// <summary>
-	/// Gets or sets the Velocity of this Player in it's SolarSystem.
+	/// Gets or sets the Position of this Entity in it's SolarSystem.
 	/// </summary>
 	public Vector3D Velocity
 	{
-		get { return velocity; }
+		get { return m_velocity; }
 		set
 		{
-			velocity = value;
-			Position += velocity * Time.deltaTime;
+			m_velocity = value;
+			Position += m_velocity * Time.deltaTime;
 		}
 	}
 
 	/// <summary>
-	/// Gets or sets the Position of this Player in it's SolarSystem.
+	/// Gets or sets the Position of this Entity in it's SolarSystem.
 	/// </summary>
 	public Vector3D Position
 	{
-		get { return position; }
+		get { return m_position; }
 		set
 		{
-			position = value;
+			if (value == m_position)
+				return;
+
+			m_position = value;
 			PlayerManager.Instance.UpdateEntityForPlayersInSystem(this, SolarSystem);
 		}
 	}
 
 	/// <summary>
-	/// Gets or sets the Rotation of this Player in it's SolarSystem.
+	/// Gets or sets the Rotation of this Entity in it's SolarSystem.
 	/// </summary>
 	public Quaternion Rotation
 	{
-		get { return rotation; }
+		get { return m_rotation; }
 		set
 		{
-			rotation = value;
+			m_rotation = value;
 			PlayerManager.Instance.UpdateEntityForPlayersInSystem(this, SolarSystem);
 		}
 	}

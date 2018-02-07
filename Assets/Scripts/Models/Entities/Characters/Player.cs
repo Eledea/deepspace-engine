@@ -1,5 +1,6 @@
 ﻿using DeepSpace.Core;
 using DeepSpace.InventorySystem;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -19,13 +20,14 @@ public class Player : Entity
 
 	//NonSerialised fields.
 	public SolarSystemView solarSystemView;
-	public EntityController movementController;
-	public OverlayController inventoryController;
+	public EntityController entityController;
+	public OverlayController overlayController;
 
-	public bool InventoryUpdateFlag;
+	//Call this action if an Inventory in the SolarSystem a Player is in gets updated.
+	Action cbInventoryUpdateFunc;
 
-	protected int healthPoints;
-	protected float oxygenLevel;
+	protected int m_healthPoints;
+	protected float m_oxygenLevel;
 
 	/// <summary>
 	/// Returns a value indicating whether this Player is using the Inventory system.
@@ -34,7 +36,7 @@ public class Player : Entity
 	{
 		get
 		{
-			return inventoryController.ShowingOverlay == false;
+			return overlayController.ShowingOverlay == false;
 		}
 	}
 
@@ -45,12 +47,12 @@ public class Player : Entity
 	{
 		get
 		{
-			return healthPoints;
+			return m_healthPoints;
 		}
 
 		set
 		{
-			healthPoints = value;
+			m_healthPoints = value;
 		}
 	}
 
@@ -61,12 +63,28 @@ public class Player : Entity
 	{
 		get
 		{
-			return oxygenLevel;
+			return m_oxygenLevel;
 		}
 
 		set
 		{
-			oxygenLevel = value;
+			m_oxygenLevel = value;
 		}
+	}
+
+	/// <summary>
+	/// Register a function to callback when an Inventory in this Player's SolarSystem updates.
+	/// </summary>
+	public void RegisterInventoryUpdateCallback(Action callback)
+	{
+		cbInventoryUpdateFunc += callback;
+	}
+
+	/// <summary>
+	/// Unregister a function to callback when the Inventory updates.
+	/// </summary>
+	public void UnregisterInventoryUpdateCallback(Action callback)
+	{
+		cbInventoryUpdateFunc -= callback;
 	}
 }

@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class SolarSystem
 {
-	List<Player> Players;
-	List<Entity> Entities;
+	List<Player> m_players;
+	List<Entity> m_entities;
 
 	/// <summary>
 	/// Returns the Players in this SolarSystem as an array.
@@ -18,10 +18,10 @@ public class SolarSystem
 	{
 		get
 		{
-			if (Players == null)
-				Players = new List<Player>();
+			if (m_players == null)
+				m_players = new List<Player>();
 
-			return Players.ToArray();
+			return m_players.ToArray();
 		}
 	}
 
@@ -32,10 +32,10 @@ public class SolarSystem
 	{
 		get
 		{
-			if (Entities == null)
-				Entities = new List<Entity>();
+			if (m_entities == null)
+				m_entities = new List<Entity>();
 
-			return Entities.ToArray ();
+			return m_entities.ToArray ();
 		}
 	}
 
@@ -62,10 +62,10 @@ public class SolarSystem
 	/// </summary>
 	public void AddPlayerToSolarSystem(Player player)
 	{
-		if (Players == null)
-			Players = new List<Player>();
+		if (m_players == null)
+			m_players = new List<Player>();
 
-		Players.Add(player);
+		m_players.Add(player);
 
 		AddEntityToSolarSystem(player);
 	}
@@ -75,10 +75,10 @@ public class SolarSystem
 	/// </summary>
 	public void AddEntityToSolarSystem(Entity entity)
 	{
-		if (Entities == null)
-			Entities = new List<Entity>();
+		if (m_entities == null)
+			m_entities = new List<Entity>();
 
-		Entities.Add (entity);
+		m_entities.Add (entity);
 		entity.SolarSystem = this;
 	}
 
@@ -87,10 +87,10 @@ public class SolarSystem
 	/// </summary>
 	public void RemovePlayerFromSolarSystem(Player player)
 	{
-		if (Players == null)
+		if (m_players == null)
 			return;
 
-		Players.Remove(player);
+		m_players.Remove(player);
 
 		RemoveEntityFromSolarSystem(player);
 	}
@@ -100,10 +100,10 @@ public class SolarSystem
 	/// </summary>
 	public void RemoveEntityFromSolarSystem(Entity entity)
 	{
-		if (Entities == null)
+		if (m_entities == null)
 			return;
 
-		Entities.Remove (entity);
+		m_entities.Remove (entity);
 		entity.SolarSystem = null;
 	}
 }

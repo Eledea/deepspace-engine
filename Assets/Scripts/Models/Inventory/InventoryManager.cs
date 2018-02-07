@@ -81,7 +81,7 @@ namespace DeepSpace.InventorySystem
 		public void UpdateItemStackGraphicsForPlayer(Player p)
 		{
 			if (p.IsUsingInventorySystem)
-				p.inventoryController.OnInventoryUpdate();
+				p.overlayController.OnInventoryUpdate();
 		}
 	}
 }

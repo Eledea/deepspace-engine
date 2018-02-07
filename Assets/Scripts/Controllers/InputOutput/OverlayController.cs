@@ -55,13 +55,6 @@ public class OverlayController : MonoBehaviour
 	void Update()
 	{
 		Update_OverlayController();
-
-		if (Player.InventoryUpdateFlag)
-		{
-			OnInventoryUpdate();
-
-			Player.InventoryUpdateFlag = false;
-		}
 	}
 
 	void Update_OverlayController()
@@ -90,8 +83,29 @@ public class OverlayController : MonoBehaviour
 					}
 				}
 
-				OnInventoryUpdate();
+				DrawOverlay();
 			}
+		}
+	}
+
+	/// <summary>
+	/// Draws the Overlay for this Player.
+	/// </summary>
+	private void DrawOverlay()
+	{
+		OnInventoryUpdate();
+	}
+
+	/// <summary>
+	/// Hides the Overlay for this Player.
+	/// </summary>
+	private void HideOverlay()
+	{
+		while (this.transform.childCount > 0)
+		{
+			Transform child = transform.GetChild(0);
+			child.SetParent(null);
+			Destroy(child.gameObject);
 		}
 	}
 
@@ -113,19 +127,6 @@ public class OverlayController : MonoBehaviour
 		{
 			DrawInventoryForEntity(Player, new Vector2(0, -2.5f * graphicSize));
 			DrawInventoryForEntity(target, new Vector2(0, 2.5f * graphicSize));
-		}
-	}
-
-	/// <summary>
-	/// Hide the Inventory for this Player.
-	/// </summary>
-	private void HideOverlay()
-	{
-		while (this.transform.childCount > 0)
-		{
-			Transform child = transform.GetChild(0);
-			child.SetParent(null);
-			Destroy(child.gameObject);
 		}
 	}
 
