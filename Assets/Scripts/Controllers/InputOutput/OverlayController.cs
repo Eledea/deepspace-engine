@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Unity-centric class for allowing Player interaction with the Inventory system.
 /// </summary>
-public class InventoryController : MonoBehaviour
+public class OverlayController : MonoBehaviour
 {
 	public GameObject[] interfaces;
 	public Sprite[] Sprites;
@@ -26,13 +26,11 @@ public class InventoryController : MonoBehaviour
 
 	Camera myCamera;
 
-	enum InventoryShowMode { None, Internal, External }
-	InventoryShowMode myShowMode;
+	enum OverlayShowMode { None, Internal, External }
+	OverlayShowMode myShowMode;
 
 	enum InventoryDragType { None, Left, Right}
 	InventoryDragType dragType;
-
-	bool showingOverlay;
 
 	Queue<GameObject> overlayGraphics;
 
@@ -50,7 +48,7 @@ public class InventoryController : MonoBehaviour
 	{
 		get
 		{
-			return showingOverlay == false;
+			return myShowMode == OverlayShowMode.None;
 		}
 	}
 
@@ -72,29 +70,26 @@ public class InventoryController : MonoBehaviour
 		{
 			if (Player.IsUsingInventorySystem)
 			{
-				myShowMode = InventoryShowMode.None;
-
-				showingOverlay = false;
-				HideInventory();
+				myShowMode = OverlayShowMode.None;
+				HideOverlay();
 			}
 			else
 			{
 				Ray center = new Ray(myCamera.transform.position, myCamera.transform.forward);
 				RaycastHit hitInfo;
 
-				myShowMode = InventoryShowMode.Internal;
+				myShowMode = OverlayShowMode.Internal;
 				target = Player;
 
 				if (Physics.Raycast(center, out hitInfo, 3))
 				{
 					if (Player.solarSystemView.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
 					{
-						myShowMode = InventoryShowMode.External;
+						myShowMode = OverlayShowMode.External;
 						target = Player.solarSystemView.GameObjectToEntity(hitInfo.transform.gameObject);
 					}
 				}
 
-				showingOverlay = true;
 				OnInventoryUpdate();
 			}
 		}
@@ -106,25 +101,25 @@ public class InventoryController : MonoBehaviour
 	public void OnInventoryUpdate()
 	{
 		if (overlayGraphics != null)
-			HideInventory();
+			HideOverlay();
 
 		overlayGraphics = new Queue<GameObject>();
 
-		if (myShowMode == InventoryShowMode.Internal)
+		if (myShowMode == OverlayShowMode.Internal)
 		{
-			ShowInventoryForEntity(Player, new Vector2(0, 0));
+			DrawInventoryForEntity(Player, new Vector2(0, 0));
 		}
-		else if (myShowMode == InventoryShowMode.External)
+		else if (myShowMode == OverlayShowMode.External)
 		{
-			ShowInventoryForEntity(Player, new Vector2(0, -2.5f * graphicSize));
-			ShowInventoryForEntity(target, new Vector2(0, 2.5f * graphicSize));
+			DrawInventoryForEntity(Player, new Vector2(0, -2.5f * graphicSize));
+			DrawInventoryForEntity(target, new Vector2(0, 2.5f * graphicSize));
 		}
 	}
 
 	/// <summary>
 	/// Hide the Inventory for this Player.
 	/// </summary>
-	private void HideInventory()
+	private void HideOverlay()
 	{
 		while (this.transform.childCount > 0)
 		{
@@ -137,7 +132,7 @@ public class InventoryController : MonoBehaviour
 	/// <summary>
 	/// Spawns the Inventory for an Entity.
 	/// </summary>
-	private void ShowInventoryForEntity(Entity e, Vector2 screenPosition)
+	private void DrawInventoryForEntity(Entity e, Vector2 screenPosition)
 	{
 		GameObject overlay = Instantiate(interfaces[0], this.transform);
 		overlay.transform.localPosition = screenPosition;
@@ -232,8 +227,6 @@ public class InventoryController : MonoBehaviour
 			ItemStack currentToTargetStack = null;
 			ItemStack targetToCurrentStack = null;
 
-			//TODO: How about using delegates/ lambdas to massively simplify the logic for this Sam?
-
 			if (dragType != InventoryDragType.None)
 			{
 				if (currentInv.GetItemStackAt(my_x, my_y) != targetInv.GetItemStackAt(new_x, new_y))
@@ -266,7 +259,7 @@ public class InventoryController : MonoBehaviour
 
 							if (currentToTargetStack.Type == targetToCurrentStack.Type)
 							{
-								InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.RoundToInt(currentToTargetStack.NumItems / 2));
+								InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.FloorToInt(currentToTargetStack.NumItems / 2));
 								ItemStack s = currentToTargetStack;
 								currentToTargetStack = targetToCurrentStack;
 								targetToCurrentStack = s;
@@ -277,14 +270,20 @@ public class InventoryController : MonoBehaviour
 							InventoryManager.Instance.SpawnNewItemStackAt(currentToTargetStack.Type, 0, targetInv, new_x, new_y);
 							targetToCurrentStack = targetInv.GetItemStackAt(new_x, new_y);
 
-							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.RoundToInt(currentToTargetStack.NumItems / 2));
+							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
 						}
 					}
 
-					if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
-						targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
-					if (targetToCurrentStack != null && currentToTargetStack.NumItems != 0)
-						currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
+					if (currentToTargetStack != null)
+					{
+						if (currentToTargetStack.NumItems != 0)
+							targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
+					}
+					if (targetToCurrentStack != null)
+					{
+						if (targetToCurrentStack.NumItems != 0)
+							currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
+					}
 
 					InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Player.SolarSystem);
 				}

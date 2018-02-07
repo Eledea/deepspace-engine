@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	public InventoryController myController;
+	public OverlayController myController;
 
 	public Inventory Inventory;
 	public Vector2 Index;

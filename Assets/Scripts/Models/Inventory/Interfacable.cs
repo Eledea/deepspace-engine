@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class Interfacable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	public InventoryController myController;
+	public OverlayController myController;
 
 	public void OnPointerDown(PointerEventData eventData)
 	{

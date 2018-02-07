@@ -21,35 +21,43 @@ namespace DeepSpace.Core
 		public double z;
 
 		//Properties.
-		public static Vector3D back {
+		public static Vector3D back
+		{
 			get { return new Vector3D (0, 0, -1); }
 		}
 
-		public static Vector3D down {
+		public static Vector3D down
+		{
 			get { return new Vector3D (0, -1, 0); }
 		}
 
-		public static Vector3D forward {
+		public static Vector3D forward
+		{
 			get { return new Vector3D (0, 0, 1); }
 		}
 
-		public static Vector3D left {
+		public static Vector3D left
+		{
 			get { return new Vector3D (-1, 0, 0); }
 		}
 
-		public static Vector3D one {
+		public static Vector3D one
+		{
 			get { return new Vector3D (1, 1, 1); }
 		}
 
-		public static Vector3D right {
+		public static Vector3D right
+		{
 			get { return new Vector3D (1, 0, 0); }
 		}
 
-		public static Vector3D up {
+		public static Vector3D up
+		{
 			get { return new Vector3D (0, 1, 0); }
 		}
 
-		public static Vector3D zero {
+		public static Vector3D zero
+		{
 			get { return  new Vector3D (0, 0, 0); }
 		}
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Unity-centric class for controlling a player's movement ingame.
+/// Unity-centric class for controlling an Entity.
 /// </summary>
-public class MovementController : MonoBehaviour
+public class EntityController : MonoBehaviour
 {
 	enum Axis { X, Y, Z };
 
@@ -29,8 +29,6 @@ public class MovementController : MonoBehaviour
 	Dictionary<Axis, KeyBinding> axisBindings;
 	KeyBinding roll;
 
-	List<Vector3> lastDirections;
-
 	bool DampenersOn = true;
 
 	Quaternion rotateTo;
@@ -45,9 +43,6 @@ public class MovementController : MonoBehaviour
 			Update_PlayerRotation ();
 			Update_PlayerRoll ();
 		}
-
-		if (Player.Velocity.magnitude != 0)
-			Player.UpdatePosition ();
 	}
 
 	void Update_DampenersController()

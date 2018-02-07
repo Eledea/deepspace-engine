@@ -105,7 +105,7 @@ public class SolarSystemView : MonoBehaviour
 	/// <summary>
 	/// Updates the GameObject for this Entity.
 	/// </summary>
-	void UpdateGameObjectForEntity(Entity e)
+	public void UpdateGameObjectForEntity(Entity e)
 	{
 		if ((Vector3D.Distance(e.Position, Player.Position)) < loadRange)
 		{
@@ -128,35 +128,31 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	void SpawnGameObjectForEntity(Entity e)
 	{
-		GameObject myGO;
+		GameObject go;
+
+		//TODO: Clean this up.
 
 		if (e is Orbital)
-			myGO = Instantiate(sphere);
+		{
+			go = Instantiate(sphere);
+		}
 		else if (e is Player)
-			myGO = SpawnGameObjectForPlayer();
+		{
+			go = Instantiate(player);
+			go.GetComponentInChildren<EntityController>().Player = Player;
+			go.GetComponentInChildren<OverlayController>().Player = Player;
+
+			Player.movementController = go.GetComponentInChildren<EntityController>();
+			Player.inventoryController = go.GetComponentInChildren<OverlayController>();
+		}
 		else
-			myGO = Instantiate(cube);
+			go = Instantiate(cube);
 
-		myGO.transform.parent = this.transform;
-		myGO.name = e.Name;
+		go.transform.parent = this.transform;
+		go.name = e.Name;
 
-		entityToGameObject [e] = myGO;
-		gameObjectToEntity [myGO] = e;
-	}
-
-	/// <summary>
-	/// Spawns the GameObject for this Player.
-	/// </summary>
-	GameObject SpawnGameObjectForPlayer()
-	{
-		playerGO = Instantiate(player);
-		playerGO.GetComponentInChildren<MovementController>().Player = Player;
-		playerGO.GetComponentInChildren<InventoryController>().Player = Player;
-
-		Player.movementController = playerGO.GetComponentInChildren<MovementController>();
-		Player.inventoryController = playerGO.GetComponentInChildren<InventoryController>();
-
-		return playerGO;
+		entityToGameObject [e] = go;
+		gameObjectToEntity [go] = e;
 	}
 
 	/// <summary>

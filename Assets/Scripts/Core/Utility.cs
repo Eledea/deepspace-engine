@@ -2,8 +2,8 @@
 
 namespace DeepSpace.Core
 {
-	/// <summary>
-	/// Contains functions for carrying out general utility tasks that are not class specific.
+	/// <summary> 
+	/// Contains functions for carrying out general utility tasks.
 	/// </summary>
 	public sealed class Utility
 	{

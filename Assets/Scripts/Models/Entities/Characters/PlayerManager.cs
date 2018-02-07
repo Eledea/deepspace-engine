@@ -77,19 +77,19 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Updates the local Entity representation for all Players in a SolarSystem.
 	/// </summary>
-	public void UpdateEntitiesForPlayersInSystem(SolarSystem ss)
+	public void UpdateEntityForPlayersInSystem(Entity e, SolarSystem ss)
 	{
 		if (ss == null)
 			return;
 
 		foreach(Player p in ss.PlayersInSystem)
-			UpdateEntitiesForPlayer(p);
+			UpdateEntityForPlayer(e, p);
 	}
 
 	/// <summary>
 	/// Updates the local Entity representation for a Player.
 	/// </summary>
-	public void UpdateEntitiesForPlayer(Player p)
+	public void UpdateEntityForPlayer(Entity e, Player p)
 	{
 		p.solarSystemView.UpdateAllEntities();
 	}

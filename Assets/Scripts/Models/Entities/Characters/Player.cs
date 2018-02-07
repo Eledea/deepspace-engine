@@ -1,6 +1,5 @@
 ﻿using DeepSpace.Core;
 using DeepSpace.InventorySystem;
-using System;
 using UnityEngine;
 
 /// <summary>
@@ -20,8 +19,8 @@ public class Player : Entity
 
 	//NonSerialised fields.
 	public SolarSystemView solarSystemView;
-	public MovementController movementController;
-	public InventoryController inventoryController;
+	public EntityController movementController;
+	public OverlayController inventoryController;
 
 	public bool InventoryUpdateFlag;
 
