@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace DeepSpace.InventorySystem
@@ -71,17 +71,17 @@ namespace DeepSpace.InventorySystem
 				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the
 				//function to update the Inventories currently being managed.
 
-				UpdateItemStackGraphicsForPlayer(p);
+				UpdateItemStackGraphicsForCharacter(p.Character);
 			}
 		}
 
 		/// <summary>
-		/// Updates the ItemStack graphics for a player.
+		/// Updates the ItemStack graphics for a Character.
 		/// </summary>
-		public void UpdateItemStackGraphicsForPlayer(Player p)
+		public void UpdateItemStackGraphicsForCharacter(Character c)
 		{
-			if (p.IsUsingInventorySystem)
-				p.overlayController.OnInventoryUpdate();
+			if (c.IsUsingInventorySystem)
+				c.overlayController.OnInventoryUpdate();
 		}
 	}
 }

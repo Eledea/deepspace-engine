@@ -44,24 +44,21 @@ public class PlayerManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Creates a Player to the InventoryManager.
+	/// Creates a Player and adds it to the PlayerManager.
 	/// </summary>
 	public void OnNewPlayerConnect(string name, SolarSystem ss)
 	{
 		GameObject global = Instantiate(GlobalPlayer);
 		global.name = name;
+		SolarSystemView view = global.GetComponent<SolarSystemView>();
 
-		Player p = new Player(name, 37331, new Vector3D(0, 0, -2), Quaternion.identity);
+		Player p = new Player(name, 37331, new Vector3D(0, 0, -2), Quaternion.identity, view);
 		AddPlayerToManager(p, ss);
 
-		SolarSystemView myView = global.GetComponent<SolarSystemView>();
-		myView.Player = p;
-		p.solarSystemView = myView;
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Character.Inventory, 0, 2);
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Character.Inventory, 3, 1);
 
-		myView.OnSolarSystemChange();
-
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Inventory, 0, 2);
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Inventory, 3, 1);
+		view.OnSolarSystemChange();
 	}
 
 	/// <summary>
@@ -83,15 +80,7 @@ public class PlayerManager : MonoBehaviour
 			return;
 
 		foreach(Player p in ss.PlayersInSystem)
-			UpdateEntityForPlayer(e, p);
-	}
-
-	/// <summary>
-	/// Updates the local Entity representation for a Player.
-	/// </summary>
-	public void UpdateEntityForPlayer(Entity e, Player p)
-	{
-		p.solarSystemView.UpdateAllEntities();
+			p.View.UpdateGameObjectForEntity(e);
 	}
 
 	/// <summary>

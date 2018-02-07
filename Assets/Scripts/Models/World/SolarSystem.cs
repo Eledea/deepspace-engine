@@ -1,4 +1,4 @@
-﻿using DeepSpace.Core;
+using DeepSpace.Core;
 using DeepSpace.InventorySystem;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,39 +60,38 @@ public class SolarSystem
 	/// <summary>
 	/// Adds a Player to this SolarSystem.
 	/// </summary>
-	public void AddPlayerToSolarSystem(Player player)
+	public void AddPlayerToSolarSystem(Player p)
 	{
 		if (m_players == null)
 			m_players = new List<Player>();
 
-		m_players.Add(player);
+		m_players.Add(p);
 
-		AddEntityToSolarSystem(player);
+		AddEntityToSolarSystem(p.Character);
 	}
 
 	/// <summary>
 	/// Adds an Entity to this SolarSystem.
 	/// </summary>
-	public void AddEntityToSolarSystem(Entity entity)
+	public void AddEntityToSolarSystem(Entity e)
 	{
 		if (m_entities == null)
 			m_entities = new List<Entity>();
 
-		m_entities.Add (entity);
-		entity.SolarSystem = this;
+		m_entities.Add (e);
+		e.SolarSystem = this;
 	}
 
 	/// <summary>
 	/// Removes a Player from this SolarSystem.
 	/// </summary>
-	public void RemovePlayerFromSolarSystem(Player player)
+	public void RemovePlayerFromSolarSystem(Player p)
 	{
 		if (m_players == null)
 			return;
 
-		m_players.Remove(player);
-
-		RemoveEntityFromSolarSystem(player);
+		m_players.Remove(p);
+		RemoveEntityFromSolarSystem(p.Character);
 	}
 
 	/// <summary>

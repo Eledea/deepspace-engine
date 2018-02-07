@@ -1,4 +1,4 @@
-﻿using DeepSpace.Core;
+using DeepSpace.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class SolarSystemView : MonoBehaviour
 {
-	public GameObject player;
+	public GameObject character;
 	public GameObject sphere;
 	public GameObject cube;
 
@@ -21,9 +21,9 @@ public class SolarSystemView : MonoBehaviour
 	/// <summary>
 	/// The Player data class that this controller is linked to.
 	/// </summary>
-	public Player Player { get; set;}
+	public Character Character { get; set;}
 
-	GameObject playerGO;
+	GameObject characterGO;
 
 	Dictionary<Entity, GameObject> entityToGameObject;
 	Dictionary<GameObject, Entity> gameObjectToEntity;
@@ -40,27 +40,27 @@ public class SolarSystemView : MonoBehaviour
 	{
 		if (entityToGameObject != null)
 		{
-			foreach (Entity e in Player.SolarSystem.EntitiesInSystem)
+			foreach (Entity e in Character.SolarSystem.EntitiesInSystem)
 				DestroyGameObjectForEntity(e);
 		}
 
 		entityToGameObject = new Dictionary<Entity, GameObject>();
 		gameObjectToEntity = new Dictionary<GameObject, Entity>();
 
-		floatingOrigin = Player.Position;
+		floatingOrigin = Character.Position;
 
 		UpdateAllEntities();
 
-		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", Player.SolarSystem.EntitiesInSystem.Length));
+		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", Character.SolarSystem.EntitiesInSystem.Length));
 	}
 
 	void LateUpdate()
 	{
-		if (playerGO != null)
+		if (characterGO != null)
 		{
-			if (playerGO.transform.position.magnitude > floatingRange)
+			if (characterGO.transform.position.magnitude > floatingRange)
 			{
-				floatingOrigin = Player.Position;
+				floatingOrigin = Character.Position;
 				Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
 			}
 		}
@@ -71,10 +71,10 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public void UpdateAllEntities()
 	{
-		if (Player.SolarSystem == null)
+		if (Character.SolarSystem == null)
 			return;
 
-		foreach (Entity e in Player.SolarSystem.EntitiesInSystem)
+		foreach (Entity e in Character.SolarSystem.EntitiesInSystem)
 			UpdateGameObjectForEntity(e);
 	}
 
@@ -107,7 +107,7 @@ public class SolarSystemView : MonoBehaviour
 	/// </summary>
 	public void UpdateGameObjectForEntity(Entity e)
 	{
-		if ((Vector3D.Distance(e.Position, Player.Position)) < loadRange)
+		if ((Vector3D.Distance(e.Position, Character.Position)) < loadRange)
 		{
 			if (GameObjectForEntity(e) == false)
 				SpawnGameObjectForEntity(e);
@@ -130,21 +130,17 @@ public class SolarSystemView : MonoBehaviour
 	{
 		GameObject go;
 
-		//TODO: Clean this up.
-
-		if (e is Orbital)
+		if (e.EntityId == Character.EntityId)
+		{
+			go = SpawnLocalCharacter((Character)e);
+		}
+		else if (e is Orbital)
 		{
 			go = Instantiate(sphere);
 		}
-		else if (e is Player)
+		else if (e is Character)
 		{
-			go = Instantiate(player);
-			go.GetComponentInChildren<EntityController>().Player = Player;
-			go.GetComponentInChildren<OverlayController>().Player = Player;
-
-			Player.entityController = go.GetComponentInChildren<EntityController>();
-			Player.overlayController = go.GetComponentInChildren<OverlayController>();
-			Player.RegisterInventoryUpdateCallback(() => { Player.overlayController.OnInventoryUpdate(); });
+			go = Instantiate(character);
 		}
 		else
 			go = Instantiate(cube);
@@ -156,6 +152,19 @@ public class SolarSystemView : MonoBehaviour
 		gameObjectToEntity [go] = e;
 	}
 
+	private GameObject SpawnLocalCharacter(Character c)
+	{
+		characterGO = Instantiate(character);
+		characterGO.GetComponentInChildren<EntityController>().Player = Character;
+		characterGO.GetComponentInChildren<OverlayController>().Character = Character;
+
+		Character.entityController = characterGO.GetComponentInChildren<EntityController>();
+		Character.overlayController = characterGO.GetComponentInChildren<OverlayController>();
+		Character.RegisterInventoryUpdateCallback(() => { Character.overlayController.OnInventoryUpdate(); });
+
+		return characterGO;
+	}
+
 	/// <summary>
 	/// Destroys the GameObject for an Entity using a GameObject reference.
 	/// </summary>
@@ -164,21 +173,21 @@ public class SolarSystemView : MonoBehaviour
 		if (GameObjectForEntity(e) == false)
 			return;
 
-		GameObject myGO;
+		GameObject go;
 
-		if (e is Player)
+		if (e is Character)
 		{
-			myGO = playerGO;
-			playerGO = null;
+			go = characterGO;
+			characterGO = null;
 		}
 		else
 		{
-			myGO = EntityToGameObject(e);
+			go = EntityToGameObject(e);
 		}
 
-		Destroy(myGO);
+		Destroy(go);
 
-		gameObjectToEntity.Remove (myGO);
+		gameObjectToEntity.Remove (go);
 		entityToGameObject.Remove(e);
 	}
 }

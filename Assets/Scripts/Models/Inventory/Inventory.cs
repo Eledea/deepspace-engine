@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace DeepSpace.InventorySystem
 {
@@ -7,19 +7,6 @@ namespace DeepSpace.InventorySystem
 	/// </summary>
 	public class Inventory
 	{
-		//What is the best way of storing the data for Items in an Inventory???
-		//We have a few options...
-
-		//The data type that makes the most sense in this situation in a 2D array
-		//for that columns and rows that we will have on the interface.
-
-		//But HOW will the game know what each slot has???
-		//We COULD use integers to store data and have each interger correspond to an
-		//item type in an enum....but how will we know how much of each item we will have???
-
-		//A 2D int array in this situation is no good, because we are NOT able to know
-		//how many of an item we have in each slot.
-
 		/// <summary>
 		/// Constructs a new Inventory.
 		/// </summary>
@@ -30,8 +17,6 @@ namespace DeepSpace.InventorySystem
 		}
 
 		ItemStack[,] Inv;
-
-		Entity m_entity;
 
 		/// <summary>
 		/// Returns the length of the x axis of this Inventory.
@@ -52,17 +37,6 @@ namespace DeepSpace.InventorySystem
 			get
 			{
 				return Inv.GetLength(1);
-			}
-		}
-
-		/// <summary>
-		/// Returns the Entity that this Invenntory is attached to.
-		/// </summary>
-		public Entity Entity
-		{
-			get
-			{
-				return m_entity;
 			}
 		}
 
@@ -104,6 +78,19 @@ namespace DeepSpace.InventorySystem
 		public ItemStack GetItemStackAt(int x, int y)
 		{
 			return Inv [x, y];
+		}
+
+		Entity m_entity;
+
+		/// <summary>
+		/// Returns the Entity that this Invenntory is attached to.
+		/// </summary>
+		public Entity Entity
+		{
+			get
+			{
+				return m_entity;
+			}
 		}
 	}
 }

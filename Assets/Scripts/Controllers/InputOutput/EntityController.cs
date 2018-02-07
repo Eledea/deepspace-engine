@@ -24,7 +24,7 @@ public class EntityController : MonoBehaviour
 	/// <summary>
 	/// The Player data class that this controller is linked to.
 	/// </summary>
-	public Player Player { get; set;}
+	public Character Player { get; set;}
 
 	Dictionary<Axis, KeyBinding> axisBindings;
 	KeyBinding roll;

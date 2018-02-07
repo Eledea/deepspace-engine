@@ -22,7 +22,7 @@ public class OverlayController : MonoBehaviour
 	/// <summary>
 	/// The Player data class that this controller is linked to.
 	/// </summary>
-	public Player Player { get; set; }
+	public Character Character { get; set; }
 
 	Camera myCamera;
 
@@ -61,7 +61,7 @@ public class OverlayController : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.I))
 		{
-			if (Player.IsUsingInventorySystem)
+			if (Character.IsUsingInventorySystem)
 			{
 				myShowMode = OverlayShowMode.None;
 				HideOverlay();
@@ -72,14 +72,14 @@ public class OverlayController : MonoBehaviour
 				RaycastHit hitInfo;
 
 				myShowMode = OverlayShowMode.Internal;
-				target = Player;
+				target = Character;
 
 				if (Physics.Raycast(center, out hitInfo, 3))
 				{
-					if (Player.solarSystemView.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
+					if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
 					{
 						myShowMode = OverlayShowMode.External;
-						target = Player.solarSystemView.GameObjectToEntity(hitInfo.transform.gameObject);
+						target = Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject);
 					}
 				}
 
@@ -121,11 +121,11 @@ public class OverlayController : MonoBehaviour
 
 		if (myShowMode == OverlayShowMode.Internal)
 		{
-			DrawInventoryForEntity(Player, new Vector2(0, 0));
+			DrawInventoryForEntity(Character, new Vector2(0, 0));
 		}
 		else if (myShowMode == OverlayShowMode.External)
 		{
-			DrawInventoryForEntity(Player, new Vector2(0, -2.5f * graphicSize));
+			DrawInventoryForEntity(Character, new Vector2(0, -2.5f * graphicSize));
 			DrawInventoryForEntity(target, new Vector2(0, 2.5f * graphicSize));
 		}
 	}
@@ -234,23 +234,21 @@ public class OverlayController : MonoBehaviour
 				{
 					currentToTargetStack = currentInv.RemoveItemStackFrom(my_x, my_y);
 
-					if (dragType == InventoryDragType.Left)
+					if (dragType == InventoryDragType.Left && targetInv.IsItemStackAt(new_x, new_y))
 					{
-						if (targetInv.IsItemStackAt(new_x, new_y))
-						{
-							targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
+						targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
 
-							if (currentToTargetStack.Type == targetToCurrentStack.Type)
+						if (currentToTargetStack.Type == targetToCurrentStack.Type)
+						{
+							if (currentToTargetStack.ItemAddability >= targetToCurrentStack.NumItems)
 							{
-								if (currentToTargetStack.ItemAddability >= targetToCurrentStack.NumItems)
-								{
-									InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, targetToCurrentStack.NumItems);
-									targetToCurrentStack = null;
-								}
-								else
-									InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, currentToTargetStack.ItemAddability);
+								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, targetToCurrentStack.NumItems);
+								targetToCurrentStack = null;
 							}
+							else
+								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, currentToTargetStack.ItemAddability);
 						}
+
 					}
 					if (dragType == InventoryDragType.Right)
 					{
@@ -275,18 +273,12 @@ public class OverlayController : MonoBehaviour
 						}
 					}
 
-					if (currentToTargetStack != null)
-					{
-						if (currentToTargetStack.NumItems != 0)
+					if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
 							targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
-					}
-					if (targetToCurrentStack != null)
-					{
-						if (targetToCurrentStack.NumItems != 0)
+					if (targetToCurrentStack != null && targetToCurrentStack.NumItems != 0)
 							currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
-					}
 
-					InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Player.SolarSystem);
+					InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Character.SolarSystem);
 				}
 			}
 		}
