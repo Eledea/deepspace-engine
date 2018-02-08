@@ -54,7 +54,7 @@ public class SolarSystem
 		Storage s = new Storage("Storage", 63739, new Vector3D(15, 0, 10), Quaternion.identity);
 		AddEntityToSolarSystem(s);
 
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, 42, s.Inventory, 4, 2);
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, 42, s.Inventory, new Vector2(4, 2));
 	}
 
 	/// <summary>

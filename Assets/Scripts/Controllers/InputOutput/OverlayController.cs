@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Unity-centric class for allowing Player interaction with the Inventory system.
+/// The OverlayController controls Interaction with the overlay and the InventorySystem.
 /// </summary>
 public class OverlayController : MonoBehaviour
 {
@@ -16,7 +16,6 @@ public class OverlayController : MonoBehaviour
 	void OnEnable()
 	{
 		myCamera = transform.parent.GetComponentInChildren<Camera>();
-		dragType = InventoryDragType.None;
 	}
 
 	/// <summary>
@@ -29,15 +28,13 @@ public class OverlayController : MonoBehaviour
 	enum OverlayShowMode { None, Internal, External }
 	OverlayShowMode myShowMode;
 
-	enum InventoryDragType { None, Left, Right}
-	InventoryDragType dragType;
-
-	Queue<GameObject> overlayGraphics;
+	MouseButton dragButton;
 
 	Entity target;
+	Queue<GameObject> overlayGraphics;
 
 	Dropzone startDragDrop;
-	Dropzone mouseOverDrop;
+	Dropzone endDragDrop;
 
 	RectTransform dragGraphic;
 
@@ -68,13 +65,12 @@ public class OverlayController : MonoBehaviour
 			}
 			else
 			{
-				Ray center = new Ray(myCamera.transform.position, myCamera.transform.forward);
 				RaycastHit hitInfo;
 
 				myShowMode = OverlayShowMode.Internal;
 				target = Character;
 
-				if (Physics.Raycast(center, out hitInfo, 3))
+				if (Physics.Raycast(new Ray(myCamera.transform.position, myCamera.transform.forward), out hitInfo, 3))
 				{
 					if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
 					{
@@ -170,7 +166,7 @@ public class OverlayController : MonoBehaviour
 	/// </summary>
 	public void OnPointerEnter(Dropzone d)
 	{
-		mouseOverDrop = d;
+		endDragDrop = d;
 	}
 
 	/// <summary>
@@ -178,7 +174,7 @@ public class OverlayController : MonoBehaviour
 	/// </summary>
 	public void OnPointerExit()
 	{
-		mouseOverDrop = null;
+		endDragDrop = null;
 	}
 
 	/// <summary>
@@ -195,9 +191,11 @@ public class OverlayController : MonoBehaviour
 	public void OnBeginDrag(Interfacable i)
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
-			dragType = InventoryDragType.Left;
+			dragButton = MouseButton.Left;
 		else if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1))
-			dragType = InventoryDragType.Right;
+			dragButton = MouseButton.Right;
+		else
+			dragButton = MouseButton.Unknown;
 
 		dragGraphic = Instantiate(interfaces[3], this.transform).GetComponent<RectTransform>();
 		dragGraphic.gameObject.transform.localPosition = Vector2.zero;
@@ -217,74 +215,39 @@ public class OverlayController : MonoBehaviour
 	/// </summary>
 	public void OnEndDrag()
 	{
-		if (mouseOverDrop != null)
+		if (endDragDrop != null)
 		{
-			Inventory currentInv = startDragDrop.Inventory;
-			Inventory targetInv = mouseOverDrop.Inventory;
-
-			int my_x = (int)startDragDrop.Index.x; int my_y = (int)startDragDrop.Index.y;
-			int new_x = (int)mouseOverDrop.Index.x; int new_y = (int)mouseOverDrop.Index.y;
-
-			ItemStack currentToTargetStack = null;
-			ItemStack targetToCurrentStack = null;
-
-			if (dragType != InventoryDragType.None)
-			{
-				if (currentInv.GetItemStackAt(my_x, my_y) != targetInv.GetItemStackAt(new_x, new_y))
-				{
-					currentToTargetStack = currentInv.RemoveItemStackFrom(my_x, my_y);
-
-					if (dragType == InventoryDragType.Left && targetInv.IsItemStackAt(new_x, new_y))
-					{
-						targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
-
-						if (currentToTargetStack.Type == targetToCurrentStack.Type)
-						{
-							if (currentToTargetStack.ItemAddability >= targetToCurrentStack.NumItems)
-							{
-								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, targetToCurrentStack.NumItems);
-								targetToCurrentStack = null;
-							}
-							else
-								InventoryManager.Instance.MoveItemsToStack(targetToCurrentStack, currentToTargetStack, currentToTargetStack.ItemAddability);
-						}
-
-					}
-					if (dragType == InventoryDragType.Right)
-					{
-						if (targetInv.IsItemStackAt(new_x, new_y))
-						{
-							targetToCurrentStack = targetInv.RemoveItemStackFrom(new_x, new_y);
-
-							if (currentToTargetStack.Type == targetToCurrentStack.Type)
-							{
-								InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.FloorToInt(currentToTargetStack.NumItems / 2));
-								ItemStack s = currentToTargetStack;
-								currentToTargetStack = targetToCurrentStack;
-								targetToCurrentStack = s;
-							}
-						}
-						else
-						{
-							InventoryManager.Instance.SpawnNewItemStackAt(currentToTargetStack.Type, 0, targetInv, new_x, new_y);
-							targetToCurrentStack = targetInv.GetItemStackAt(new_x, new_y);
-
-							InventoryManager.Instance.MoveItemsToStack(currentToTargetStack, targetToCurrentStack, Mathf.CeilToInt(currentToTargetStack.NumItems / 2));
-						}
-					}
-
-					if (currentToTargetStack != null && currentToTargetStack.NumItems != 0)
-							targetInv.AddItemStackAt(currentToTargetStack, new_x, new_y);
-					if (targetToCurrentStack != null && targetToCurrentStack.NumItems != 0)
-							currentInv.AddItemStackAt(targetToCurrentStack, my_x, my_y);
-
-					InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Character.SolarSystem);
-				}
-			}
+			MouseDrag drag = new MouseDrag(startDragDrop.Index, endDragDrop.Index, dragButton);
+			ExecuteDragCommand(drag);
 		}
 
 		Destroy(dragGraphic.gameObject);
+		dragButton = MouseButton.None;
+	}
 
-		dragType = InventoryDragType.None;
+	/// <summary>
+	/// Interprets the Drag this Player just made and run any operations that we should be doing.
+	/// </summary>
+	void ExecuteDragCommand(MouseDrag drag)
+	{
+		//We can now use guard clauses to simplify the logic for this mess dramatically! :D
+
+		if (drag.Start == drag.End || drag.Button == MouseButton.None)
+			return;
+			
+		switch (drag.Button)
+		{
+			case MouseButton.Left:
+				InventoryManager.Instance.MoveItemStackTo(startDragDrop.Inventory, drag.Start, endDragDrop.Inventory, drag.End);
+				break;
+			case MouseButton.Right:
+				InventoryManager.Instance.MoveItemStackTo(startDragDrop.Inventory, drag.Start, endDragDrop.Inventory, drag.End);
+				break;
+			case MouseButton.Unknown:
+				Debug.LogError("Player is attempting to make a mouse drag with a button that couldn't be identified!");
+				return;
+		}
+
+		InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Character.SolarSystem);
 	}
 }

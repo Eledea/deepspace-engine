@@ -35,30 +35,55 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Spawns a new ItemStack for an IType.
 		/// </summary>
-		public void SpawnNewItemStackAt(IType type, int numItems, Inventory inv, int x, int y)
+		public void SpawnNewItemStackAt(IType type, int numItems, Inventory inv, Vector2 index)
 		{
 			//TODO: Check to see if we exceed the number of items this stack can hold.
 
 			var t = Type.GetType(string.Format("DeepSpace.InventorySystem.{0}", type.ToString()));
-			ItemStack s = (ItemStack)Activator.CreateInstance(t, numItems, inv, x, y);
+			ItemStack s = (ItemStack)Activator.CreateInstance(t, numItems, inv, index);
 
-			inv.AddItemStackAt(s, x, y);
+			inv.AddItemStackAt(s, index);
 		}
 
 		/// <summary>
-		/// Moves n Items from one ItemStack to another.
+		/// Moves an existing ItemStack from one index to another.
 		/// </summary>
-		public void MoveItemsToStack(ItemStack s1, ItemStack s2, int n)
+		public void MoveItemStackTo(Inventory inv, Vector2 index, Inventory newInv, Vector2 newIndex)
 		{
-			if (s1.Type == s2.Type)
-			{
-				s1.RemoveItems(n);
-				s2.AddItems(n);
-			}
-			else
-			{
-				Debug.LogError("ERROR: Cannot move Items between two stacks with different Item Ids.");
-			}
+			if (inv.IsItemStackAt(index) == false || (inv == newInv && index == newIndex))
+				return;
+
+			ItemStack s1 = inv.RemoveItemStackFrom(index);
+			ItemStack s2 = newInv.RemoveItemStackFrom(newIndex);
+
+			//TODO: Make Logic here work.
+		}
+
+		/// <summary>
+		/// Splits an existing ItemStack into 2 seperate ItemStacks with n Items in.
+		/// </summary>
+		public void SplitItemStackAtTo(Inventory inv, Vector2 index, int n, Inventory newInv, Vector2 newIndex)
+		{
+			ItemStack s1 = inv.GetItemStackAt(index);
+			ItemStack s2 = inv.GetItemStackAt(index);
+
+			//TODO: Make Logic here work.
+		}
+
+		/// <summary>
+		/// Determines if we can move Items from Itemstack s1 to s2.
+		/// </summary>
+		bool CanMoveToItemStack(ItemStack s1, ItemStack s2)
+		{
+			return s1.Type == s2.Type;
+		}
+
+		/// <summary>
+		/// Determines if the ItemStacks are mergable or not.
+		/// </summary>
+		bool CanMergeItemStacks(ItemStack s1, ItemStack s2)
+		{
+			return s1.Type == s2.Type && s2.ItemAddability >= s1.NumItems;
 		}
 
 		/// <summary>

@@ -1,11 +1,13 @@
-﻿namespace DeepSpace.InventorySystem
+﻿using UnityEngine;
+
+namespace DeepSpace.InventorySystem
 {
 	/// <summary>
 	/// The Stone class defines an ItemStack of Stone.
 	/// </summary>
 	public class Stone : ItemStack
 	{
-		public Stone(int n, Inventory inv, int x, int y)
+		public Stone(int n, Inventory inv, Vector2 index)
 		{
 			m_type = IType.Stone;
 
@@ -16,7 +18,7 @@
 			else
 				m_itemCount = n;
 
-			inv.AddItemStackAt(this, x, y);
+			inv.AddItemStackAt(this, index);
 		}
 	}
 }

@@ -52,8 +52,8 @@ public class PlayerManager : MonoBehaviour
 		Player p = new Player(name, 37331, new Vector3D(0, 0, -2), Quaternion.identity, view);
 		AddPlayerToManager(p, ss);
 
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Character.Inventory, 0, 2);
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Character.Inventory, 3, 1);
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Character.Inventory, new Vector2(0, 2));
+		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Character.Inventory, new Vector2(3, 1));
 
 		view.OnSolarSystemChange();
 	}

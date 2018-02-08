@@ -43,23 +43,28 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Adds an ItemStack at this array position.
 		/// </summary>
-		public void AddItemStackAt(ItemStack s, int x, int y)
+		public void AddItemStackAt(ItemStack s, Vector2 index)
 		{
-			Inv [x, y] = s;
+			Inv [Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)] = s;
 
 			s.Inv = this;
-			s.InventoryIndex = new Vector2(x, y);
+			s.InventoryIndex = new Vector2(Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y));
 		}
 
 		/// <summary>
 		/// Removes an ItemStack from this array position.
 		/// </summary>
-		public ItemStack RemoveItemStackFrom(int x, int y)
+		public ItemStack RemoveItemStackFrom(Vector2 index)
 		{
-			ItemStack s = GetItemStackAt (x, y);
-			s.Inv = null;
+			ItemStack s = GetItemStackAt(Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y));
 
-			Inv [x, y] = null;
+			if (s == null)
+				return null;
+
+			Inv [Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)] = null;
+
+			s.Inv = null;
+			s.InventoryIndex = Vector2.zero;
 
 			return s;
 		}
@@ -73,11 +78,33 @@ namespace DeepSpace.InventorySystem
 		}
 
 		/// <summary>
+		/// Determines whether this instance contains an ItemStack at the specified array index.
+		/// </summary>
+		public bool IsItemStackAt(Vector2 index)
+		{
+			return GetItemStackAt(Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)) != null;
+		}
+
+		/// <summary>
 		/// Gets an ItemStack at this array index.
 		/// </summary>
 		public ItemStack GetItemStackAt(int x, int y)
 		{
-			return Inv [x, y];
+			if (Inv[x, y] != null)
+				return Inv[x, y];
+			else
+				return null;
+		}
+
+		/// <summary>
+		/// Gets an ItemStack at this array index.
+		/// </summary>
+		public ItemStack GetItemStackAt(Vector2 index)
+		{
+			if (Inv[Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)] != null)
+				return Inv[Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)];
+			else
+				return null;
 		}
 
 		Entity m_entity;

@@ -12,7 +12,7 @@ namespace DeepSpace.Core
 		public Vector3D (double X, double Y, double Z) { x = X; y = Y; z = Z; }
 		public Vector3D (double X, double Y) { x = X; y = Y; z = 0; }
 
-		//Components
+		//Fields
 		public double x;
 		public double y;
 		public double z;
