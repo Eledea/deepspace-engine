@@ -27,8 +27,6 @@ public class Galaxy
 
 			SolarSystems.Add (ss);
 		}
-
-		PlayerManager.Instance.OnNewPlayerConnect("Sam", SolarSystems[UnityEngine.Random.Range(0, SolarSystems.Count)]);
 	}
 
 	float m_advanceTimeTimer = 1f;

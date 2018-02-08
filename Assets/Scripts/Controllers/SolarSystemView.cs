@@ -12,12 +12,6 @@ public class SolarSystemView : MonoBehaviour
 	public GameObject sphere;
 	public GameObject cube;
 
-	void OnEnable()
-	{
-		floatingRange = 50;
-		loadRange = 100;
-	}
-
 	/// <summary>
 	/// The Player data class that this controller is linked to.
 	/// </summary>
@@ -49,9 +43,9 @@ public class SolarSystemView : MonoBehaviour
 
 		floatingOrigin = Character.Position;
 
-		UpdateAllEntities();
+		UpdateAllEntities(50, 100);
 
-		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s)", Character.SolarSystem.EntitiesInSystem.Length));
+		Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s).", Character.SolarSystem.EntitiesInSystem.Length));
 	}
 
 	void LateUpdate()
@@ -69,8 +63,11 @@ public class SolarSystemView : MonoBehaviour
 	/// <summary>
 	/// Update for all the Entities in the SolarSystem this player is in.
 	/// </summary>
-	public void UpdateAllEntities()
+	public void UpdateAllEntities(double _floatingRange, double _loadRange)
 	{
+		floatingRange = _floatingRange;
+		loadRange = _loadRange;
+
 		if (Character.SolarSystem == null)
 			return;
 
@@ -140,7 +137,7 @@ public class SolarSystemView : MonoBehaviour
 		}
 		else if (e is Character)
 		{
-			go = Instantiate(character);
+			go = SpawnLocalCharacter((Character)e);
 		}
 		else
 			go = Instantiate(cube);

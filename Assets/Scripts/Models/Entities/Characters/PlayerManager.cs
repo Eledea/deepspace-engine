@@ -10,8 +10,6 @@ public class PlayerManager : MonoBehaviour
 {
 	public static PlayerManager Instance { get; protected set; }
 
-	public GameObject GlobalPlayer;
-
 	void OnEnable()
 	{
 		Instance = this;
@@ -46,11 +44,10 @@ public class PlayerManager : MonoBehaviour
 	/// <summary>
 	/// Creates a Player and adds it to the PlayerManager.
 	/// </summary>
-	public void OnNewPlayerConnect(string name, SolarSystem ss)
+	public void OnNewPlayerConnect(PlayerConnection c, string name, SolarSystem ss)
 	{
-		GameObject global = Instantiate(GlobalPlayer);
-		global.name = name;
-		SolarSystemView view = global.GetComponent<SolarSystemView>();
+		c.gameObject.name = name;
+		SolarSystemView view = c.gameObject.GetComponent<SolarSystemView>();
 
 		Player p = new Player(name, 37331, new Vector3D(0, 0, -2), Quaternion.identity, view);
 		AddPlayerToManager(p, ss);
@@ -78,6 +75,8 @@ public class PlayerManager : MonoBehaviour
 	{
 		if (ss == null)
 			return;
+
+		//Debug.Log(string.Format("Updated an Entity with name: {0}", e.Name))
 
 		foreach(Player p in ss.PlayersInSystem)
 			p.View.UpdateGameObjectForEntity(e);
