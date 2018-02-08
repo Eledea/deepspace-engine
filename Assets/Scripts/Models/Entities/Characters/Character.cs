@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Independent data class for storing a Player.
+/// The Character class defines a Character for a Player.
 /// </summary>
 public class Character : Entity
 {

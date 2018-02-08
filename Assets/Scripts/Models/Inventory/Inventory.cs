@@ -1,4 +1,4 @@
-using UnityEngine;
+using DeepSpace.Core;
 
 namespace DeepSpace.InventorySystem
 {
@@ -43,28 +43,28 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Adds an ItemStack at this array position.
 		/// </summary>
-		public void AddItemStackAt(ItemStack s, Vector2 index)
+		public void AddItemStackAt(ItemStack s, Vector2I index)
 		{
-			Inv [Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)] = s;
+			Inv [index.x, index.y] = s;
 
 			s.Inv = this;
-			s.InventoryIndex = new Vector2(Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y));
+			s.InventoryIndex = new Vector2I(index.x, index.y);
 		}
 
 		/// <summary>
 		/// Removes an ItemStack from this array position.
 		/// </summary>
-		public ItemStack RemoveItemStackFrom(Vector2 index)
+		public ItemStack RemoveItemStackFrom(Vector2I index)
 		{
-			ItemStack s = GetItemStackAt(Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y));
+			ItemStack s = GetItemStackAt(index.x, index.y);
 
 			if (s == null)
 				return null;
 
-			Inv [Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)] = null;
+			Inv [index.x, index.y] = null;
 
 			s.Inv = null;
-			s.InventoryIndex = Vector2.zero;
+			s.InventoryIndex = Vector2I.zero;
 
 			return s;
 		}
@@ -80,9 +80,9 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Determines whether this instance contains an ItemStack at the specified array index.
 		/// </summary>
-		public bool IsItemStackAt(Vector2 index)
+		public bool IsItemStackAt(Vector2I index)
 		{
-			return GetItemStackAt(Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)) != null;
+			return GetItemStackAt(index.x, index.y) != null;
 		}
 
 		/// <summary>
@@ -99,10 +99,10 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Gets an ItemStack at this array index.
 		/// </summary>
-		public ItemStack GetItemStackAt(Vector2 index)
+		public ItemStack GetItemStackAt(Vector2I index)
 		{
-			if (Inv[Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)] != null)
-				return Inv[Mathf.FloorToInt(index.x), Mathf.FloorToInt(index.y)];
+			if (Inv[index.x, index.y] != null)
+				return Inv[index.x, index.y];
 			else
 				return null;
 		}

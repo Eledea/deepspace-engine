@@ -143,7 +143,7 @@ public class OverlayController : MonoBehaviour
 				drop.transform.localPosition = Utility.IndexToWorldSpacePosition(x, y, graphicSize, e.Inventory.InvSize_x, e.Inventory.InvSize_y);
 				drop.name = string.Format("{0}:{1}", x, y);
 				Dropzone d = drop.GetComponentInParent<Dropzone>();
-				d.Inventory = e.Inventory; d.Index = new Vector2(x, y);
+				d.Inventory = e.Inventory; d.Index = new Vector2I(x, y);
 				d.myController = this;
 
 				if (e.Inventory.IsItemStackAt(x, y))
@@ -232,7 +232,7 @@ public class OverlayController : MonoBehaviour
 	{
 		//We can now use guard clauses to simplify the logic for this mess dramatically! :D
 
-		if (drag.Start == drag.End || drag.Button == MouseButton.None)
+		if (drag.Button == MouseButton.None)
 			return;
 			
 		switch (drag.Button)
@@ -241,7 +241,7 @@ public class OverlayController : MonoBehaviour
 				InventoryManager.Instance.MoveItemStackTo(startDragDrop.Inventory, drag.Start, endDragDrop.Inventory, drag.End);
 				break;
 			case MouseButton.Right:
-				InventoryManager.Instance.MoveItemStackTo(startDragDrop.Inventory, drag.Start, endDragDrop.Inventory, drag.End);
+				InventoryManager.Instance.SplitItemStackAtTo(startDragDrop.Inventory, drag.Start, 0.5f, endDragDrop.Inventory, drag.End);
 				break;
 			case MouseButton.Unknown:
 				Debug.LogError("Player is attempting to make a mouse drag with a button that couldn't be identified!");

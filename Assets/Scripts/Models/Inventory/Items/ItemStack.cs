@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using DeepSpace.Core;
 
 namespace DeepSpace.InventorySystem
 {
@@ -20,16 +20,16 @@ namespace DeepSpace.InventorySystem
 		/// <summary>
 		/// Returns or sets the array index of this ItemStack in it's Inventory.
 		/// </summary>
-		public Vector2 InventoryIndex
+		public Vector2I InventoryIndex
 		{
 			get
 			{
-				return new Vector2 (m_inv_x, m_inv_y);
+				return new Vector2I(m_inv_x, m_inv_y);
 			}
 
 			set
 			{
-				m_inv_x = Mathf.FloorToInt (value.x); m_inv_y = Mathf.FloorToInt (value.y);
+				m_inv_x = value.x; m_inv_y = value.y;
 			}
 		}
 

@@ -7,7 +7,7 @@ namespace DeepSpace.InventorySystem
 	/// </summary>
 	public class Stone : ItemStack
 	{
-		public Stone(int n, Inventory inv, Vector2 index)
+		public Stone(int n)
 		{
 			m_type = IType.Stone;
 
@@ -17,8 +17,6 @@ namespace DeepSpace.InventorySystem
 				m_itemCount = m_itemLimit;
 			else
 				m_itemCount = n;
-
-			inv.AddItemStackAt(this, index);
 		}
 	}
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-
-namespace DeepSpace.Core
+﻿namespace DeepSpace.Core
 {
 	/// <summary>
 	/// Defines the Mouse button of an interaction with a Mouse.
@@ -21,21 +18,21 @@ namespace DeepSpace.Core
 	public struct MouseDrag
 	{
 		//Constructors
-		public MouseDrag(Vector2 start, Vector2 end, MouseButton button) { m_startIndex = start; m_endIndex = end; m_button = button; }
-		public MouseDrag(int start_x, int start_y, int end_x, int end_y, MouseButton button) { m_startIndex = new Vector2(start_x, start_y); m_endIndex = new Vector2(end_x, end_y); m_button = button; }
+		public MouseDrag(Vector2I start, Vector2I end, MouseButton button) { m_startIndex = start; m_endIndex = end; m_button = button; }
+		public MouseDrag(int start_x, int start_y, int end_x, int end_y, MouseButton button) { m_startIndex = new Vector2I(start_x, start_y); m_endIndex = new Vector2I(end_x, end_y); m_button = button; }
 
 		//Fields
-		Vector2 m_startIndex;
-		Vector2 m_endIndex;
+		Vector2I m_startIndex;
+		Vector2I m_endIndex;
 		MouseButton m_button;
 
 		//Properties
-		public Vector2 Start
+		public Vector2I Start
 		{
 			get { return m_startIndex; }
 		}
 
-		public Vector2 End
+		public Vector2I End
 		{
 			get { return m_endIndex; }
 		}

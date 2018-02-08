@@ -2,11 +2,12 @@
 using DeepSpace.InventorySystem;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 // <summary>
 /// Manages the Players for the Galaxy that we have loaded.
 /// </summary>
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : NetworkBehaviour
 {
 	public static PlayerManager Instance { get; protected set; }
 
@@ -49,11 +50,11 @@ public class PlayerManager : MonoBehaviour
 		c.gameObject.name = name;
 		SolarSystemView view = c.gameObject.GetComponent<SolarSystemView>();
 
-		Player p = new Player(name, 37331, new Vector3D(0, 0, -2), Quaternion.identity, view);
+		Player p = new Player(name, 37331, new Vector3D(10, 0, 8), Quaternion.identity, view);
 		AddPlayerToManager(p, ss);
 
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Wood, Random.Range(1, 51), p.Character.Inventory, new Vector2(0, 2));
-		InventoryManager.Instance.SpawnNewItemStackAt(IType.Stone, Random.Range(1, 51), p.Character.Inventory, new Vector2(3, 1));
+		p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Wood, Random.Range(1, 51)), new Vector2I(0, 2));
+		p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Stone, Random.Range(1, 51)), new Vector2I(3, 1));
 
 		view.OnSolarSystemChange();
 	}

@@ -43,7 +43,7 @@ namespace DeepSpace.Core
 			return new Vector3((float)x, (float)y, (float)z);
 		}
 
-		//Methods
+		//Functions
 		public override int GetHashCode() {
 			return ((byte)x << 16) | ((byte)y << 8) | (byte)z;
 		}

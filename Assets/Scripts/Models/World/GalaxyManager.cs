@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Server side class that manages data based operations for the Galaxy we are currently in.
 /// </summary>
-public class GalaxyManager : MonoBehaviour
+public class GalaxyManager : NetworkBehaviour
 {
 	public static GalaxyManager Instance { get; protected set; }
 
