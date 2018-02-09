@@ -1,5 +1,8 @@
+using DeepSpace.Characters;
 using DeepSpace.Core;
 using DeepSpace.InventorySystem;
+using DeepSpace.Networking;
+using DeepSpace.World;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

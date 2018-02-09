@@ -1,4 +1,5 @@
-﻿using DeepSpace.Core;
+﻿using DeepSpace.Characters;
+using DeepSpace.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
