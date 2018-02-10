@@ -1,21 +1,21 @@
 ﻿using DeepSpace.Core;
 using UnityEngine;
 
-namespace DeepSpace.Building
+namespace DeepSpace
 {
 	/// <summary>
-	/// The Storage class defines a Storage Entity in a SolarSystem.
+	/// The Storage class defines a Storage on a Grid.
 	/// </summary>
-	public class Storage : Buildable
+	public class Storage : Deployable
 	{
 		public Storage(string name, long id, Vector3D position, Quaternion rotation)
 		{
-			/*Name = name;
+			Name = name;
 			EntityId = id;
 			Position = position;
 			Rotation = rotation;
 
-			InventoryManager.Instance.AddInventoryToEntity(this, 8, 4);*/
+			Inventory = new MyInventoryComponent(8, 4);
 		}
 	}
 }

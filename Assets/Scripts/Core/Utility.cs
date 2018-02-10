@@ -32,14 +32,6 @@ namespace DeepSpace.Core
 		}
 
 		/// <summary>
-		/// Returns a clamped float between -1 and 1 from a double.
-		/// </summary>
-		public static float DoubleToFloatClamp(double value)
-		{
-			return Mathf.Clamp((float)value, -1f, 1f);
-		}
-
-		/// <summary>
 		/// Returns a random floating-point number representing an angle in radians around a point.
 		/// </summary>
 		public static float RandomizedPointAngle

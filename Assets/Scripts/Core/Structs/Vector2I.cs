@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-
-namespace DeepSpace.Core
+﻿namespace DeepSpace.Core
 {
 	/// <summary>
 	/// Defines a Vector with 2 integer components.
@@ -10,7 +7,6 @@ namespace DeepSpace.Core
 	{
 		//Constructors
 		public Vector2I (int X, int Y) { x = X; y = Y; }
-		public Vector2I (float X, float Y) { x = Mathf.FloorToInt(X); y = Mathf.FloorToInt(Y); }
 
 		//Fields
 		public int x;

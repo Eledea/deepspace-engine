@@ -1,9 +1,8 @@
 using DeepSpace.Core;
-using DeepSpace.InventorySystem;
 using DeepSpace.Networking;
 using UnityEngine;
 
-namespace DeepSpace.World
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Entity class defines an Entity in a SolarSystem.
@@ -19,11 +18,6 @@ namespace DeepSpace.World
 		Vector3D m_position;
 		Quaternion m_rotation;
 
-		public Inventory Inventory;
-
-		/// <summary>
-		/// Gets or sets the Position of this Entity in it's SolarSystem.
-		/// </summary>
 		public Vector3D Velocity
 		{
 			get { return m_velocity; }
@@ -34,9 +28,6 @@ namespace DeepSpace.World
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the Position of this Entity in it's SolarSystem.
-		/// </summary>
 		public Vector3D Position
 		{
 			get { return m_position; }
@@ -45,14 +36,13 @@ namespace DeepSpace.World
 				if (value == m_position)
 					return;
 
+				//TODO: Make this update client data with an action system instead.
+
 				m_position = value;
 				PlayerManager.Instance.UpdateEntityForPlayersInSystem(this, SolarSystem);
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the Rotation of this Entity in it's SolarSystem.
-		/// </summary>
 		public Quaternion Rotation
 		{
 			get { return m_rotation; }
@@ -66,12 +56,24 @@ namespace DeepSpace.World
 			}
 		}
 
-		/// <summary>
-		/// Determines if this Entity has an Inventory or not.
-		/// </summary>
+		MyInventoryComponent m_inventoryComponent;
+
 		public bool HasInventory
 		{
 			get { return Inventory != null; }
+		}
+
+		public MyInventoryComponent Inventory
+		{
+			get
+			{
+				return m_inventoryComponent;
+			}
+
+			set
+			{
+				m_inventoryComponent = value;
+			}
 		}
 	}
 }

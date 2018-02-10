@@ -1,4 +1,4 @@
-﻿namespace DeepSpace.InventorySystem
+﻿namespace DeepSpace
 {
 	public enum IType
 	{

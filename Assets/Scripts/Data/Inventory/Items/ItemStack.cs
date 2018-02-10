@@ -1,13 +1,13 @@
 ﻿using DeepSpace.Core;
 
-namespace DeepSpace.InventorySystem
+namespace DeepSpace
 {
 	/// <summary>
 	/// The ItemStack class defines a stack of Items.
 	/// </summary>
 	public class ItemStack
 	{
-		public Inventory Inv;
+		public MyInventoryComponent Inv;
 
 		private int m_inv_x;
 		private int m_inv_y;

@@ -1,9 +1,8 @@
 ﻿using DeepSpace.Core;
-using DeepSpace.World;
 using System;
 using System.Collections.Generic;
 
-namespace DeepSpace.Orbitals
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Orbital class defines an Orbital in a SolarSystem.

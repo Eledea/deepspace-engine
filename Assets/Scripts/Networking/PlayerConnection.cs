@@ -1,5 +1,4 @@
-﻿using DeepSpace.World;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 namespace DeepSpace.Networking
@@ -12,6 +11,8 @@ namespace DeepSpace.Networking
 				return;
 
 			Debug.Log(string.Format("{0} connected to the server.", "Sam"));
+
+			//TODO: Check to see if this is a new Player joining or an existing one.
 
 			SolarSystem ss = GalaxyManager.Instance.Galaxy.SolarSystems[0];
 			PlayerManager.Instance.OnNewPlayerConnect(this, "Sam", ss);

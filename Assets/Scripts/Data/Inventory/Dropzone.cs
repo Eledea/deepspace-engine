@@ -1,14 +1,15 @@
-﻿using DeepSpace.Core;
+﻿using DeepSpace.Controllers;
+using DeepSpace.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DeepSpace.InventorySystem
+namespace DeepSpace
 {
 	public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	{
 		public OverlayController myController;
 
-		public Inventory Inventory;
+		public MyInventoryComponent Inventory;
 		public Vector2I Index;
 
 		public void OnPointerEnter(PointerEventData eventData)

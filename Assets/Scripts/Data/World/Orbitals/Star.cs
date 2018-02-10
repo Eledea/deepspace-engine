@@ -1,6 +1,6 @@
 ﻿using DeepSpace.Core;
 
-namespace DeepSpace.Orbitals
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Star class defines a Star in a SolarSystem.

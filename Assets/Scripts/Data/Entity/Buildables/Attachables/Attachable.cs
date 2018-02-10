@@ -1,7 +1,4 @@
-﻿using DeepSpace.Core;
-using UnityEngine;
-
-namespace DeepSpace.Building
+﻿namespace DeepSpace
 {
 	/// <summary>
 	/// The Attachable class defines a Attachable on a Grid.

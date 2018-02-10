@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DeepSpace.InventorySystem
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Wood class defines an ItemStack of Wood.

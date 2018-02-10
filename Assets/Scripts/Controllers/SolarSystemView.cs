@@ -1,7 +1,4 @@
 using DeepSpace.Core;
-using DeepSpace.Characters;
-using DeepSpace.Orbitals;
-using DeepSpace.World;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,13 +10,11 @@ namespace DeepSpace.Controllers
 	/// </summary>
 	public class SolarSystemView : MonoBehaviour
 	{
+		//TODO: Serialise this.
 		public GameObject character;
 		public GameObject sphere;
 		public GameObject cube;
 
-		/// <summary>
-		/// The Player data class that this controller is linked to.
-		/// </summary>
 		public Character Character { get; set; }
 
 		GameObject characterGO;
@@ -32,9 +27,6 @@ namespace DeepSpace.Controllers
 		double floatingRange;
 		double loadRange;
 
-		/// <summary>
-		/// Sets a new SolarSystem.
-		/// </summary>
 		public void OnSolarSystemChange()
 		{
 			if (entityToGameObject != null)
@@ -65,9 +57,6 @@ namespace DeepSpace.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Update for all the Entities in the SolarSystem this player is in.
-		/// </summary>
 		public void UpdateAllEntities(double _floatingRange, double _loadRange)
 		{
 			floatingRange = _floatingRange;
@@ -80,33 +69,21 @@ namespace DeepSpace.Controllers
 				UpdateGameObjectForEntity(e);
 		}
 
-		/// <summary>
-		/// Determines if this Entity has a GameObject spawned.
-		/// </summary>
 		public bool GameObjectForEntity(Entity e)
 		{
 			return entityToGameObject.ContainsKey(e);
 		}
 
-		/// <summary>
-		/// Returns an Entity from a GameObject.
-		/// </summary>
 		public Entity GameObjectToEntity(GameObject go)
 		{
 			return gameObjectToEntity[go];
 		}
 
-		/// <summary>
-		/// Returns a GameObject from an Entity.
-		/// </summary>
 		public GameObject EntityToGameObject(Entity e)
 		{
 			return entityToGameObject[e];
 		}
 
-		/// <summary>
-		/// Updates the GameObject for this Entity.
-		/// </summary>
 		public void UpdateGameObjectForEntity(Entity e)
 		{
 			if ((Vector3D.Distance(e.Position, Character.Position)) < loadRange)
@@ -125,9 +102,6 @@ namespace DeepSpace.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Spawns a GameObject for this Entity.
-		/// </summary>
 		void SpawnGameObjectForEntity(Entity e)
 		{
 			GameObject go;
@@ -167,9 +141,6 @@ namespace DeepSpace.Controllers
 			return characterGO;
 		}
 
-		/// <summary>
-		/// Destroys the GameObject for an Entity using a GameObject reference.
-		/// </summary>
 		void DestroyGameObjectForEntity(Entity e)
 		{
 			if (GameObjectForEntity(e) == false)

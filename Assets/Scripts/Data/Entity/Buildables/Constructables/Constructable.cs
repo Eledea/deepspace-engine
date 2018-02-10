@@ -1,7 +1,4 @@
-﻿using DeepSpace.Core;
-using UnityEngine;
-
-namespace DeepSpace.Building
+﻿namespace DeepSpace
 {
 	/// <summary>
 	/// The Deployable class defines a Constructable on a Grid.

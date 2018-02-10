@@ -2,7 +2,7 @@ using DeepSpace.Controllers;
 using DeepSpace.Core;
 using UnityEngine;
 
-namespace DeepSpace.Characters
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Player class defines the attributes of a Player both online and offline and it's respective Character.

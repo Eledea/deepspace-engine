@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeepSpace.World
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Galaxy class defines a Galaxy and the SolarSystems within it.

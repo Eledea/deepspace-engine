@@ -1,11 +1,9 @@
-﻿using DeepSpace.World;
-
-namespace DeepSpace.Building
+﻿namespace DeepSpace
 {
 	/// <summary>
 	/// The Buildable class defines a Buildable in a SolarSystem.
 	/// </summary>
-	public class Buildable
+	public class Buildable : Entity
 	{
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using DeepSpace.Core;
 
-namespace DeepSpace.Orbitals
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Planet class defines a Planet in a SolarSystem.

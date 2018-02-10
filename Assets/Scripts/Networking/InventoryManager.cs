@@ -1,7 +1,4 @@
 using DeepSpace.Core;
-using DeepSpace.Characters;
-using DeepSpace.InventorySystem;
-using DeepSpace.World;
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -20,40 +17,17 @@ namespace DeepSpace.Networking
 			Instance = this;
 		}
 
-		/// <summary>
-		/// Adds an Inventory to an Entity.
-		/// </summary>
-		public void AddInventoryToEntity(Entity e, int x, int y)
-		{
-			Inventory inv = new Inventory(e, x, y);
-			e.Inventory = inv;
-		}
-
-		/// <summary>
-		/// Removes an Inventory from an Entity.
-		/// </summary>
-		public void RemoveInventoryFromEntity(Entity e)
-		{
-			e.Inventory = null;
-		}
-
-		/// <summary>
-		/// Spawns a new ItemStack for an IType.
-		/// </summary>
 		public ItemStack SpawnNewItemStack(IType type, int numItems)
 		{
-			//TODO: Check to see if we exceed the number of items this stack can hold.
+			//TODO: Implement new Item system.
 
-			var t = Type.GetType(string.Format("DeepSpace.InventorySystem.{0}", type.ToString()));
-			ItemStack s = (ItemStack)Activator.CreateInstance(t, numItems);
+			var t = Type.GetType(string.Format("DeepSpace.{0}", type.ToString()));
+			ItemStack s = Activator.CreateInstance(t, numItems) as ItemStack;
 
 			return s;
 		}
 
-		/// <summary>
-		/// Moves an existing ItemStack from one index to another.
-		/// </summary>
-		public void MoveItemStackTo(Inventory inv, Vector2I index, Inventory newInv, Vector2I newIndex)
+		public void MoveItemStackTo(MyInventoryComponent inv, Vector2I index, MyInventoryComponent newInv, Vector2I newIndex)
 		{
 			if (inv.IsItemStackAt(index) == false || (inv == newInv && index == newIndex))
 				return;
@@ -72,10 +46,7 @@ namespace DeepSpace.Networking
 				inv.AddItemStackAt(s2, index);
 		}
 
-		/// <summary>
-		/// Splits an existing ItemStack into 2 seperate ItemStacks with n Items in.
-		/// </summary>
-		public void SplitItemStackAtTo(Inventory inv, Vector2I index, float percentage, Inventory newInv, Vector2I newIndex)
+		public void SplitItemStackAtTo(MyInventoryComponent inv, Vector2I index, float percentage, MyInventoryComponent newInv, Vector2I newIndex)
 		{
 			ItemStack s1 = inv.GetItemStackAt(index);
 			ItemStack s2 = newInv.GetItemStackAt(newIndex);
@@ -98,18 +69,12 @@ namespace DeepSpace.Networking
 				newInv.AddItemStackAt(s2, newIndex);
 		}
 
-		/// <summary>
-		/// Moves n items from ItemStack s1 to s2.
-		/// </summary>
 		void MoveItemsToStack(ItemStack s1, ItemStack s2, int n)
 		{
 			s1.RemoveItems(n);
 			s2.AddItems(n);
 		}
 
-		/// <summary>
-		/// Determines if the ItemStacks are mergable or not.
-		/// </summary>
 		bool CanMergeItemStacks(ItemStack s1, ItemStack s2, float percentage)
 		{
 			if (s1 == null || s2 == null)
@@ -118,9 +83,6 @@ namespace DeepSpace.Networking
 			return s1.Type == s2.Type && s2.ItemAddability >= (s1.NumItems * percentage);
 		}
 
-		/// <summary>
-		/// Determines if we can move Items from Itemstack s1 to s2.
-		/// </summary>
 		bool CanMoveToItemStack(ItemStack s1, ItemStack s2)
 		{
 			if (s1 == null || s2 == null)
@@ -129,9 +91,6 @@ namespace DeepSpace.Networking
 			return s1.Type == s2.Type;
 		}
 
-		/// <summary>
-		/// Updates the ItemStack graphics for all players who are using the Inventory system in a SolarSystem.
-		/// </summary>
 		public void UpdateItemStackGraphicsForPlayersInSolarSystem(SolarSystem ss)
 		{
 			foreach (Player p in ss.PlayersInSystem)
@@ -143,9 +102,6 @@ namespace DeepSpace.Networking
 			}
 		}
 
-		/// <summary>
-		/// Updates the ItemStack graphics for a Character.
-		/// </summary>
 		public void UpdateItemStackGraphicsForCharacter(Character c)
 		{
 			if (c.IsUsingInventorySystem)

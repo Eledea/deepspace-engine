@@ -1,13 +1,8 @@
-using DeepSpace.Building;
 using DeepSpace.Core;
-using DeepSpace.Characters;
-using DeepSpace.InventorySystem;
-using DeepSpace.Networking;
-using DeepSpace.Orbitals;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeepSpace.World
+namespace DeepSpace
 {
 	/// <summary>
 	/// The SolarSystem class defines a SolarSystem and the Orbitals and Entities within it.
@@ -57,12 +52,8 @@ namespace DeepSpace.World
 			foreach (Orbital child in myStar.ChildOrbitals)
 				AddEntityToSolarSystem(child);
 
-			Storage s = new Storage("Storage", 63739, new Vector3D(10, 0, 10), Quaternion.identity);
+			Storage s = new Storage("Storage", 673731, new Vector3D(10, 10, 10), Quaternion.identity);
 			AddEntityToSolarSystem(s);
-
-			//TODO: Move Inventory property from Entity to Player and Buildable.
-
-			//s.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Wood, Random.Range(1, 51)), new Vector2I(5, 3));
 		}
 
 		/// <summary>

@@ -1,6 +1,6 @@
 ﻿using DeepSpace.Core;
 
-namespace DeepSpace.Orbitals
+namespace DeepSpace
 {
 	/// <summary>
 	/// The Moon class defines a Moon in a SolarSystem.
