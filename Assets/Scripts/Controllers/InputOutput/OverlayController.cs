@@ -24,8 +24,8 @@ namespace DeepSpace.Controllers
 
 		Camera myCamera;
 
-		enum OverlayShowMode { None, Internal, External }
-		OverlayShowMode myShowMode;
+		enum InventoryShowMode { None, Internal, External }
+		InventoryShowMode myShowMode;
 
 		MouseButton dragButton;
 
@@ -41,7 +41,7 @@ namespace DeepSpace.Controllers
 		{
 			get
 			{
-				return myShowMode == OverlayShowMode.None;
+				return myShowMode == InventoryShowMode.None;
 			}
 		}
 
@@ -56,21 +56,21 @@ namespace DeepSpace.Controllers
 			{
 				if (Character.IsUsingInventorySystem)
 				{
-					myShowMode = OverlayShowMode.None;
+					myShowMode = InventoryShowMode.None;
 					HideOverlay();
 				}
 				else
 				{
 					RaycastHit hitInfo;
 
-					myShowMode = OverlayShowMode.Internal;
+					myShowMode = InventoryShowMode.Internal;
 					target = Character;
 
 					if (Physics.Raycast(new Ray(myCamera.transform.position, myCamera.transform.forward), out hitInfo, 3))
 					{
-						if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).HasInventory)
+						if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).Inventory != null)
 						{
-							myShowMode = OverlayShowMode.External;
+							myShowMode = InventoryShowMode.External;
 							target = Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject);
 						}
 					}
@@ -102,18 +102,18 @@ namespace DeepSpace.Controllers
 
 			overlayGraphics = new Queue<GameObject>();
 
-			if (myShowMode == OverlayShowMode.Internal)
+			if (myShowMode == InventoryShowMode.Internal)
 			{
 				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, 0), Character.Name);
 			}
-			else if (myShowMode == OverlayShowMode.External)
+			else if (myShowMode == InventoryShowMode.External)
 			{
-				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, -2.5f * graphicSize), Character.Name);
-				DrawInventoryAtPosition(target.Inventory, new Vector2(0, 2.5f * graphicSize), target.Name);
+				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, -2.5F * graphicSize), Character.Name);
+				DrawInventoryAtPosition(target.Inventory, new Vector2(0, 2.5F * graphicSize), target.Name);
 			}
 		}
 
-		private void DrawInventoryAtPosition(MyInventoryComponent c, Vector2 screenPosition, string name)
+		private void DrawInventoryAtPosition(MyEntityInventoryComponent c, Vector2 screenPosition, string name)
 		{
 			GameObject overlay = Instantiate(interfaces[0], this.transform);
 			overlay.transform.localPosition = screenPosition;
@@ -225,7 +225,7 @@ namespace DeepSpace.Controllers
 					InventoryManager.Instance.MoveItemStackTo(startDragDrop.Inventory, drag.Start, endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Right:
-					InventoryManager.Instance.SplitItemStackAtTo(startDragDrop.Inventory, drag.Start, 0.5f, endDragDrop.Inventory, drag.End);
+					InventoryManager.Instance.SplitItemStackAtTo(startDragDrop.Inventory, drag.Start, 0.5F, endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Unknown:
 					Debug.LogError("Player is attempting to make a mouse drag with a button that couldn't be identified!");

@@ -8,14 +8,13 @@ namespace DeepSpace
 	/// </summary>
 	public class Storage : Deployable
 	{
-		public Storage(string name, long id, Vector3D position, Quaternion rotation)
+		public Storage(string name, long id, Vector3D velocity, Vector3D position, Quaternion rotation)
 		{
 			Name = name;
 			EntityId = id;
-			Position = position;
-			Rotation = rotation;
 
-			Inventory = new MyInventoryComponent(8, 4);
+			Transform = new MyEntityTransformComponent(velocity, position, rotation);
+			Inventory = new MyEntityInventoryComponent(8, 4);
 		}
 	}
 }

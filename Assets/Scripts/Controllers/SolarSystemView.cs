@@ -38,7 +38,7 @@ namespace DeepSpace.Controllers
 			entityToGameObject = new Dictionary<Entity, GameObject>();
 			gameObjectToEntity = new Dictionary<GameObject, Entity>();
 
-			floatingOrigin = Character.Position;
+			floatingOrigin = Character.Transform.Position;
 
 			UpdateAllEntities(50, 100);
 
@@ -51,7 +51,7 @@ namespace DeepSpace.Controllers
 			{
 				if (characterGO.transform.position.magnitude > floatingRange)
 				{
-					floatingOrigin = Character.Position;
+					floatingOrigin = Character.Transform.Position;
 					Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
 				}
 			}
@@ -86,14 +86,14 @@ namespace DeepSpace.Controllers
 
 		public void UpdateGameObjectForEntity(Entity e)
 		{
-			if ((Vector3D.Distance(e.Position, Character.Position)) < loadRange)
+			if ((Vector3D.Distance(e.Transform.Position, e.Transform.Position)) < loadRange)
 			{
 				if (GameObjectForEntity(e) == false)
 					SpawnGameObjectForEntity(e);
 
 				GameObject myGO = EntityToGameObject(e);
-				myGO.transform.position = (e.Position - floatingOrigin).ToVector3();
-				myGO.transform.rotation = e.Rotation;
+				myGO.transform.position = (e.Transform.Position - floatingOrigin).ToVector3();
+				myGO.transform.rotation = e.Transform.Rotation;
 			}
 			else
 			{
@@ -134,9 +134,9 @@ namespace DeepSpace.Controllers
 			characterGO.GetComponentInChildren<EntityController>().Player = Character;
 			characterGO.GetComponentInChildren<OverlayController>().Character = Character;
 
-			Character.entityController = characterGO.GetComponentInChildren<EntityController>();
-			Character.overlayController = characterGO.GetComponentInChildren<OverlayController>();
-			Character.RegisterInventoryUpdateCallback(() => { Character.overlayController.OnInventoryUpdate(); });
+			Character.m_entityController = characterGO.GetComponentInChildren<EntityController>();
+			Character.m_overlayController = characterGO.GetComponentInChildren<OverlayController>();
+			Character.RegisterInventoryUpdateCallback(() => { Character.m_overlayController.OnInventoryUpdate(); });
 
 			return characterGO;
 		}

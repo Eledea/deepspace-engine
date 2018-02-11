@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace DeepSpace
+﻿namespace DeepSpace
 {
 	/// <summary>
 	/// The Stone class defines an ItemStack of Stone.

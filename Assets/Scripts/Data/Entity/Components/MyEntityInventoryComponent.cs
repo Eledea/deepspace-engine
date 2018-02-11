@@ -3,11 +3,13 @@ using DeepSpace.Core;
 namespace DeepSpace
 {
 	/// <summary>
-	/// The MyInventoryComponent class defines an MyInventoryComponent of an Entity.
+	/// The MyEntityInventoryComponent class defines an Inventory of an Entity.
 	/// </summary>
-	public class MyInventoryComponent
+	public class MyEntityInventoryComponent : MyEntityComponentBase
 	{
-		public MyInventoryComponent(int size_x, int size_y)
+		//TODO: Needs refactoring for new Entity component system.
+
+		public MyEntityInventoryComponent(int size_x, int size_y)
 		{
 			Inv = new ItemStack[size_x, size_y];
 		}

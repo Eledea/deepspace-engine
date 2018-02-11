@@ -9,61 +9,38 @@ namespace DeepSpace
 	/// </summary>
 	public class Entity
 	{
-		public string Name;
-		public long EntityId;
+		public Entity()
+		{
+			Components = new MyEntityComponentPacakage(this);
+		}
 
 		public SolarSystem SolarSystem;
 
-		Vector3D m_velocity;
-		Vector3D m_position;
-		Quaternion m_rotation;
+		public MyEntityComponentPacakage Components { get; private set; }
 
-		public Vector3D Velocity
+		public string Name;
+		//TODO: Actually implement the Entity ID system.
+		public long EntityId;
+
+		MyEntityTransformComponent m_transformComponent;
+		public MyEntityTransformComponent Transform
 		{
-			get { return m_velocity; }
+			get
+			{
+				return m_transformComponent;
+			}
+
 			set
 			{
-				m_velocity = value;
-				Position += m_velocity * Time.deltaTime;
+				Components.RemoveComponentFromPackage(m_transformComponent);
+				Components.AddComponentToPackage(value);
+
+				m_transformComponent = value;
 			}
 		}
 
-		public Vector3D Position
-		{
-			get { return m_position; }
-			set
-			{
-				if (value == m_position)
-					return;
-
-				//TODO: Make this update client data with an action system instead.
-
-				m_position = value;
-				PlayerManager.Instance.UpdateEntityForPlayersInSystem(this, SolarSystem);
-			}
-		}
-
-		public Quaternion Rotation
-		{
-			get { return m_rotation; }
-			set
-			{
-				if (value == m_rotation)
-					return;
-
-				m_rotation = value;
-				PlayerManager.Instance.UpdateEntityForPlayersInSystem(this, SolarSystem);
-			}
-		}
-
-		MyInventoryComponent m_inventoryComponent;
-
-		public bool HasInventory
-		{
-			get { return Inventory != null; }
-		}
-
-		public MyInventoryComponent Inventory
+		MyEntityInventoryComponent m_inventoryComponent;
+		public MyEntityInventoryComponent Inventory
 		{
 			get
 			{
@@ -72,6 +49,9 @@ namespace DeepSpace
 
 			set
 			{
+				Components.RemoveComponentFromPackage(m_inventoryComponent);
+				Components.AddComponentToPackage(value);
+
 				m_inventoryComponent = value;
 			}
 		}

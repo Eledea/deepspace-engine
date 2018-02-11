@@ -7,6 +7,7 @@ namespace DeepSpace.Networking
 	{
 		void Start()
 		{
+			//If this isn't the GlobalPlayer object for the corresponding Player, bail here. 
 			if (isLocalPlayer == false)
 				return;
 

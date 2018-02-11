@@ -9,13 +9,15 @@ namespace DeepSpace.Controllers
 	/// </summary>
 	public class EntityController : MonoBehaviour
 	{
+		//TODO: Re-write this class with direction system.
+
 		void OnEnable()
 		{
-			axisBindings = new Dictionary<Axis, KeyBinding>()
+			axisBindings = new Dictionary<BaseDirections.Axis, KeyBinding>()
 			{
-				{ Axis.X, new KeyBinding(KeyCode.W, KeyCode.S) },
-				{ Axis.Y, new KeyBinding(KeyCode.D, KeyCode.A) },
-				{ Axis.Z, new KeyBinding(KeyCode.Space, KeyCode.LeftControl) }
+				{ BaseDirections.Axis.X, new KeyBinding(KeyCode.W, KeyCode.S) },
+				{ BaseDirections.Axis.Y, new KeyBinding(KeyCode.D, KeyCode.A) },
+				{ BaseDirections.Axis.Z, new KeyBinding(KeyCode.Space, KeyCode.LeftControl) }
 			};
 
 			roll = new KeyBinding(KeyCode.Q, KeyCode.E);
@@ -23,7 +25,7 @@ namespace DeepSpace.Controllers
 
 		public Character Player { get; set; }
 
-		Dictionary<Axis, KeyBinding> axisBindings;
+		Dictionary<BaseDirections.Axis, KeyBinding> axisBindings;
 		KeyBinding roll;
 
 		bool DampenersOn = true;
@@ -58,29 +60,27 @@ namespace DeepSpace.Controllers
 			Vector3 acceleration = Vector3.zero;
 			List<Vector3> directions = new List<Vector3> { transform.forward.normalized, transform.right.normalized, transform.up.normalized };
 
-			int i = 0; foreach (Axis axis in axisBindings.Keys)
+			int i = 0; foreach (BaseDirections.Axis axis in axisBindings.Keys)
 			{
 				float axisInput = axisBindings[axis].Magnitude;
 				acceleration += directions[i] * axisInput; i++;
 			}
 
-			//TODO: Re-implement dampeners.
-
 			if (Input.GetKeyDown(KeyCode.Escape))
-				Player.Velocity = Vector3D.zero;
+				Player.Transform.Velocity = Vector3D.zero;
 
-			Player.Velocity += acceleration * 10f * Time.deltaTime;
+			Player.Transform.Velocity += acceleration * 10F * Time.deltaTime;
 		}
 
 		void Update_PlayerRotation()
 		{
-			Player.Rotation = Player.Rotation * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 5f, Vector3.right);
-			Player.Rotation = Player.Rotation * Quaternion.AngleAxis(Input.GetAxis("Mouse X") * 5f, Vector3.up);
+			Player.Transform.Rotation = Player.Transform.Rotation * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 5F, Vector3.right);
+			Player.Transform.Rotation = Player.Transform.Rotation * Quaternion.AngleAxis(Input.GetAxis("Mouse X") * 5F, Vector3.up);
 		}
 
 		void Update_PlayerRoll()
 		{
-			Player.Rotation = Player.Rotation * Quaternion.AngleAxis(roll.Magnitude * 2f, Vector3.forward);
+			Player.Transform.Rotation = Player.Transform.Rotation * Quaternion.AngleAxis(roll.Magnitude * 2F, Vector3.forward);
 		}
 	}
 }

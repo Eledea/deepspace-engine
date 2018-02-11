@@ -1,4 +1,5 @@
 ﻿using DeepSpace.Core;
+using UnityEngine;
 
 namespace DeepSpace
 {
@@ -10,9 +11,10 @@ namespace DeepSpace
 		public void GenerateMoon()
 		{
 			Name = "Moon";
-			OrbitalAngle = Utility.RandomizedPointAngle;
+			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = 10000;
-			Position = OrbitalPosition;
+
+			Transform = new MyEntityTransformComponent(Vector3D.zero, OrbitalPosition, Quaternion.identity);
 		}
 	}
 }

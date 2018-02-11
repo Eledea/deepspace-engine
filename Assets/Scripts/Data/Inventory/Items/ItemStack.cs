@@ -7,7 +7,7 @@ namespace DeepSpace
 	/// </summary>
 	public class ItemStack
 	{
-		public MyInventoryComponent Inv;
+		public MyEntityInventoryComponent Inv;
 
 		private int m_inv_x;
 		private int m_inv_y;

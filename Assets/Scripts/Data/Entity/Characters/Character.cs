@@ -16,15 +16,14 @@ namespace DeepSpace
 
 			Name = name;
 			EntityId = id;
-			Position = position;
-			Rotation = rotation;
 
-			Inventory = new MyInventoryComponent(4, 4);
+			Transform = new MyEntityTransformComponent(Vector3D.zero, position, rotation);
+			Inventory = new MyEntityInventoryComponent(4, 4);
 		}
 
 		//NonSerialised fields.
-		public EntityController entityController;
-		public OverlayController overlayController;
+		public EntityController m_entityController;
+		public OverlayController m_overlayController;
 
 		Player m_player;
 
@@ -39,7 +38,7 @@ namespace DeepSpace
 		{
 			get
 			{
-				return overlayController.ShowingOverlay == false;
+				return m_overlayController.ShowingOverlay == false;
 			}
 		}
 

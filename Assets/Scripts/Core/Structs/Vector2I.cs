@@ -20,7 +20,7 @@
 		public static Vector2I up = new Vector2I(0, 1);
 		public static Vector2I zero = new Vector2I(0, 0);
 
-		//Functions
+		//Methods
 		public override int GetHashCode()
 		{
 			return ((byte)x << 16) | ((byte)y << 8);

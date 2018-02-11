@@ -1,4 +1,5 @@
 ﻿using DeepSpace.Core;
+using UnityEngine;
 
 namespace DeepSpace
 {
@@ -10,9 +11,10 @@ namespace DeepSpace
 		public void GeneratePlanet(int i, int maxMoons)
 		{
 			Name = "Planet";
-			OrbitalAngle = Utility.RandomizedPointAngle;
+			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = (ulong)(50000 * (i + 1));
-			Position = OrbitalPosition;
+
+			Transform = new MyEntityTransformComponent(Vector3D.zero, OrbitalPosition, Quaternion.identity);
 
 			int numMoons = UnityEngine.Random.Range(0, maxMoons + 1);
 

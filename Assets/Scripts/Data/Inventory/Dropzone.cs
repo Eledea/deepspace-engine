@@ -9,7 +9,7 @@ namespace DeepSpace
 	{
 		public OverlayController myController;
 
-		public MyInventoryComponent Inventory;
+		public MyEntityInventoryComponent Inventory;
 		public Vector2I Index;
 
 		public void OnPointerEnter(PointerEventData eventData)

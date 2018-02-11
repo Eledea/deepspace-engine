@@ -27,7 +27,7 @@ namespace DeepSpace.Networking
 			return s;
 		}
 
-		public void MoveItemStackTo(MyInventoryComponent inv, Vector2I index, MyInventoryComponent newInv, Vector2I newIndex)
+		public void MoveItemStackTo(MyEntityInventoryComponent inv, Vector2I index, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
 			if (inv.IsItemStackAt(index) == false || (inv == newInv && index == newIndex))
 				return;
@@ -46,7 +46,7 @@ namespace DeepSpace.Networking
 				inv.AddItemStackAt(s2, index);
 		}
 
-		public void SplitItemStackAtTo(MyInventoryComponent inv, Vector2I index, float percentage, MyInventoryComponent newInv, Vector2I newIndex)
+		public void SplitItemStackAtTo(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
 			ItemStack s1 = inv.GetItemStackAt(index);
 			ItemStack s2 = newInv.GetItemStackAt(newIndex);
@@ -105,7 +105,7 @@ namespace DeepSpace.Networking
 		public void UpdateItemStackGraphicsForCharacter(Character c)
 		{
 			if (c.IsUsingInventorySystem)
-				c.overlayController.OnInventoryUpdate();
+				c.m_overlayController.OnInventoryUpdate();
 		}
 	}
 }

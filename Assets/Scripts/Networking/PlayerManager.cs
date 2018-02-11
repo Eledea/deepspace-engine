@@ -59,14 +59,14 @@ namespace DeepSpace.Networking
 			MovePlayerToSolarSystem(p, ss);
 		}
 
-		public void UpdateEntityForPlayersInSystem(Entity e, SolarSystem ss)
+		public void UpdateEntityForPlayersInSystem(Entity e)
 		{
-			if (ss == null)
+			if (e.SolarSystem == null)
 				return;
 
 			//Debug.Log(string.Format("Updated an Entity with name: {0}", e.Name))
 
-			foreach (Player p in ss.PlayersInSystem)
+			foreach (Player p in e.SolarSystem.PlayersInSystem)
 				p.View.UpdateGameObjectForEntity(e);
 		}
 
