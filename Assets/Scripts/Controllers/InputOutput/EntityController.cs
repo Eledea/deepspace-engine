@@ -5,12 +5,10 @@ using UnityEngine;
 namespace DeepSpace.Controllers
 {
 	/// <summary>
-	/// Unity-centric class for controlling an Entity.
+	/// The EntityController allows Player control over Entities that may be controlled.
 	/// </summary>
 	public class EntityController : MonoBehaviour
 	{
-		//TODO: Re-write this class with direction system.
-
 		void OnEnable()
 		{
 			axisBindings = new Dictionary<BaseDirections.Axis, KeyBinding>()
@@ -23,7 +21,7 @@ namespace DeepSpace.Controllers
 			roll = new KeyBinding(KeyCode.Q, KeyCode.E);
 		}
 
-		public Character Player { get; set; }
+		public Character Character { get; set; }
 
 		Dictionary<BaseDirections.Axis, KeyBinding> axisBindings;
 		KeyBinding roll;
@@ -37,7 +35,7 @@ namespace DeepSpace.Controllers
 			Update_DampenersController();
 			Update_PlayerAcceleration();
 
-			if (Player.IsUsingInventorySystem == false)
+			if (Character.IsUsingInventorySystem == false)
 			{
 				Update_PlayerRotation();
 				Update_PlayerRoll();
@@ -67,20 +65,20 @@ namespace DeepSpace.Controllers
 			}
 
 			if (Input.GetKeyDown(KeyCode.Escape))
-				Player.Transform.Velocity = Vector3D.zero;
+				Character.Transform.Velocity = Vector3D.zero;
 
-			Player.Transform.Velocity += acceleration * 10F * Time.deltaTime;
+			Character.Transform.Velocity += acceleration * 10F * Time.deltaTime;
 		}
 
 		void Update_PlayerRotation()
 		{
-			Player.Transform.Rotation = Player.Transform.Rotation * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 5F, Vector3.right);
-			Player.Transform.Rotation = Player.Transform.Rotation * Quaternion.AngleAxis(Input.GetAxis("Mouse X") * 5F, Vector3.up);
+			Character.Transform.Rotation = Character.Transform.Rotation * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 5F, Vector3.right);
+			Character.Transform.Rotation = Character.Transform.Rotation * Quaternion.AngleAxis(Input.GetAxis("Mouse X") * 5F, Vector3.up);
 		}
 
 		void Update_PlayerRoll()
 		{
-			Player.Transform.Rotation = Player.Transform.Rotation * Quaternion.AngleAxis(roll.Magnitude * 2F, Vector3.forward);
+			Character.Transform.Rotation = Character.Transform.Rotation * Quaternion.AngleAxis(roll.Magnitude * 2F, Vector3.forward);
 		}
 	}
 }

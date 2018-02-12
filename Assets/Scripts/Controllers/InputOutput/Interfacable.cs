@@ -1,8 +1,7 @@
-﻿using DeepSpace.Controllers;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DeepSpace
+namespace DeepSpace.Controllers
 {
 	public class Interfacable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 	{

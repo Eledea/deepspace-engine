@@ -100,7 +100,7 @@ namespace DeepSpace.Networking
 		public void UpdateInventoryForPlayer(Player p)
 		{
 			if (p.Character.IsUsingInventorySystem)
-				p.Character.m_overlayController.OnInventoryUpdate();
+				p.Character.Controllers.OverlayController.OnInventoryUpdate();
 		}
 	}
 }

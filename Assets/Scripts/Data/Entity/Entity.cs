@@ -1,4 +1,3 @@
-using DeepSpace.Core;
 using DeepSpace.Networking;
 
 namespace DeepSpace
@@ -13,14 +12,25 @@ namespace DeepSpace
 			Components = new MyEntityComponentPacakage(this);
 		}
 
+		public string Name;
 		public SolarSystem SolarSystem;
 
 		//TODO: Use this for Serialisation later.
 		public MyEntityComponentPacakage Components { get; private set; }
 
-		public string Name;
-		//TODO: Actually implement the Entity ID system.
-		public long EntityId;
+		private long m_entityId;
+		public long EntityId
+		{
+			get { return m_entityId; }
+			protected set
+			{
+				if (m_entityId != 0)
+					return;
+
+				//Assign a new ID here.
+				m_entityId = value;
+			}
+		}
 
 		MyEntityTransformComponent m_transformComponent;
 		public MyEntityTransformComponent Transform

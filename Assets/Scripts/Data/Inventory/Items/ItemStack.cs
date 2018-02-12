@@ -7,14 +7,13 @@ namespace DeepSpace
 	/// </summary>
 	public class ItemStack
 	{
-		public MyEntityInventoryComponent Inv;
+		public MyEntityInventoryComponent Inventory { get; set; }
 
 		private int m_inv_x;
 		private int m_inv_y;
-
 		protected int m_itemCount;
-		protected int m_itemLimit;
 
+		protected int m_itemLimit;
 		protected IType m_type;
 
 		/// <summary>
@@ -34,27 +33,14 @@ namespace DeepSpace
 		}
 
 		/// <summary>
-		/// Returns the x component of the array index of this ItemStack.
-		/// </summary>
-		public int Index_x
-		{
-			get { return m_inv_x; }
-		}
-
-		/// <summary>
-		/// Returns the y component of the array index of this ItemStack.
-		/// </summary>
-		public int Index_y
-		{
-			get { return m_inv_y; }
-		}
-
-		/// <summary>
-		/// Returns the number of Items in this ItemStack.
+		/// Returns the number of Items currently in this ItemStack.
 		/// </summary>
 		public int NumItems
 		{
-			get { return m_itemCount; }
+			get
+			{
+				return m_itemCount;
+			}
 		}
 
 		/// <summary>
@@ -62,7 +48,10 @@ namespace DeepSpace
 		/// </summary>
 		public int MaxItems
 		{
-			get { return m_itemLimit; }
+			get
+			{
+				return m_itemLimit;
+			}
 		}
 
 		/// <summary>
@@ -70,23 +59,10 @@ namespace DeepSpace
 		/// </summary>
 		public IType Type
 		{
-			get { return m_type; }
-		}
-
-		/// <summary>
-		/// Returns the IType name of this ItemStack.
-		/// </summary>
-		public string TypeName
-		{
-			get { return m_type.ToString (); }
-		}
-
-		/// <summary>
-		/// Returns the IType integer of this ItemStack.
-		/// </summary>
-		public int TypeId
-		{
-			get { return (int)m_type; }
+			get
+			{
+				return m_type;
+			}
 		}
 
 		/// <summary>
@@ -94,7 +70,10 @@ namespace DeepSpace
 		/// </summary>
 		public int ItemAddability
 		{
-			get { return m_itemLimit - m_itemCount; }
+			get
+			{
+				return m_itemLimit - m_itemCount;
+			}
 		}
 
 		/// <summary>

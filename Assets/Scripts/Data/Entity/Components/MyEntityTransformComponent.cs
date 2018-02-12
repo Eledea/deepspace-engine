@@ -25,8 +25,7 @@ namespace DeepSpace
 		Vector3D m_velocity;
 		Vector3D m_position;
 
-		//TODO: Consider using a different Quaternion class built from scratch to allow better
-		//optimisation and more centralisation.
+		//TODO: Implement our own Quaternion struct instead of using the Unity one.
 
 		Quaternion m_rotation;
 

@@ -1,5 +1,4 @@
-﻿using DeepSpace.Controllers;
-using DeepSpace.Core;
+﻿using DeepSpace.Core;
 using System;
 using UnityEngine;
 
@@ -21,23 +20,28 @@ namespace DeepSpace
 			Inventory = new MyEntityInventoryComponent(this, 4, 4);
 		}
 
-		//NonSerialised fields.
-		public EntityController m_entityController;
-		public OverlayController m_overlayController;
-
-		Player m_player;
-
-		public Player Player
-		{
-			get { return m_player; }
-		}
+		[NonSerialized] public InputOutput Controllers;
 
 		public bool IsUsingInventorySystem
 		{
 			get
 			{
-				return m_overlayController.ShowingOverlay == false;
+				return Controllers.OverlayController.ShowingOverlay == false;
 			}
+		}
+
+		public bool IsUsingBuildingSystem
+		{
+			get
+			{
+				return Controllers.BuildController.IsBuilding == false;
+			}
+		}
+
+		Player m_player;
+		public Player Player
+		{
+			get { return m_player; }
 		}
 
 		protected int m_healthPoints;

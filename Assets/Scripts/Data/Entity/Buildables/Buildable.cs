@@ -1,5 +1,4 @@
 ﻿using DeepSpace.Core;
-using UnityEngine;
 
 namespace DeepSpace
 {

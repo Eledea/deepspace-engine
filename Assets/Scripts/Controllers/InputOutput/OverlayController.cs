@@ -15,14 +15,7 @@ namespace DeepSpace.Controllers
 		public Sprite[] Sprites;
 		public int graphicSize = 50;
 
-		void OnEnable()
-		{
-			m_myCamera = transform.parent.GetComponentInChildren<Camera>();
-		}
-
 		public Character Character { get; set; }
-
-		Camera m_myCamera;
 
 		enum InventoryShowMode { None, Internal, External }
 		InventoryShowMode m_showMode;
@@ -37,10 +30,7 @@ namespace DeepSpace.Controllers
 
 		public bool ShowingOverlay
 		{
-			get
-			{
-				return m_showMode == InventoryShowMode.None;
-			}
+			get { return m_showMode == InventoryShowMode.None; }
 		}
 
 		void Update()
@@ -50,7 +40,7 @@ namespace DeepSpace.Controllers
 
 		void Update_OverlayController()
 		{
-			if (Input.GetKeyDown(KeyCode.I))
+			if (Input.GetKeyDown(KeyCode.Tab))
 			{
 				if (Character.IsUsingInventorySystem)
 				{
@@ -64,7 +54,8 @@ namespace DeepSpace.Controllers
 					m_showMode = InventoryShowMode.Internal;
 					m_target = Character;
 
-					if (Physics.Raycast(new Ray(m_myCamera.transform.position, m_myCamera.transform.forward), out hitInfo, 3))
+					Ray fromCamera = new Ray(Character.Controllers.Camera.transform.position, Character.Controllers.Camera.transform.forward);
+					if (Physics.Raycast(fromCamera, out hitInfo, 3))
 					{
 						if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).Inventory != null)
 						{
@@ -133,9 +124,9 @@ namespace DeepSpace.Controllers
 						ItemStack s = c.GetItemStackAt(x, y);
 						GameObject graphic = Instantiate(interfaces[2], drop.transform);
 						graphic.transform.localPosition = Vector2.zero;
-						graphic.name = string.Format(s.TypeName);
+						graphic.name = string.Format(s.Type.ToString());
 						graphic.GetComponentInChildren<Interfacable>().myController = this;
-						graphic.GetComponentInChildren<Image>().sprite = Sprites[s.TypeId];
+						graphic.GetComponentInChildren<Image>().sprite = Sprites[(int)s.Type];
 						graphic.GetComponentInChildren<Text>().text = c.GetItemStackAt(x, y).NumItems.ToString();
 						m_overlayGraphics.Enqueue(graphic);
 					}

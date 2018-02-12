@@ -124,14 +124,10 @@ namespace DeepSpace.Controllers
 
 		private GameObject SpawnLocalCharacter(Character c)
 		{
-			characterGO = Instantiate(character);
-			characterGO.GetComponentInChildren<EntityController>().Player = Character;
-			characterGO.GetComponentInChildren<OverlayController>().Character = Character;
+			var go = Instantiate(character) as GameObject;
+			c.Controllers = new InputOutput(go, c);
 
-			Character.m_entityController = characterGO.GetComponentInChildren<EntityController>();
-			Character.m_overlayController = characterGO.GetComponentInChildren<OverlayController>();
-
-			return characterGO;
+			return go;
 		}
 
 		void DestroyGameObjectForEntity(Entity e)

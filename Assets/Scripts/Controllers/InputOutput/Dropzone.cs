@@ -1,9 +1,8 @@
-﻿using DeepSpace.Controllers;
-using DeepSpace.Core;
+﻿using DeepSpace.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DeepSpace
+namespace DeepSpace.Controllers
 {
 	public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	{

@@ -33,7 +33,7 @@ namespace DeepSpace
 		{
 			Inventory [index.x, index.y] = s;
 
-			s.Inv = this;
+			s.Inventory = this;
 			s.InventoryIndex = new Vector2I(index.x, index.y);
 
 			OnInventoryComponentUpdate(Entity);
@@ -48,7 +48,7 @@ namespace DeepSpace
 
 			Inventory [index.x, index.y] = null;
 
-			s.Inv = null;
+			s.Inventory = null;
 			s.InventoryIndex = Vector2I.zero;
 
 			OnInventoryComponentUpdate(Entity);
