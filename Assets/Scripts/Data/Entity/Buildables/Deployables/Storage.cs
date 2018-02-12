@@ -13,8 +13,8 @@ namespace DeepSpace
 			Name = name;
 			EntityId = id;
 
-			Transform = new MyEntityTransformComponent(velocity, position, rotation);
-			Inventory = new MyEntityInventoryComponent(8, 4);
+			Transform = new MyEntityTransformComponent(this, velocity, position, rotation);
+			Inventory = new MyEntityInventoryComponent(this, 8, 4);
 		}
 	}
 }

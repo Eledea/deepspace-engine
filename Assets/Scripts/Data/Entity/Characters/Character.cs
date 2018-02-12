@@ -17,8 +17,8 @@ namespace DeepSpace
 			Name = name;
 			EntityId = id;
 
-			Transform = new MyEntityTransformComponent(Vector3D.zero, position, rotation);
-			Inventory = new MyEntityInventoryComponent(4, 4);
+			Transform = new MyEntityTransformComponent(this, Vector3D.zero, position, rotation);
+			Inventory = new MyEntityInventoryComponent(this, 4, 4);
 		}
 
 		//NonSerialised fields.
@@ -31,8 +31,6 @@ namespace DeepSpace
 		{
 			get { return m_player; }
 		}
-
-		Action cbInventoryUpdateFunc;
 
 		public bool IsUsingInventorySystem
 		{
@@ -69,11 +67,6 @@ namespace DeepSpace
 			{
 				m_oxygenLevel = value;
 			}
-		}
-
-		public void RegisterInventoryUpdateCallback(Action callback)
-		{
-			cbInventoryUpdateFunc += callback;
 		}
 	}
 }

@@ -20,7 +20,6 @@ namespace DeepSpace
 
 		public void OnDrag(PointerEventData eventData)
 		{
-			myController.OnDrag(eventData.position);
 		}
 
 		public void OnEndDrag(PointerEventData eventData)

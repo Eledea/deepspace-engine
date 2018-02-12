@@ -107,17 +107,11 @@ namespace DeepSpace.Controllers
 			GameObject go;
 
 			if (e.EntityId == Character.EntityId)
-			{
 				go = SpawnLocalCharacter((Character)e);
-			}
 			else if (e is Orbital)
-			{
 				go = Instantiate(sphere);
-			}
 			else if (e is Character)
-			{
 				go = SpawnLocalCharacter((Character)e);
-			}
 			else
 				go = Instantiate(cube);
 
@@ -136,7 +130,6 @@ namespace DeepSpace.Controllers
 
 			Character.m_entityController = characterGO.GetComponentInChildren<EntityController>();
 			Character.m_overlayController = characterGO.GetComponentInChildren<OverlayController>();
-			Character.RegisterInventoryUpdateCallback(() => { Character.m_overlayController.OnInventoryUpdate(); });
 
 			return characterGO;
 		}

@@ -14,7 +14,7 @@ namespace DeepSpace
 			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = 0;
 
-			Transform = new MyEntityTransformComponent(Vector3D.zero, OrbitalPosition, Quaternion.identity);
+			Transform = new MyEntityTransformComponent(this, Vector3D.zero, OrbitalPosition, Quaternion.identity);
 
 			for (int i = 0; i < numPlanets; i++)
 			{

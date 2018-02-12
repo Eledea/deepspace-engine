@@ -45,14 +45,14 @@ namespace DeepSpace
 		/// </summary>
 		public void GenerateSolarSystem(int numPlanets, int maxMoons)
 		{
-			Star myStar = new Star();
+			var myStar = new Star() as Star;
 			myStar.GenerateStar(numPlanets, maxMoons);
 			AddEntityToSolarSystem(myStar);
 
 			foreach (Orbital child in myStar.ChildOrbitals)
 				AddEntityToSolarSystem(child);
 
-			Storage s = new Storage("Storage", 673731, Vector3D.zero, new Vector3D(10, 0, 10), Quaternion.identity);
+			var s = new Storage("Storage", 673731, Vector3D.zero, new Vector3D(10, 0, 10), Quaternion.identity);
 			AddEntityToSolarSystem(s);
 		}
 

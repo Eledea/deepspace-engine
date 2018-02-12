@@ -91,21 +91,16 @@ namespace DeepSpace.Networking
 			return s1.Type == s2.Type;
 		}
 
-		public void UpdateItemStackGraphicsForPlayersInSolarSystem(SolarSystem ss)
+		public void UpdateInventoriesForPlayersInSystem(Entity e)
 		{
-			foreach (Player p in ss.PlayersInSystem)
-			{
-				//InventoryController instances will not be networked. Therefore, we have to use our data class to call the
-				//function to update the Inventories currently being managed.
-
-				UpdateItemStackGraphicsForCharacter(p.Character);
-			}
+			foreach (Player p in e.SolarSystem.PlayersInSystem)
+				UpdateInventoryForPlayer(p);
 		}
 
-		public void UpdateItemStackGraphicsForCharacter(Character c)
+		public void UpdateInventoryForPlayer(Player p)
 		{
-			if (c.IsUsingInventorySystem)
-				c.m_overlayController.OnInventoryUpdate();
+			if (p.Character.IsUsingInventorySystem)
+				p.Character.m_overlayController.OnInventoryUpdate();
 		}
 	}
 }

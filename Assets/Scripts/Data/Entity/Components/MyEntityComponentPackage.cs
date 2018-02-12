@@ -7,8 +7,6 @@ namespace DeepSpace
 	/// </summary>
 	public class MyEntityComponentPacakage
 	{
-		//TODO: Use this for Serialisation later.
-
 		public MyEntityComponentPacakage(Entity e)
 		{
 			Entity = e;

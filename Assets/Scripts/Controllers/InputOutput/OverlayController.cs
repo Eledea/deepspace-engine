@@ -17,31 +17,29 @@ namespace DeepSpace.Controllers
 
 		void OnEnable()
 		{
-			myCamera = transform.parent.GetComponentInChildren<Camera>();
+			m_myCamera = transform.parent.GetComponentInChildren<Camera>();
 		}
 
 		public Character Character { get; set; }
 
-		Camera myCamera;
+		Camera m_myCamera;
 
 		enum InventoryShowMode { None, Internal, External }
-		InventoryShowMode myShowMode;
+		InventoryShowMode m_showMode;
 
-		MouseButton dragButton;
+		MouseButton m_dragButton;
 
-		Entity target;
-		Queue<GameObject> overlayGraphics;
+		Entity m_target;
+		Queue<GameObject> m_overlayGraphics;
 
-		Dropzone startDragDrop;
-		Dropzone endDragDrop;
-
-		RectTransform dragGraphic;
+		Dropzone m_startDragDrop;
+		Dropzone m_endDragDrop;
 
 		public bool ShowingOverlay
 		{
 			get
 			{
-				return myShowMode == InventoryShowMode.None;
+				return m_showMode == InventoryShowMode.None;
 			}
 		}
 
@@ -56,22 +54,22 @@ namespace DeepSpace.Controllers
 			{
 				if (Character.IsUsingInventorySystem)
 				{
-					myShowMode = InventoryShowMode.None;
+					m_showMode = InventoryShowMode.None;
 					HideOverlay();
 				}
 				else
 				{
 					RaycastHit hitInfo;
 
-					myShowMode = InventoryShowMode.Internal;
-					target = Character;
+					m_showMode = InventoryShowMode.Internal;
+					m_target = Character;
 
-					if (Physics.Raycast(new Ray(myCamera.transform.position, myCamera.transform.forward), out hitInfo, 3))
+					if (Physics.Raycast(new Ray(m_myCamera.transform.position, m_myCamera.transform.forward), out hitInfo, 3))
 					{
 						if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).Inventory != null)
 						{
-							myShowMode = InventoryShowMode.External;
-							target = Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject);
+							m_showMode = InventoryShowMode.External;
+							m_target = Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject);
 						}
 					}
 
@@ -97,19 +95,19 @@ namespace DeepSpace.Controllers
 
 		public void OnInventoryUpdate()
 		{
-			if (overlayGraphics != null)
+			if (m_overlayGraphics != null)
 				HideOverlay();
 
-			overlayGraphics = new Queue<GameObject>();
+			m_overlayGraphics = new Queue<GameObject>();
 
-			if (myShowMode == InventoryShowMode.Internal)
+			if (m_showMode == InventoryShowMode.Internal)
 			{
 				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, 0), Character.Name);
 			}
-			else if (myShowMode == InventoryShowMode.External)
+			else if (m_showMode == InventoryShowMode.External)
 			{
 				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, -2.5F * graphicSize), Character.Name);
-				DrawInventoryAtPosition(target.Inventory, new Vector2(0, 2.5F * graphicSize), target.Name);
+				DrawInventoryAtPosition(m_target.Inventory, new Vector2(0, 2.5F * graphicSize), m_target.Name);
 			}
 		}
 
@@ -139,7 +137,7 @@ namespace DeepSpace.Controllers
 						graphic.GetComponentInChildren<Interfacable>().myController = this;
 						graphic.GetComponentInChildren<Image>().sprite = Sprites[s.TypeId];
 						graphic.GetComponentInChildren<Text>().text = c.GetItemStackAt(x, y).NumItems.ToString();
-						overlayGraphics.Enqueue(graphic);
+						m_overlayGraphics.Enqueue(graphic);
 					}
 				}
 			}
@@ -150,7 +148,7 @@ namespace DeepSpace.Controllers
 		/// </summary>
 		public void OnPointerEnter(Dropzone d)
 		{
-			endDragDrop = d;
+			m_endDragDrop = d;
 		}
 
 		/// <summary>
@@ -158,7 +156,7 @@ namespace DeepSpace.Controllers
 		/// </summary>
 		public void OnPointerExit()
 		{
-			endDragDrop = null;
+			m_endDragDrop = null;
 		}
 
 		/// <summary>
@@ -166,7 +164,7 @@ namespace DeepSpace.Controllers
 		/// </summary>
 		public void OnPointerDown(Interfacable i)
 		{
-			startDragDrop = i.gameObject.GetComponentInParent<Dropzone>();
+			m_startDragDrop = i.gameObject.GetComponentInParent<Dropzone>();
 		}
 
 		/// <summary>
@@ -175,23 +173,11 @@ namespace DeepSpace.Controllers
 		public void OnBeginDrag(Interfacable i)
 		{
 			if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
-				dragButton = MouseButton.Left;
+				m_dragButton = MouseButton.Left;
 			else if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1))
-				dragButton = MouseButton.Right;
+				m_dragButton = MouseButton.Right;
 			else
-				dragButton = MouseButton.Unknown;
-
-			dragGraphic = Instantiate(interfaces[3], this.transform).GetComponent<RectTransform>();
-			dragGraphic.gameObject.transform.localPosition = Vector2.zero;
-			//dragGraphic.gameObject.GetComponent<Image>().sprite = Sprites[startDragDrop.Inventory.GetItemStackAt((int)startDragDrop.Index.x, (int)startDragDrop.Index.y).TypeId];
-		}
-
-		/// <summary>
-		/// Called by Interfacable when this Player is moving their mouse.
-		/// </summary>
-		public void OnDrag(Vector2 mousePosition)
-		{
-			dragGraphic.position = mousePosition;
+				m_dragButton = MouseButton.Unknown;
 		}
 
 		/// <summary>
@@ -199,14 +185,13 @@ namespace DeepSpace.Controllers
 		/// </summary>
 		public void OnEndDrag()
 		{
-			if (endDragDrop != null)
+			if (m_endDragDrop != null)
 			{
-				MouseDrag drag = new MouseDrag(startDragDrop.Index, endDragDrop.Index, dragButton);
+				MouseDrag drag = new MouseDrag(m_startDragDrop.Index, m_endDragDrop.Index, m_dragButton);
 				ExecuteDragCommand(drag);
 			}
 
-			Destroy(dragGraphic.gameObject);
-			dragButton = MouseButton.None;
+			m_dragButton = MouseButton.None;
 		}
 
 		/// <summary>
@@ -222,17 +207,15 @@ namespace DeepSpace.Controllers
 			switch (drag.Button)
 			{
 				case MouseButton.Left:
-					InventoryManager.Instance.MoveItemStackTo(startDragDrop.Inventory, drag.Start, endDragDrop.Inventory, drag.End);
+					InventoryManager.Instance.MoveItemStackTo(m_startDragDrop.Inventory, drag.Start, m_endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Right:
-					InventoryManager.Instance.SplitItemStackAtTo(startDragDrop.Inventory, drag.Start, 0.5F, endDragDrop.Inventory, drag.End);
+					InventoryManager.Instance.SplitItemStackAtTo(m_startDragDrop.Inventory, drag.Start, 0.5F, m_endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Unknown:
 					Debug.LogError("Player is attempting to make a mouse drag with a button that couldn't be identified!");
 					return;
 			}
-
-			InventoryManager.Instance.UpdateItemStackGraphicsForPlayersInSolarSystem(Character.SolarSystem);
 		}
 	}
 }

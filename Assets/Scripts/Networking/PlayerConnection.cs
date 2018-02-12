@@ -15,8 +15,8 @@ namespace DeepSpace.Networking
 
 			//TODO: Check to see if this is a new Player joining or an existing one.
 
-			SolarSystem ss = GalaxyManager.Instance.Galaxy.SolarSystems[0];
-			PlayerManager.Instance.OnNewPlayerConnect(this, "Sam", ss);
+			var solarSystem = GalaxyManager.Instance.Galaxy.SolarSystems[0] as SolarSystem;
+			PlayerManager.Instance.OnNewPlayerConnect(this, "Sam", solarSystem);
 		}
 	}
 }

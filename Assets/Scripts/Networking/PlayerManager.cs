@@ -46,10 +46,10 @@ namespace DeepSpace.Networking
 			Player p = new Player(name, 37331, new Vector3D(10, 0, 8), Quaternion.identity, view);
 			AddPlayerToManager(p, ss);
 
+			view.OnSolarSystemChange();
+
 			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Wood, Random.Range(1, 51)), new Vector2I(0, 2));
 			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Stone, Random.Range(1, 51)), new Vector2I(3, 1));
-
-			view.OnSolarSystemChange();
 		}
 
 		public void AddPlayerToManager(Player p, SolarSystem ss)

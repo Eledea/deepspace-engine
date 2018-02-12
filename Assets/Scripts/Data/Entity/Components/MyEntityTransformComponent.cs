@@ -9,14 +9,16 @@ namespace DeepSpace
 	/// </summary>
 	public class MyEntityTransformComponent : MyEntityComponentBase
 	{
-		public MyEntityTransformComponent(Vector3D velocity, Vector3D position, Quaternion rotation)
-		{
-			Velocity = velocity;
-			Position = position;
-			Rotation = rotation;
-		}
+		public Entity Entity { get; private set; }
 
-		//TODO: Introduce a callback system to PlayerManager to maintain component seperation from Networking.
+		public MyEntityTransformComponent(Entity e, Vector3D velocity, Vector3D position, Quaternion rotation)
+		{
+			Entity = e;
+
+			m_velocity = velocity;
+			m_position = position;
+			m_rotation = rotation;
+		}
 
 		public event Action<Entity> OnTransformComponentUpdate;
 
@@ -47,6 +49,7 @@ namespace DeepSpace
 					return;
 
 				m_position = value;
+				OnTransformComponentUpdate(Entity);
 			}
 		}
 
@@ -59,6 +62,7 @@ namespace DeepSpace
 					return;
 
 				m_rotation = value;
+				OnTransformComponentUpdate(Entity);
 			}
 		}
 	}

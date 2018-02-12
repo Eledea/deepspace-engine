@@ -1,4 +1,5 @@
 using DeepSpace.Core;
+using System;
 
 namespace DeepSpace
 {
@@ -7,37 +8,35 @@ namespace DeepSpace
 	/// </summary>
 	public class MyEntityInventoryComponent : MyEntityComponentBase
 	{
-		//TODO: Needs refactoring for new Entity component system.
+		public Entity Entity { get; private set; }
 
-		public MyEntityInventoryComponent(int size_x, int size_y)
+		public MyEntityInventoryComponent(Entity e, int size_x, int size_y)
 		{
-			Inv = new ItemStack[size_x, size_y];
+			Entity = e;
+			Inventory = new ItemStack[size_x, size_y];
 		}
 
-		ItemStack[,] Inv;
+		private ItemStack[,] Inventory;
+		public event Action<Entity> OnInventoryComponentUpdate;
 
 		public int InvSize_x
 		{
-			get
-			{
-				return Inv.GetLength(0);
-			}
+			get { return Inventory.GetLength(0); }
 		}
 
 		public int InvSize_y
 		{
-			get
-			{
-				return Inv.GetLength(1);
-			}
+			get { return Inventory.GetLength(1); }
 		}
 
 		public void AddItemStackAt(ItemStack s, Vector2I index)
 		{
-			Inv [index.x, index.y] = s;
+			Inventory [index.x, index.y] = s;
 
 			s.Inv = this;
 			s.InventoryIndex = new Vector2I(index.x, index.y);
+
+			OnInventoryComponentUpdate(Entity);
 		}
 
 		public ItemStack RemoveItemStackFrom(Vector2I index)
@@ -47,11 +46,12 @@ namespace DeepSpace
 			if (s == null)
 				return null;
 
-			Inv [index.x, index.y] = null;
+			Inventory [index.x, index.y] = null;
 
 			s.Inv = null;
 			s.InventoryIndex = Vector2I.zero;
 
+			OnInventoryComponentUpdate(Entity);
 			return s;
 		}
 
@@ -67,16 +67,16 @@ namespace DeepSpace
 
 		public ItemStack GetItemStackAt(int x, int y)
 		{
-			if (Inv[x, y] != null)
-				return Inv[x, y];
+			if (Inventory[x, y] != null)
+				return Inventory[x, y];
 			else
 				return null;
 		}
 
 		public ItemStack GetItemStackAt(Vector2I index)
 		{
-			if (Inv[index.x, index.y] != null)
-				return Inv[index.x, index.y];
+			if (Inventory[index.x, index.y] != null)
+				return Inventory[index.x, index.y];
 			else
 				return null;
 		}
