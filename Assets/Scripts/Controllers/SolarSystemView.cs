@@ -4,95 +4,101 @@ using UnityEngine;
 
 namespace DeepSpace.Controllers
 {
+	[System.Serializable]
+	public struct EntityDefinition
+	{
+		public string Name;
+		public GameObject GO;
+	}
+
 	/// <summary>
-	/// The SolarSystenView class manages the spawning, rendering and removing of GameObjects representing Orbitals
-	/// and Entities for the SolarSystem that the Player is in.
+	/// Manages the drawing, updating and destruction of Entities as GameObjects.
 	/// </summary>
 	public class SolarSystemView : MonoBehaviour
 	{
-		//TODO: Serialise this.
-		public GameObject character;
-		public GameObject sphere;
-		public GameObject cube;
+		public EntityDefinition[] Objects;
 
 		public Character Character { get; set; }
 
-		GameObject characterGO;
+		Dictionary<Entity, GameObject> m_entityToGameObject;
+		Dictionary<GameObject, Entity> m_gameObjectToEntity;
 
-		Dictionary<Entity, GameObject> entityToGameObject;
-		Dictionary<GameObject, Entity> gameObjectToEntity;
+		public GameObject LocalCharacter { get; private set; }
 
-		Vector3D floatingOrigin;
+		Vector3D m_floatingOrigin;
 
-		double floatingRange;
-		double loadRange;
+		double m_floatingRange = 500;
+		double m_loadRange = 10000;
 
-		public void OnSolarSystemChange()
+		void Update()
 		{
-			if (entityToGameObject != null)
-			{
-				foreach (Entity e in Character.SolarSystem.EntitiesInSystem)
-					DestroyGameObjectForEntity(e);
-			}
-
-			entityToGameObject = new Dictionary<Entity, GameObject>();
-			gameObjectToEntity = new Dictionary<GameObject, Entity>();
-
-			floatingOrigin = Character.Transform.Position;
-
-			UpdateAllEntities(50, 100);
-
-			Debug.Log(string.Format("Loaded a new SolarSystem containing {0} Entity(s).", Character.SolarSystem.EntitiesInSystem.Length));
-		}
-
-		void LateUpdate()
-		{
-			if (characterGO != null)
-			{
-				if (characterGO.transform.position.magnitude > floatingRange)
-				{
-					floatingOrigin = Character.Transform.Position;
-					Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
-				}
-			}
-		}
-
-		public void UpdateAllEntities(double _floatingRange, double _loadRange)
-		{
-			floatingRange = _floatingRange;
-			loadRange = _loadRange;
-
-			if (Character.SolarSystem == null)
+			if (LocalCharacter == null)
 				return;
 
-			foreach (Entity e in Character.SolarSystem.EntitiesInSystem)
-				UpdateGameObjectForEntity(e);
+			if (LocalCharacter.transform.position.magnitude > m_floatingRange)
+			{
+				m_floatingOrigin = Character.Transform.Position;
+				Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
+
+				LocalCharacter.transform.position = (Character.Transform.Position - m_floatingOrigin).ToVector3();
+				UpdateAllEntitiesForSolarSystem();
+			}
 		}
 
 		public bool GameObjectForEntity(Entity e)
 		{
-			return entityToGameObject.ContainsKey(e);
+			return m_entityToGameObject.ContainsKey(e);
 		}
 
 		public Entity GameObjectToEntity(GameObject go)
 		{
-			return gameObjectToEntity[go];
+			return m_gameObjectToEntity[go];
 		}
 
 		public GameObject EntityToGameObject(Entity e)
 		{
-			return entityToGameObject[e];
+			return m_entityToGameObject[e];
+		}
+
+		public void OnLocalCharacterSpawned()
+		{
+			while (transform.childCount > 0)
+			{
+				Transform child = transform.GetChild(0);
+				child.SetParent(null);
+				Destroy(child.gameObject);
+			}
+
+			m_entityToGameObject = new Dictionary<Entity, GameObject>();
+			m_gameObjectToEntity = new Dictionary<GameObject, Entity>();
+
+			m_floatingOrigin = Character.Transform.Position;
+
+			LocalCharacter = DrawGameObjectForEntity(Character) as GameObject;
+			Character.Controllers = new InputOutput(LocalCharacter, Character);
+
+			UpdateAllEntitiesForSolarSystem();
+			Debug.Log(string.Format("Loaded a new SolarSystem with {0} Entity(s).", Character.SolarSystem.EntitiesInSystem.Length));
+		}
+
+		private void UpdateAllEntitiesForSolarSystem()
+		{
+			foreach (Entity e in Character.SolarSystem.EntitiesInSystem)
+				UpdateGameObjectForEntity(e);
 		}
 
 		public void UpdateGameObjectForEntity(Entity e)
 		{
-			if ((Vector3D.Distance(e.Transform.Position, e.Transform.Position)) < loadRange)
+			if (e.EntityId == Character.EntityId)
+				return;
+
+			if ((Vector3D.Distance(Character.Transform.Position, e.Transform.Position)) < m_loadRange)
 			{
 				if (GameObjectForEntity(e) == false)
-					SpawnGameObjectForEntity(e);
+					DrawGameObjectForEntity(e);
 
 				GameObject myGO = EntityToGameObject(e);
-				myGO.transform.position = (e.Transform.Position - floatingOrigin).ToVector3();
+				myGO.transform.position = (e.Transform.Position - m_floatingOrigin).ToVector3();
 				myGO.transform.rotation = e.Transform.Rotation;
 			}
 			else
@@ -102,45 +108,39 @@ namespace DeepSpace.Controllers
 			}
 		}
 
-		void SpawnGameObjectForEntity(Entity e)
+		private GameObject DrawGameObjectForEntity(Entity e)
 		{
 			GameObject go;
 
 			if (e.EntityId == Character.EntityId)
-				go = SpawnLocalCharacter((Character)e);
-			else if (e is Orbital)
-				go = Instantiate(sphere);
+				go = Instantiate(Objects[0].GO) as GameObject;
 			else if (e is Character)
-				go = SpawnLocalCharacter((Character)e);
+				go = Instantiate(Objects[1].GO) as GameObject;
+			else if (e is Orbital)
+				go = Instantiate(Objects[2].GO) as GameObject;
 			else
-				go = Instantiate(cube);
+				go = Instantiate(Objects[3].GO) as GameObject;
 
-			go.transform.parent = this.transform;
+			go.transform.SetParent(this.transform);
 			go.name = e.Name;
 
-			entityToGameObject[e] = go;
-			gameObjectToEntity[go] = e;
-		}
-
-		private GameObject SpawnLocalCharacter(Character c)
-		{
-			var go = Instantiate(character) as GameObject;
-			c.Controllers = new InputOutput(go, c);
+			m_entityToGameObject[e] = go;
+			m_gameObjectToEntity[go] = e;
 
 			return go;
 		}
 
-		void DestroyGameObjectForEntity(Entity e)
+		private void DestroyGameObjectForEntity(Entity e)
 		{
 			if (GameObjectForEntity(e) == false)
 				return;
 
 			GameObject go;
 
-			if (e is Character)
+			if (e.EntityId == Character.EntityId)
 			{
-				go = characterGO;
-				characterGO = null;
+				go = LocalCharacter;
+				LocalCharacter = null;
 			}
 			else
 			{
@@ -149,8 +149,8 @@ namespace DeepSpace.Controllers
 
 			Destroy(go);
 
-			gameObjectToEntity.Remove(go);
-			entityToGameObject.Remove(e);
+			m_gameObjectToEntity.Remove(go);
+			m_entityToGameObject.Remove(e);
 		}
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 namespace DeepSpace.Networking
 {
 	/// <summary>
-	/// Server side class that manages data based operations for the Galaxy we are currently in.
+	/// Server side class that manages data based operations for the Galaxy we have loaded.
 	/// </summary>
 	public class GalaxyManager : NetworkBehaviour
 	{
@@ -14,7 +14,7 @@ namespace DeepSpace.Networking
 		{
 			Instance = this;
 
-			NewGalaxy("Testworld");
+			OnNewGalaxyCreated("Testworld");
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace DeepSpace.Networking
 		/// <summary>
 		/// Generates a new galaxy with filename.
 		/// </summary>
-		public void NewGalaxy(string fileName)
+		public void OnNewGalaxyCreated(string fileName)
 		{
 			this.Galaxy = new Galaxy();
 
@@ -35,7 +35,7 @@ namespace DeepSpace.Networking
 		/// <summary>
 		/// Loads a galaxy from file with filename.
 		/// </summary>
-		public void LoadGalaxy(string fileName)
+		public void OnGalaxyLoaded(string fileName)
 		{
 			if (Galaxy != null)
 			{
@@ -44,10 +44,20 @@ namespace DeepSpace.Networking
 			}
 		}
 
+		float m_advanceTimeTimer = 1f;
+
 		void Update()
 		{
 			if (Galaxy != null)
-				Galaxy.AdvanceTime();
+			{
+				m_advanceTimeTimer -= Time.deltaTime;
+
+				if (m_advanceTimeTimer < 0)
+				{
+					Galaxy.AdvanceTime();
+					m_advanceTimeTimer = 0f;
+				}
+			}
 		}
 	}
 }

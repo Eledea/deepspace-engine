@@ -15,7 +15,8 @@ namespace DeepSpace.Controllers
 		public Character Character { get; set; }
 		public bool IsBuilding { get; private set; }
 
-		private GameObject m_preview;
+		float m_previewDistance = 3F;
+		GameObject m_preview;
 
 		void Update()
 		{
@@ -38,12 +39,16 @@ namespace DeepSpace.Controllers
 		{
 			if (IsBuilding)
 			{
+				m_previewDistance += Input.GetAxis("Mouse ScrollWheel") * 5F;
+				m_previewDistance = Mathf.Clamp(m_previewDistance, 1F, 8F);
+
 				Ray fromCamera = new Ray(Character.Controllers.Camera.transform.position, Character.Controllers.Camera.transform.forward);
-				ShowPreviewAt(fromCamera.GetPoint(5));
+				ShowPreviewAt(fromCamera.GetPoint(m_previewDistance));
 			}
 			else
 			{
 				Destroy(m_preview);
+				m_previewDistance = 3F;
 			}
 		}
 
@@ -51,11 +56,11 @@ namespace DeepSpace.Controllers
 		{
 			if (m_preview == null)
 			{
-				m_preview = Instantiate(PreviewObject);
+				m_preview = Instantiate(PreviewObject, position, Quaternion.identity);
 				m_preview.name = "Building Preview";
 			}
 
-			m_preview.transform.position = position;
+			m_preview.transform.position = Vector3.Lerp(m_preview.transform.position, position, Time.deltaTime * 10F);
 			m_preview.GetComponent<MeshRenderer>().material = PreviewMaterial;
 		}
 	}

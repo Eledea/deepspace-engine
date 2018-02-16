@@ -72,8 +72,8 @@ MonoBehaviour:
     i13: 137
     i14: 76
     i15: 67
-  m_ServerOnly: 1
-  m_LocalPlayerAuthority: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114185246765617342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,6 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3d6494853d9d046a32f92fb82aa63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 1167942811384792, guid: c40f7233c54757b409c5c24976e04536, type: 2}
-  sphere: {fileID: 1316545316231452, guid: 7acb28dd3697a074cbe0db023058deaa, type: 2}
-  cube: {fileID: 1366969380253264, guid: a1985c6411b285d4490754a9a1b3d837, type: 2}
+  Objects:
+  - Name: LocalCharacter
+    GO: {fileID: 1083334517023208, guid: 1599e903317f94944b8f7539b2ae6051, type: 2}
+  - Name: Character
+    GO: {fileID: 1167942811384792, guid: c40f7233c54757b409c5c24976e04536, type: 2}
+  - Name: Orbital
+    GO: {fileID: 1610489541373994, guid: b08d50ac8e0bb7e4c89dcacc45359d25, type: 2}
+  - Name: Entity
+    GO: {fileID: 1765080728381664, guid: 74e930ad96fc89b44bd7ea2a6e9c0d20, type: 2}

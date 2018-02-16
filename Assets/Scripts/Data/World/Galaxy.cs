@@ -14,8 +14,8 @@ namespace DeepSpace
 			SolarSystems = new List<SolarSystem>();
 		}
 
-		public UInt64 timeSinceStart;
-		public List<SolarSystem> SolarSystems;
+		public UInt64 timeSinceStart { get; private set; }
+		public List<SolarSystem> SolarSystems { get; private set; }
 
 		/// <summary>
 		/// Generate a new galaxy with number of solar systems.
@@ -31,26 +31,12 @@ namespace DeepSpace
 			}
 		}
 
-		float m_advanceTimeTimer = 1f;
-
-		/// <summary>
-		/// Updates the time timer.
-		/// </summary>
-		public void UpdateTime()
-		{
-			m_advanceTimeTimer -= Time.deltaTime;
-
-			if (m_advanceTimeTimer < 0)
-				AdvanceTime();
-		}
-
 		/// <summary>
 		/// Advances the time in this Galaxy by 1 second.
 		/// </summary>
 		public void AdvanceTime()
 		{
 			timeSinceStart += 1;
-			m_advanceTimeTimer = 0f;
 		}
 	}
 }

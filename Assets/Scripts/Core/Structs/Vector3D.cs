@@ -17,7 +17,7 @@ namespace DeepSpace.Core
 		public double y;
 		public double z;
 
-		//Properties.
+		//Properties
 		public static Vector3D back = new Vector3D(0, 0, -1);
 		public static Vector3D down = new Vector3D (0, -1, 0);
 		public static Vector3D forward = new Vector3D (0, 0, 1);
@@ -60,9 +60,9 @@ namespace DeepSpace.Core
 			return false;
 		}
 
-		public static Vector3D Clamp(Vector3D value, Vector3D min, Vector3D max)
+		public static Vector3D Clamp(Vector3D value, float min, float max)
 		{
-			return new Vector3D(Utility.ClampD(value.x, min.x, max.x), Utility.ClampD(value.y, min.y, max.y), Utility.ClampD(value.z, min.z, max.z));
+			return new Vector3D(Utility.ClampD(value.x, min, max), Utility.ClampD(value.y, min, max), Utility.ClampD(value.z, min, max));
 		}
 
 		public static double Distance(Vector3D a, Vector3D b)

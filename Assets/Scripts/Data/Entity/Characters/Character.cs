@@ -16,7 +16,7 @@ namespace DeepSpace
 			Name = name;
 			EntityId = id;
 
-			Transform = new MyEntityTransformComponent(this, Vector3D.zero, position, rotation);
+			Transform = new MyEntityTransformComponent(this, position, rotation);
 			Inventory = new MyEntityInventoryComponent(this, 4, 4);
 		}
 
@@ -26,6 +26,9 @@ namespace DeepSpace
 		{
 			get
 			{
+				if (m_player.IsSpawned == false)
+					return false;
+
 				return Controllers.OverlayController.ShowingOverlay == false;
 			}
 		}

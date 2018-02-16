@@ -11,34 +11,18 @@ namespace DeepSpace
 	{
 		public Entity Entity { get; private set; }
 
-		public MyEntityTransformComponent(Entity e, Vector3D velocity, Vector3D position, Quaternion rotation)
+		public MyEntityTransformComponent(Entity e, Vector3D position, Quaternion rotation)
 		{
 			Entity = e;
 
-			m_velocity = velocity;
 			m_position = position;
 			m_rotation = rotation;
 		}
 
+		//Call this when this Transform component changes.
 		public event Action<Entity> OnTransformComponentUpdate;
 
-		Vector3D m_velocity;
 		Vector3D m_position;
-
-		//TODO: Implement our own Quaternion struct instead of using the Unity one.
-
-		Quaternion m_rotation;
-
-		public Vector3D Velocity
-		{
-			get { return m_velocity; }
-			set
-			{
-				m_velocity = value;
-				Position += m_velocity * Time.deltaTime;
-			}
-		}
-
 		public Vector3D Position
 		{
 			get { return m_position; }
@@ -52,6 +36,8 @@ namespace DeepSpace
 			}
 		}
 
+		//TODO: Implement our own Quaternion struct instead of using the Unity one.
+		Quaternion m_rotation;
 		public Quaternion Rotation
 		{
 			get { return m_rotation; }

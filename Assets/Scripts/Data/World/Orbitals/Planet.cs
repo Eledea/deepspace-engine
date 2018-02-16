@@ -14,7 +14,7 @@ namespace DeepSpace
 			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = (ulong)(50000 * (i + 1));
 
-			Transform = new MyEntityTransformComponent(this, Vector3D.zero, OrbitalPosition, Quaternion.identity);
+			Transform = new MyEntityTransformComponent(this, OrbitalPosition, Quaternion.identity);
 
 			int numMoons = UnityEngine.Random.Range(0, maxMoons + 1);
 

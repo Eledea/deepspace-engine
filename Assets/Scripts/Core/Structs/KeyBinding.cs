@@ -3,7 +3,7 @@
 namespace DeepSpace.Core
 {
 	/// <summary>
-	/// The KeyBinding struct defines a KeyBinding with a positive and negative magnitude.
+	/// Defines a KeyBinding with a positive and negative magnitude.
 	/// </summary>
 	public struct KeyBinding
 	{

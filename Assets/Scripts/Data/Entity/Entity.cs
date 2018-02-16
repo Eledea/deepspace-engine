@@ -18,12 +18,13 @@ namespace DeepSpace
 		//TODO: Use this for Serialisation later.
 		public MyEntityComponentPacakage Components { get; private set; }
 
-		private long m_entityId;
+		long m_entityId;
 		public long EntityId
 		{
 			get { return m_entityId; }
 			protected set
 			{
+				//Why are we trying to assign a new ID to an Entity that already has one?
 				if (m_entityId != 0)
 					return;
 
@@ -46,7 +47,7 @@ namespace DeepSpace
 				Components.AddComponentToPackage(value);
 
 				m_transformComponent = value;
-				m_transformComponent.OnTransformComponentUpdate += ((e) => { PlayerManager.Instance.UpdateEntityForPlayersInSystem(this); });
+				m_transformComponent.OnTransformComponentUpdate += ((e) => { PlayerManager.Instance.OnEntityTransformComponentUpdate(this); });
 			}
 		}
 
@@ -64,7 +65,7 @@ namespace DeepSpace
 				Components.AddComponentToPackage(value);
 
 				m_inventoryComponent = value;
-				m_inventoryComponent.OnInventoryComponentUpdate += ((e) => { InventoryManager.Instance.UpdateInventoriesForPlayersInSystem(this); });
+				m_inventoryComponent.OnInventoryComponentUpdate += ((e) => { InventoryManager.Instance.OnEntityInventoryComponentUpdated(this); });
 			}
 		}
 	}

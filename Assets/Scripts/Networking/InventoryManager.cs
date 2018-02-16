@@ -17,7 +17,7 @@ namespace DeepSpace.Networking
 			Instance = this;
 		}
 
-		public ItemStack SpawnNewItemStack(IType type, int numItems)
+		public ItemStack OnItemStackCreated(IType type, int numItems)
 		{
 			//TODO: Implement new Item system.
 
@@ -27,7 +27,7 @@ namespace DeepSpace.Networking
 			return s;
 		}
 
-		public void MoveItemStackTo(MyEntityInventoryComponent inv, Vector2I index, MyEntityInventoryComponent newInv, Vector2I newIndex)
+		public void OnItemStackMoved(MyEntityInventoryComponent inv, Vector2I index, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
 			if (inv.IsItemStackAt(index) == false || (inv == newInv && index == newIndex))
 				return;
@@ -46,19 +46,19 @@ namespace DeepSpace.Networking
 				inv.AddItemStackAt(s2, index);
 		}
 
-		public void SplitItemStackAtTo(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
+		public void OnItemStackSplit(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
 			ItemStack s1 = inv.GetItemStackAt(index);
 			ItemStack s2 = newInv.GetItemStackAt(newIndex);
 
 			if (s1.NumItems == 1)
 			{
-				MoveItemStackTo(inv, index, newInv, newIndex);
+				OnItemStackMoved(inv, index, newInv, newIndex);
 				return;
 			}
 
 			if (s2 == null)
-				s2 = SpawnNewItemStack(s1.Type, 0);
+				s2 = OnItemStackCreated(s1.Type, 0);
 
 			if (CanMoveToItemStack(s1, s2))
 				MoveItemsToStack(s1, s2, Mathf.FloorToInt(s1.NumItems * percentage));
@@ -91,16 +91,13 @@ namespace DeepSpace.Networking
 			return s1.Type == s2.Type;
 		}
 
-		public void UpdateInventoriesForPlayersInSystem(Entity e)
+		public void OnEntityInventoryComponentUpdated(Entity e)
 		{
 			foreach (Player p in e.SolarSystem.PlayersInSystem)
-				UpdateInventoryForPlayer(p);
-		}
-
-		public void UpdateInventoryForPlayer(Player p)
-		{
-			if (p.Character.IsUsingInventorySystem)
-				p.Character.Controllers.OverlayController.OnInventoryUpdate();
+			{
+				if (p.Character.IsUsingInventorySystem)
+					p.Character.Controllers.OverlayController.OnInventoryUpdate();
+			}
 		}
 	}
 }

@@ -198,10 +198,10 @@ namespace DeepSpace.Controllers
 			switch (drag.Button)
 			{
 				case MouseButton.Left:
-					InventoryManager.Instance.MoveItemStackTo(m_startDragDrop.Inventory, drag.Start, m_endDragDrop.Inventory, drag.End);
+					InventoryManager.Instance.OnItemStackMoved(m_startDragDrop.Inventory, drag.Start, m_endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Right:
-					InventoryManager.Instance.SplitItemStackAtTo(m_startDragDrop.Inventory, drag.Start, 0.5F, m_endDragDrop.Inventory, drag.End);
+					InventoryManager.Instance.OnItemStackSplit(m_startDragDrop.Inventory, drag.Start, 0.5F, m_endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Unknown:
 					Debug.LogError("Player is attempting to make a mouse drag with a button that couldn't be identified!");

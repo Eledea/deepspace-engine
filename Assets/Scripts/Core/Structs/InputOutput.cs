@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace.Core
 {
 	/// <summary>
-	/// Holds the Controller Data for a Character when it is spawned.
+	/// Setups and contains the Controller Data for a spawned Character.
 	/// </summary>
 	public struct InputOutput
 	{
@@ -20,9 +20,9 @@ namespace DeepSpace.Core
 			Camera = go.GetComponentInChildren<Camera>();
 		}
 
-		public EntityController EntityController { get; private set; }
-		public OverlayController OverlayController { get; private set; }
-		public BuildController BuildController { get; private set; }
-		public Camera Camera { get; private set; }
+		public readonly EntityController EntityController;
+		public readonly OverlayController OverlayController;
+		public readonly BuildController BuildController;
+		public readonly Camera Camera;
 	}
 }

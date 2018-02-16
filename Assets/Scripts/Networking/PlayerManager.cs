@@ -44,22 +44,17 @@ namespace DeepSpace.Networking
 			SolarSystemView view = c.gameObject.GetComponent<SolarSystemView>();
 
 			Player p = new Player(name, 37331, new Vector3D(10, 0, 8), Quaternion.identity, view);
-			AddPlayerToManager(p, ss);
 
-			view.OnSolarSystemChange();
-
-			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Wood, Random.Range(1, 51)), new Vector2I(0, 2));
-			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.SpawnNewItemStack(IType.Stone, Random.Range(1, 51)), new Vector2I(3, 1));
-		}
-
-		public void AddPlayerToManager(Player p, SolarSystem ss)
-		{
 			m_players.Add(p);
+			OnPlayerSolarSystemChanged(p, ss);
 
-			MovePlayerToSolarSystem(p, ss);
+			view.OnLocalCharacterSpawned();
+
+			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.OnItemStackCreated(IType.Wood, Random.Range(1, 51)), new Vector2I(0, 2));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.OnItemStackCreated(IType.Stone, Random.Range(1, 51)), new Vector2I(3, 1));
 		}
 
-		public void UpdateEntityForPlayersInSystem(Entity e)
+		public void OnEntityTransformComponentUpdate(Entity e)
 		{
 			if (e.SolarSystem == null)
 				return;
@@ -70,14 +65,9 @@ namespace DeepSpace.Networking
 				p.View.UpdateGameObjectForEntity(e);
 		}
 
-		public void MovePlayerToSolarSystem(Player p, SolarSystem ss)
+		public void OnPlayerSolarSystemChanged(Player p, SolarSystem ss)
 		{
 			ss.AddPlayerToSolarSystem(p);
-		}
-
-		public void RemovePlayerFromManager(Player p)
-		{
-			m_players.Remove(p);
 		}
 	}
 }

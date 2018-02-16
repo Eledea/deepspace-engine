@@ -17,11 +17,23 @@ namespace DeepSpace
 			m_solarSystemView.Character = m_character;
 		}
 
-		Character m_character;
-
-		public Character Character
+		public bool IsOnline
 		{
-			get { return m_character; }
+			get
+			{
+				return m_solarSystemView;
+			}
+		}
+
+		public bool IsSpawned
+		{
+			get
+			{
+				if (IsOnline == false)
+					return false;
+
+				return m_solarSystemView.GetComponent<SolarSystemView>().LocalCharacter;
+			}
 		}
 
 		SolarSystemView m_solarSystemView;
@@ -29,6 +41,13 @@ namespace DeepSpace
 		public SolarSystemView View
 		{
 			get { return m_solarSystemView; }
+		}
+
+		Character m_character;
+
+		public Character Character
+		{
+			get { return m_character; }
 		}
 	}
 }

@@ -3,7 +3,7 @@
 namespace DeepSpace.Core
 {
 	/// <summary> 
-	/// Contains functions for carrying out general utility tasks.
+	/// Contains functions for carrying out general Utility tasks.
 	/// </summary>
 	public sealed class Utility
 	{
@@ -32,7 +32,7 @@ namespace DeepSpace.Core
 		}
 
 		/// <summary>
-		/// Returns 1 if true, 0 is false.
+		/// Returns 0 if false, 1 is true.
 		/// </summary>
 		public static int BoolToInt(bool b)
 		{

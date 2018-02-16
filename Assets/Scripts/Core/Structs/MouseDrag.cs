@@ -18,28 +18,12 @@
 	public struct MouseDrag
 	{
 		//Constructors
-		public MouseDrag(Vector2I start, Vector2I end, MouseButton button) { m_startIndex = start; m_endIndex = end; m_button = button; }
-		public MouseDrag(int start_x, int start_y, int end_x, int end_y, MouseButton button) { m_startIndex = new Vector2I(start_x, start_y); m_endIndex = new Vector2I(end_x, end_y); m_button = button; }
-
-		//Fields
-		Vector2I m_startIndex;
-		Vector2I m_endIndex;
-		MouseButton m_button;
+		public MouseDrag(Vector2I start, Vector2I end, MouseButton button) { Start = start; End = end; Button = button; }
+		public MouseDrag(int start_x, int start_y, int end_x, int end_y, MouseButton button) { Start = new Vector2I(start_x, start_y); End = new Vector2I(end_x, end_y); Button = button; }
 
 		//Properties
-		public Vector2I Start
-		{
-			get { return m_startIndex; }
-		}
-
-		public Vector2I End
-		{
-			get { return m_endIndex; }
-		}
-
-		internal MouseButton Button
-		{
-			get { return m_button; }
-		}
+		public Vector2I Start { get; private set; }
+		public Vector2I End { get; private set; }
+		public MouseButton Button { get; private set; }
 	}
 }
