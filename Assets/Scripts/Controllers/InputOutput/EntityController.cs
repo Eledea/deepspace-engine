@@ -62,6 +62,14 @@ namespace DeepSpace.Controllers
 			{
 				float dirInput = dirBindings[dir].Magnitude;
 
+				//Did we receive an input from this axis this frame?
+				if (dirInput == 0)
+				{
+					//If not, then factor in any deceleration we need to apply.
+					//What is the Velocity of this Entity in this direction?
+					//Take the magnitude of this Velocity and clamp it between a range of 0 and 1.
+				}
+
 				acceleration += BaseDirections.VectorInDirection(transform.rotation, dir) * dirInput; i++;
 			}
 

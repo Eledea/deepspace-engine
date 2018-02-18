@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114917125283403752}
   - component: {fileID: 222202547735656512}
   - component: {fileID: 114908387268506580}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: InventorySlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bcf1b9ddc83a2e4d9ce97f268db6d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: {x: 0, y: 0}
+  myController: {fileID: 0}
 --- !u!222 &222202547735656512
 CanvasRenderer:
   m_ObjectHideFlags: 1

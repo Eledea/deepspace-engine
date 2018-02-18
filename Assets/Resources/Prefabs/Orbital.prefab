@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33028975048924758}
   - component: {fileID: 135895117181551272}
   - component: {fileID: 23656385483600008}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Orbital
   m_TagString: Untagged
   m_Icon: {fileID: 0}

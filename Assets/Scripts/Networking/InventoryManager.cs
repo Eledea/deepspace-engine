@@ -17,12 +17,12 @@ namespace DeepSpace.Networking
 			Instance = this;
 		}
 
-		public ItemStack OnItemStackCreated(IType type, int numItems)
+		public Stack OnItemStackCreated(IType type, int numItems)
 		{
 			//TODO: Implement new Item system.
 
 			var t = Type.GetType(string.Format("DeepSpace.{0}", type.ToString()));
-			ItemStack s = Activator.CreateInstance(t, numItems) as ItemStack;
+			Stack s = Activator.CreateInstance(t, numItems) as Stack;
 
 			return s;
 		}
@@ -32,8 +32,8 @@ namespace DeepSpace.Networking
 			if (inv.IsItemStackAt(index) == false || (inv == newInv && index == newIndex))
 				return;
 
-			ItemStack s1 = inv.RemoveItemStackFrom(index);
-			ItemStack s2 = newInv.RemoveItemStackFrom(newIndex);
+			Stack s1 = inv.RemoveItemStackFrom(index);
+			Stack s2 = newInv.RemoveItemStackFrom(newIndex);
 
 			if (CanMergeItemStacks(s1, s2, 1f))
 				MoveItemsToStack(s2, s1, s2.NumItems);
@@ -48,8 +48,8 @@ namespace DeepSpace.Networking
 
 		public void OnItemStackSplit(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
-			ItemStack s1 = inv.GetItemStackAt(index);
-			ItemStack s2 = newInv.GetItemStackAt(newIndex);
+			Stack s1 = inv.GetItemStackAt(index);
+			Stack s2 = newInv.GetItemStackAt(newIndex);
 
 			if (s1.NumItems == 1)
 			{
@@ -69,13 +69,13 @@ namespace DeepSpace.Networking
 				newInv.AddItemStackAt(s2, newIndex);
 		}
 
-		void MoveItemsToStack(ItemStack s1, ItemStack s2, int n)
+		void MoveItemsToStack(Stack s1, Stack s2, int n)
 		{
 			s1.RemoveItems(n);
 			s2.AddItems(n);
 		}
 
-		bool CanMergeItemStacks(ItemStack s1, ItemStack s2, float percentage)
+		bool CanMergeItemStacks(Stack s1, Stack s2, float percentage)
 		{
 			if (s1 == null || s2 == null)
 				return false;
@@ -83,7 +83,7 @@ namespace DeepSpace.Networking
 			return s1.Type == s2.Type && s2.ItemAddability >= (s1.NumItems * percentage);
 		}
 
-		bool CanMoveToItemStack(ItemStack s1, ItemStack s2)
+		bool CanMoveToItemStack(Stack s1, Stack s2)
 		{
 			if (s1 == null || s2 == null)
 				return false;
@@ -93,6 +93,8 @@ namespace DeepSpace.Networking
 
 		public void OnEntityInventoryComponentUpdated(Entity e)
 		{
+			//TODO: Avoid pointer chasing here. Use C# job system?
+
 			foreach (Player p in e.SolarSystem.PlayersInSystem)
 			{
 				if (p.Character.IsUsingInventorySystem)

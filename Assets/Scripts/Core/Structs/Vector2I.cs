@@ -23,7 +23,7 @@
 		//Methods
 		public override int GetHashCode()
 		{
-			return ((byte)x << 16) | ((byte)y << 8);
+			return ((byte)x << 16) | ((byte)y << 16);
 		}
 
 		public override bool Equals(object obj)

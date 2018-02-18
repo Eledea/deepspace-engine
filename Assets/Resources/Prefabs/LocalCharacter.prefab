@@ -20,8 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4547727117834136}
   - component: {fileID: 114721146520102520}
-  - component: {fileID: 114219442818251224}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LocalCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +38,7 @@ GameObject:
   - component: {fileID: 33058358439533212}
   - component: {fileID: 136149971699335122}
   - component: {fileID: 23027282863478156}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +57,7 @@ GameObject:
   - component: {fileID: 114657639676023540}
   - component: {fileID: 114057218877120094}
   - component: {fileID: 114989558642613058}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +73,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4490126433087612}
   - component: {fileID: 20341615503138440}
-  m_Layer: 0
+  - component: {fileID: 114544395066592352}
+  m_Layer: 8
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,12 +215,12 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114219442818251224
+--- !u!114 &114544395066592352
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1083334517023208}
+  m_GameObject: {fileID: 1468795692115372}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff6595d5f6da8fb4a9209c87d444ce80, type: 3}
@@ -228,7 +228,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PreviewObject: {fileID: 1765080728381664, guid: 74e930ad96fc89b44bd7ea2a6e9c0d20,
     type: 2}
-  PreviewMaterial: {fileID: 2100000, guid: 8fa8a0de3b2df1141b1bb68392de03b4, type: 2}
+  PreviewMaterials:
+  - Name: OK
+    Material: {fileID: 2100000, guid: 8fa8a0de3b2df1141b1bb68392de03b4, type: 2}
+  - Name: FAIL
+    Material: {fileID: 2100000, guid: 5e24fd779420d3a43a77e4f3220939a4, type: 2}
 --- !u!114 &114657639676023540
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -272,7 +276,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b132c4f62f8c9224ca99ae3e8be6ab0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interfaces:
+  EntityLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  Interfaces:
   - {fileID: 1874577171245302, guid: 151ad761489c76a4fa673af5017e8f26, type: 2}
   - {fileID: 1384236002794270, guid: 3aeebd4c1abf0bb4ab40b9a36a3c5cf5, type: 2}
   - {fileID: 1880470963982012, guid: bbaa8ab904bbaa94293d71569af035a2, type: 2}
@@ -280,7 +287,7 @@ MonoBehaviour:
   Sprites:
   - {fileID: 21300000, guid: 3a8f297de3da4dc459fca9b06b111d42, type: 3}
   - {fileID: 21300000, guid: 8244f224d518ea941aba5bcfffad7c1d, type: 3}
-  graphicSize: 50
+  GraphicSize: 50
 --- !u!136 &136149971699335122
 CapsuleCollider:
   m_ObjectHideFlags: 1

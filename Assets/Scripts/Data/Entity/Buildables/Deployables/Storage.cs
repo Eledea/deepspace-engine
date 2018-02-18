@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace
 {
 	/// <summary>
-	/// The Storage class defines a Storage on a Grid.
+	/// Defines a Storage and it's components.
 	/// </summary>
 	public class Storage : Deployable
 	{

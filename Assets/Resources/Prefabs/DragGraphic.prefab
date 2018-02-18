@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224829171767306244}
   - component: {fileID: 222064168321843046}
-  m_Layer: 11
+  m_Layer: 5
   m_Name: DragGraphic
   m_TagString: Untagged
   m_Icon: {fileID: 0}

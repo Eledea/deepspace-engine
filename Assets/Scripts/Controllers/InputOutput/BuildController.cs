@@ -1,8 +1,16 @@
 ﻿using DeepSpace.Core;
+using DeepSpace.Networking;
 using UnityEngine;
 
 namespace DeepSpace.Controllers
 {
+	[System.Serializable]
+	public struct BuildCheckMaterialDefinition
+	{
+		public string Name;
+		public Material Material;
+	}
+
 	/// <summary>
 	/// The BuildController allows Players to use the DeepSpace Building system.
 	/// </summary>
@@ -10,28 +18,38 @@ namespace DeepSpace.Controllers
 	{
 		//TODO: Needs to be serialised later.
 		public GameObject PreviewObject;
-		public Material PreviewMaterial;
+		public BuildCheckMaterialDefinition[] PreviewMaterials;
 
 		public Character Character { get; set; }
 		public bool IsBuilding { get; private set; }
 
-		float m_previewDistance = 3F;
+		private Direction m_previewOrientation = Direction.Forward;
+		private float m_previewDistance = 3F;
+		private Quaternion m_previewRotation; 
+
 		GameObject m_preview;
+		BuildCheckResult m_result;
 
 		void Update()
 		{
 			Update_ModeController();
 			Update_BuildingPreview();
+
+			if (IsBuilding)
+				Update_BuildingController();
 		}
 
 		void Update_ModeController()
 		{
 			if (Input.GetKeyDown(KeyCode.B))
 			{
-				if (IsBuilding)
-					IsBuilding = false;
-				else
-					IsBuilding = true;
+				if (Character.IsUsingInventorySystem == false)
+				{
+					if (IsBuilding)
+						IsBuilding = false;
+					else
+						IsBuilding = true;
+				}
 			}
 		}
 
@@ -40,10 +58,21 @@ namespace DeepSpace.Controllers
 			if (IsBuilding)
 			{
 				m_previewDistance += Input.GetAxis("Mouse ScrollWheel") * 5F;
-				m_previewDistance = Mathf.Clamp(m_previewDistance, 1F, 8F);
+				m_previewDistance = Mathf.Clamp(m_previewDistance, 2F, 8F);
 
-				Ray fromCamera = new Ray(Character.Controllers.Camera.transform.position, Character.Controllers.Camera.transform.forward);
-				ShowPreviewAt(fromCamera.GetPoint(m_previewDistance));
+				if (Input.GetKeyDown(KeyCode.RightBracket))
+				{
+					m_previewOrientation = BaseDirections.GetNextDirection(m_previewOrientation);
+					m_previewRotation = BaseDirections.GetRotation(m_previewOrientation);
+				}
+				if (Input.GetKeyDown(KeyCode.LeftBracket))
+				{
+					m_previewOrientation = BaseDirections.GetPrevDirection(m_previewOrientation);
+					m_previewRotation = BaseDirections.GetRotation(m_previewOrientation);
+				}
+
+				Ray fromCamera = new Ray(transform.position, transform.forward);
+				ShowPreviewAt(fromCamera.GetPoint(m_previewDistance), m_previewRotation);
 			}
 			else
 			{
@@ -52,16 +81,47 @@ namespace DeepSpace.Controllers
 			}
 		}
 
-		private void ShowPreviewAt(Vector3 position)
+		private void ShowPreviewAt(Vector3 position, Quaternion rotation)
 		{
 			if (m_preview == null)
 			{
-				m_preview = Instantiate(PreviewObject, position, Quaternion.identity);
+				m_preview = Instantiate(PreviewObject, position, rotation);
 				m_preview.name = "Building Preview";
+				m_preview.GetComponent<Collider>().isTrigger = true;
+				m_preview.GetComponent<Renderer>().material = PreviewMaterials[0].Material;
+				m_preview.AddComponent<Rigidbody>().isKinematic = true;
+				m_preview.layer = 9;
+				m_preview.AddComponent<BuildPreview>().OnBuildCheckResultChanged += UpdateBuildCheckResult;
 			}
 
 			m_preview.transform.position = Vector3.Lerp(m_preview.transform.position, position, Time.deltaTime * 10F);
-			m_preview.GetComponent<MeshRenderer>().material = PreviewMaterial;
+			m_preview.transform.rotation = Quaternion.Lerp(m_preview.transform.rotation, rotation, Time.deltaTime * 10F);
+		}
+
+		private void UpdateBuildCheckResult(BuildCheckResult result)
+		{
+			m_result = result;
+
+			switch (result)
+			{
+				case BuildCheckResult.OK:
+					m_preview.GetComponent<Renderer>().material = PreviewMaterials[0].Material;
+					break;
+				case BuildCheckResult.FAIL:
+					m_preview.GetComponent<Renderer>().material = PreviewMaterials[1].Material;
+					break;
+			}
+		}
+
+		void Update_BuildingController()
+		{
+			if (Input.GetMouseButtonDown(0))
+			{
+				if (m_result == BuildCheckResult.OK)
+				{
+					BuildingManager.Instance.OnBuildableCreated(Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation);
+				}
+			}
 		}
 	}
 }

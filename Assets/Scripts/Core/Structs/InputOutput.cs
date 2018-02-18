@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DeepSpace.Core
 {
 	/// <summary>
-	/// Setups and contains the Controller Data for a spawned Character.
+	/// Sets up and contains the Controller Data for a spawned Character.
 	/// </summary>
 	public struct InputOutput
 	{

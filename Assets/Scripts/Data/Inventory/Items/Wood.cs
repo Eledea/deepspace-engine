@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The Wood class defines an ItemStack of Wood.
 	/// </summary>
-	public class Wood : ItemStack
+	public class Wood : Stack
 	{
 		public Wood(int n)
 		{

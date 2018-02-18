@@ -2,10 +2,16 @@
 
 namespace DeepSpace
 {
+	public enum IType
+	{
+		Wood = 0,
+		Stone = 1
+	}
+
 	/// <summary>
-	/// The ItemStack class defines a stack of Items.
+	/// Defines a stack of Items.
 	/// </summary>
-	public class ItemStack
+	public class Stack
 	{
 		public MyEntityInventoryComponent Inventory { get; set; }
 
@@ -37,10 +43,7 @@ namespace DeepSpace
 		/// </summary>
 		public int NumItems
 		{
-			get
-			{
-				return m_itemCount;
-			}
+			get { return m_itemCount; }
 		}
 
 		/// <summary>
@@ -48,10 +51,7 @@ namespace DeepSpace
 		/// </summary>
 		public int MaxItems
 		{
-			get
-			{
-				return m_itemLimit;
-			}
+			get { return m_itemLimit; }
 		}
 
 		/// <summary>
@@ -59,10 +59,7 @@ namespace DeepSpace
 		/// </summary>
 		public IType Type
 		{
-			get
-			{
-				return m_type;
-			}
+			get { return m_type; }
 		}
 
 		/// <summary>
@@ -70,10 +67,7 @@ namespace DeepSpace
 		/// </summary>
 		public int ItemAddability
 		{
-			get
-			{
-				return m_itemLimit - m_itemCount;
-			}
+			get { return m_itemLimit - m_itemCount; }
 		}
 
 		/// <summary>

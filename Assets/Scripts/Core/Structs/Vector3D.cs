@@ -39,10 +39,6 @@ namespace DeepSpace.Core
 			get { return x * x + y * y + z * z; }
 		}
 
-		public Vector3 ToVector3() {
-			return new Vector3((float)x, (float)y, (float)z);
-		}
-
 		//Functions
 		public override int GetHashCode() {
 			return ((byte)x << 16) | ((byte)y << 8) | (byte)z;
@@ -60,24 +56,34 @@ namespace DeepSpace.Core
 			return false;
 		}
 
-		public static Vector3D Clamp(Vector3D value, float min, float max)
-		{
-			return new Vector3D(Utility.ClampD(value.x, min, max), Utility.ClampD(value.y, min, max), Utility.ClampD(value.z, min, max));
-		}
-
 		public static double Distance(Vector3D a, Vector3D b)
 		{
 			return (a - b).magnitude;
 		}
 
-		//Operators
-		public static bool operator == (Vector3D v1, Vector3D v2)
+		public Vector3 ToVector3()
 		{
-			return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+			return new Vector3((float)x, (float)y, (float)z);
 		}
-		public static bool operator != (Vector3D v1, Vector3D v2)
+
+		public static Vector3D ToVector3D(Vector3 input)
 		{
-			return !(v1 == v2);
+			return new Vector3D(input.x, input.y, input.z);
+		}
+
+		public static Vector3D Clamp(Vector3D value, float min, float max)
+		{
+			return new Vector3D(Utility.ClampD(value.x, min, max), Utility.ClampD(value.y, min, max), Utility.ClampD(value.z, min, max));
+		}
+
+		//Operators
+		public static bool operator == (Vector3D lhs, Vector3D rhs)
+		{
+			return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+		}
+		public static bool operator != (Vector3D lhs, Vector3D rhs)
+		{
+			return !(lhs == rhs);
 		}
 
 		public static Vector3D operator + (Vector3D v1, Vector3D v2) {

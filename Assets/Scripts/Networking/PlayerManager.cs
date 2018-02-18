@@ -21,7 +21,6 @@ namespace DeepSpace.Networking
 		}
 
 		List<Player> m_players;
-
 		public Player[] GetPlayersInManager
 		{
 			get

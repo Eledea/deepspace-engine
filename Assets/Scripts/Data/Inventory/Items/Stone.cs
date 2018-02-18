@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The Stone class defines an ItemStack of Stone.
 	/// </summary>
-	public class Stone : ItemStack
+	public class Stone : Stack
 	{
 		public Stone(int n)
 		{

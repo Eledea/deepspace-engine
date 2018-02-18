@@ -3,15 +3,10 @@ using DeepSpace.Networking;
 namespace DeepSpace
 {
 	/// <summary>
-	/// The Entity class defines an Entity in a SolarSystem.
+	/// Defines an Entity in a SolarSystem.
 	/// </summary>
 	public class Entity
 	{
-		public Entity()
-		{
-			Components = new MyEntityComponentPacakage(this);
-		}
-
 		public string Name;
 		public SolarSystem SolarSystem;
 
@@ -33,6 +28,11 @@ namespace DeepSpace
 			}
 		}
 
+		public Entity()
+		{
+			Components = new MyEntityComponentPacakage(this);
+		}
+
 		MyEntityTransformComponent m_transformComponent;
 		public MyEntityTransformComponent Transform
 		{
@@ -47,7 +47,8 @@ namespace DeepSpace
 				Components.AddComponentToPackage(value);
 
 				m_transformComponent = value;
-				m_transformComponent.OnTransformComponentUpdate += ((e) => { PlayerManager.Instance.OnEntityTransformComponentUpdate(this); });
+				//Pass event callback via Lambda expression...
+				m_transformComponent.OnEntityComponentUpdate += ((e) => { PlayerManager.Instance.OnEntityTransformComponentUpdate(this); });
 			}
 		}
 
@@ -65,7 +66,7 @@ namespace DeepSpace
 				Components.AddComponentToPackage(value);
 
 				m_inventoryComponent = value;
-				m_inventoryComponent.OnInventoryComponentUpdate += ((e) => { InventoryManager.Instance.OnEntityInventoryComponentUpdated(this); });
+				m_inventoryComponent.OnEntityComponentUpdate += ((e) => { InventoryManager.Instance.OnEntityInventoryComponentUpdated(this); });
 			}
 		}
 	}

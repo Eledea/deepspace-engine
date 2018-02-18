@@ -11,9 +11,10 @@ namespace DeepSpace.Controllers
 	/// </summary>
 	public class OverlayController : MonoBehaviour
 	{
-		public GameObject[] interfaces;
+		public LayerMask EntityLayer;
+		public GameObject[] Interfaces;
 		public Sprite[] Sprites;
-		public int graphicSize = 50;
+		public int GraphicSize = 50;
 
 		public Character Character { get; set; }
 
@@ -54,8 +55,9 @@ namespace DeepSpace.Controllers
 					m_showMode = InventoryShowMode.Internal;
 					m_target = Character;
 
+					//TODO: Cut out the Pointer chasing here.
 					Ray fromCamera = new Ray(Character.Controllers.Camera.transform.position, Character.Controllers.Camera.transform.forward);
-					if (Physics.Raycast(fromCamera, out hitInfo, 3))
+					if (Physics.Raycast(fromCamera, out hitInfo, 3, EntityLayer))
 					{
 						if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).Inventory != null)
 						{
@@ -97,14 +99,14 @@ namespace DeepSpace.Controllers
 			}
 			else if (m_showMode == InventoryShowMode.External)
 			{
-				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, -2.5F * graphicSize), Character.Name);
-				DrawInventoryAtPosition(m_target.Inventory, new Vector2(0, 2.5F * graphicSize), m_target.Name);
+				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, -2.5F * GraphicSize), Character.Name);
+				DrawInventoryAtPosition(m_target.Inventory, new Vector2(0, 2.5F * GraphicSize), m_target.Name);
 			}
 		}
 
 		private void DrawInventoryAtPosition(MyEntityInventoryComponent c, Vector2 screenPosition, string name)
 		{
-			GameObject overlay = Instantiate(interfaces[0], this.transform);
+			GameObject overlay = Instantiate(Interfaces[0], this.transform);
 			overlay.transform.localPosition = screenPosition;
 			overlay.name = string.Format("Inventory: {0}", name);
 
@@ -112,8 +114,8 @@ namespace DeepSpace.Controllers
 			{
 				for (int y = 0; y < c.InvSize_y; y++)
 				{
-					GameObject drop = Instantiate(interfaces[1], overlay.transform);
-					drop.transform.localPosition = Utility.IndexToWorldSpacePosition(x, y, graphicSize, c.InvSize_x, c.InvSize_y);
+					GameObject drop = Instantiate(Interfaces[1], overlay.transform);
+					drop.transform.localPosition = Utility.IndexToWorldSpacePosition(x, y, GraphicSize, c.InvSize_x, c.InvSize_y);
 					drop.name = string.Format("{0}:{1}", x, y);
 					Dropzone d = drop.GetComponentInParent<Dropzone>();
 					d.Inventory = c; d.Index = new Vector2I(x, y);
@@ -121,8 +123,8 @@ namespace DeepSpace.Controllers
 
 					if (c.IsItemStackAt(x, y))
 					{
-						ItemStack s = c.GetItemStackAt(x, y);
-						GameObject graphic = Instantiate(interfaces[2], drop.transform);
+						Stack s = c.GetItemStackAt(x, y);
+						GameObject graphic = Instantiate(Interfaces[2], drop.transform);
 						graphic.transform.localPosition = Vector2.zero;
 						graphic.name = string.Format(s.Type.ToString());
 						graphic.GetComponentInChildren<Interfacable>().myController = this;
@@ -186,7 +188,7 @@ namespace DeepSpace.Controllers
 		}
 
 		/// <summary>
-		/// Interprets the Drag this Player just made and run any operations that we should be doing.
+		/// Interprets the Drag this Player just made and runs any operations that should occur.
 		/// </summary>
 		void ExecuteDragCommand(MouseDrag drag)
 		{

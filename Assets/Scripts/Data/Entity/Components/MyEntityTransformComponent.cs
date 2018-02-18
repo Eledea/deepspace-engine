@@ -1,5 +1,4 @@
 ﻿using DeepSpace.Core;
-using System;
 using UnityEngine;
 
 namespace DeepSpace
@@ -9,8 +8,6 @@ namespace DeepSpace
 	/// </summary>
 	public class MyEntityTransformComponent : MyEntityComponentBase
 	{
-		public Entity Entity { get; private set; }
-
 		public MyEntityTransformComponent(Entity e, Vector3D position, Quaternion rotation)
 		{
 			Entity = e;
@@ -18,9 +15,6 @@ namespace DeepSpace
 			m_position = position;
 			m_rotation = rotation;
 		}
-
-		//Call this when this Transform component changes.
-		public event Action<Entity> OnTransformComponentUpdate;
 
 		Vector3D m_position;
 		public Vector3D Position
@@ -32,7 +26,7 @@ namespace DeepSpace
 					return;
 
 				m_position = value;
-				OnTransformComponentUpdate(Entity);
+				base.UpdateComponent();
 			}
 		}
 
@@ -47,7 +41,7 @@ namespace DeepSpace
 					return;
 
 				m_rotation = value;
-				OnTransformComponentUpdate(Entity);
+				base.UpdateComponent();
 			}
 		}
 	}

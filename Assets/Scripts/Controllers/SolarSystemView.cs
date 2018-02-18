@@ -25,7 +25,7 @@ namespace DeepSpace.Controllers
 
 		public GameObject LocalCharacter { get; private set; }
 
-		Vector3D m_floatingOrigin;
+		public Vector3D FloatingOrigin { get; private set; }
 
 		double m_floatingRange = 500;
 		double m_loadRange = 10000;
@@ -37,10 +37,10 @@ namespace DeepSpace.Controllers
 
 			if (LocalCharacter.transform.position.magnitude > m_floatingRange)
 			{
-				m_floatingOrigin = Character.Transform.Position;
+				FloatingOrigin = Character.Transform.Position;
 				Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
 
-				LocalCharacter.transform.position = (Character.Transform.Position - m_floatingOrigin).ToVector3();
+				LocalCharacter.transform.position = (Character.Transform.Position - FloatingOrigin).ToVector3();
 				UpdateAllEntitiesForSolarSystem();
 			}
 		}
@@ -72,7 +72,7 @@ namespace DeepSpace.Controllers
 			m_entityToGameObject = new Dictionary<Entity, GameObject>();
 			m_gameObjectToEntity = new Dictionary<GameObject, Entity>();
 
-			m_floatingOrigin = Character.Transform.Position;
+			FloatingOrigin = Character.Transform.Position;
 
 			LocalCharacter = DrawGameObjectForEntity(Character) as GameObject;
 			Character.Controllers = new InputOutput(LocalCharacter, Character);
@@ -98,7 +98,7 @@ namespace DeepSpace.Controllers
 					DrawGameObjectForEntity(e);
 
 				GameObject myGO = EntityToGameObject(e);
-				myGO.transform.position = (e.Transform.Position - m_floatingOrigin).ToVector3();
+				myGO.transform.position = (e.Transform.Position - FloatingOrigin).ToVector3();
 				myGO.transform.rotation = e.Transform.Rotation;
 			}
 			else

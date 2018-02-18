@@ -20,10 +20,7 @@ namespace DeepSpace.Core
 		/// </summary>
 		public bool AxisDown
 		{
-			get
-			{
-				return (Input.GetKey(positive) || Input.GetKey(negative));
-			}
+			get { return (Input.GetKey(positive) || Input.GetKey(negative)); }
 		}
 
 		/// <summary>
@@ -31,10 +28,7 @@ namespace DeepSpace.Core
 		/// </summary>
 		public float Magnitude
 		{
-			get
-			{
-				return Utility.BoolToInt (Input.GetKey (positive)) - Utility.BoolToInt (Input.GetKey (negative));
-			}
+			get { return Utility.BoolToInt (Input.GetKey (positive)) - Utility.BoolToInt (Input.GetKey (negative)); }
 		}
 	}
 }

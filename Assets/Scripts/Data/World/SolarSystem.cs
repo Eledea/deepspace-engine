@@ -1,4 +1,5 @@
 using DeepSpace.Core;
+using DeepSpace.Networking;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -79,6 +80,8 @@ namespace DeepSpace
 
 			m_entities.Add(e);
 			e.SolarSystem = this;
+
+			PlayerManager.Instance.OnEntityTransformComponentUpdate(e);
 		}
 
 		/// <summary>

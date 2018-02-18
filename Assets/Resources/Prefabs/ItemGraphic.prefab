@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224457537356672188}
   - component: {fileID: 222491593597347184}
   - component: {fileID: 114601105293351700}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 114375782568146316}
   - component: {fileID: 222767377191241686}
   - component: {fileID: 114556072688709480}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: ItemGraphic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43361d11a0e3ec459252fdc770e77b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myController: {fileID: 0}
 --- !u!114 &114556072688709480
 MonoBehaviour:
   m_ObjectHideFlags: 1
