@@ -119,7 +119,7 @@ namespace DeepSpace.Controllers
 			{
 				if (m_result == BuildCheckResult.OK)
 				{
-					BuildingManager.Instance.OnBuildableCreated(Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation);
+					BuildingManager.OnBuildableCreated(Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation);
 				}
 			}
 		}

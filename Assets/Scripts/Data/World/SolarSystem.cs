@@ -81,7 +81,7 @@ namespace DeepSpace
 			m_entities.Add(e);
 			e.SolarSystem = this;
 
-			PlayerManager.Instance.OnEntityTransformComponentUpdate(e);
+			PlayerManager.OnEntityTransformComponentUpdate(e);
 		}
 
 		/// <summary>

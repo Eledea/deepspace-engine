@@ -5,14 +5,7 @@ namespace DeepSpace.Networking
 {
 	public class BuildingManager : MonoBehaviour
 	{
-		public static BuildingManager Instance { get; protected set; }
-
-		void OnEnable()
-		{
-			Instance = this;
-		}
-
-		public void OnBuildableCreated(SolarSystem ss, Vector3D position, Quaternion rotation)
+		public static void OnBuildableCreated(SolarSystem ss, Vector3D position, Quaternion rotation)
 		{
 			//TODO: Implement an Object factory to manage this.
 

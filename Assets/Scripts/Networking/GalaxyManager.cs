@@ -8,26 +8,22 @@ namespace DeepSpace.Networking
 	/// </summary>
 	public class GalaxyManager : NetworkBehaviour
 	{
-		public static GalaxyManager Instance { get; protected set; }
-
 		void Start()
 		{
-			Instance = this;
-
 			OnNewGalaxyCreated("Testworld");
 		}
 
 		/// <summary>
 		/// The Galaxy we currently have loaded.
 		/// </summary>
-		public Galaxy Galaxy { get; set; }
+		public static Galaxy Galaxy { get; set; }
 
 		/// <summary>
 		/// Generates a new galaxy with filename.
 		/// </summary>
-		public void OnNewGalaxyCreated(string fileName)
+		public static void OnNewGalaxyCreated(string fileName)
 		{
-			this.Galaxy = new Galaxy();
+			Galaxy = new Galaxy();
 
 			Galaxy.GenerateGalaxy(1, 4, 3);
 		}
@@ -35,7 +31,7 @@ namespace DeepSpace.Networking
 		/// <summary>
 		/// Loads a galaxy from file with filename.
 		/// </summary>
-		public void OnGalaxyLoaded(string fileName)
+		public static void OnGalaxyLoaded(string fileName)
 		{
 			if (Galaxy != null)
 			{

@@ -114,21 +114,21 @@ namespace DeepSpace.Controllers
 			{
 				for (int y = 0; y < c.InvSize_y; y++)
 				{
-					GameObject drop = Instantiate(Interfaces[1], overlay.transform);
+					var drop = Instantiate(Interfaces[1], overlay.transform);
 					drop.transform.localPosition = Utility.IndexToWorldSpacePosition(x, y, GraphicSize, c.InvSize_x, c.InvSize_y);
 					drop.name = string.Format("{0}:{1}", x, y);
-					Dropzone d = drop.GetComponentInParent<Dropzone>();
+					var d = drop.GetComponentInParent<Dropzone>() as Dropzone;
 					d.Inventory = c; d.Index = new Vector2I(x, y);
 					d.myController = this;
 
 					if (c.IsItemStackAt(x, y))
 					{
-						Stack s = c.GetItemStackAt(x, y);
-						GameObject graphic = Instantiate(Interfaces[2], drop.transform);
+						var s = c.GetItemStackAt(x, y) as Stack;
+						var graphic = Instantiate(Interfaces[2], drop.transform);
 						graphic.transform.localPosition = Vector2.zero;
-						graphic.name = string.Format(s.Type.ToString());
+						graphic.name = string.Format(s.DefinitionId.ToString());
 						graphic.GetComponentInChildren<Interfacable>().myController = this;
-						graphic.GetComponentInChildren<Image>().sprite = Sprites[(int)s.Type];
+						graphic.GetComponentInChildren<Image>().sprite = Sprites[s.DefinitionId.Id];
 						graphic.GetComponentInChildren<Text>().text = c.GetItemStackAt(x, y).NumItems.ToString();
 						m_overlayGraphics.Enqueue(graphic);
 					}
@@ -200,10 +200,10 @@ namespace DeepSpace.Controllers
 			switch (drag.Button)
 			{
 				case MouseButton.Left:
-					InventoryManager.Instance.OnItemStackMoved(m_startDragDrop.Inventory, drag.Start, m_endDragDrop.Inventory, drag.End);
+					InventoryManager.OnItemStackMoved(m_startDragDrop.Inventory, drag.Start, m_endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Right:
-					InventoryManager.Instance.OnItemStackSplit(m_startDragDrop.Inventory, drag.Start, 0.5F, m_endDragDrop.Inventory, drag.End);
+					InventoryManager.OnItemStackSplit(m_startDragDrop.Inventory, drag.Start, 0.5F, m_endDragDrop.Inventory, drag.End);
 					break;
 				case MouseButton.Unknown:
 					Debug.LogError("Player is attempting to make a mouse drag with a button that couldn't be identified!");

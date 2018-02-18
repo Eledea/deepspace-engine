@@ -10,30 +10,31 @@ namespace DeepSpace.Networking
 	/// </summary>
 	public class InventoryManager : NetworkBehaviour
 	{
-		public static InventoryManager Instance { get; protected set; }
+		//TOOD: Populate this from the Inspector using a script.
+		public static MyItemDefinitionId[] ItemDefinitions;
 
-		void OnEnable()
+		public static Stack OnItemStackCreated(MyItemDefinitionId? definition, int numItems)
 		{
-			Instance = this;
-		}
+			if (definition.HasValue == false)
+				throw new NullReferenceException();
 
-		public Stack OnItemStackCreated(IType type, int numItems)
-		{
-			//TODO: Implement new Item system.
-
-			var t = Type.GetType(string.Format("DeepSpace.{0}", type.ToString()));
-			Stack s = Activator.CreateInstance(t, numItems) as Stack;
-
+			var s = new Stack((MyItemDefinitionId)definition, numItems) as Stack;
 			return s;
 		}
 
-		public void OnItemStackMoved(MyEntityInventoryComponent inv, Vector2I index, MyEntityInventoryComponent newInv, Vector2I newIndex)
+		public static Stack OnItemStackCreated(int definitionId, int numItems)
+		{
+			var definition = ItemDefinitions[definitionId];
+			return OnItemStackCreated(definition, numItems);
+		}
+
+		public static void OnItemStackMoved(MyEntityInventoryComponent inv, Vector2I index, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
 			if (inv.IsItemStackAt(index) == false || (inv == newInv && index == newIndex))
 				return;
 
-			Stack s1 = inv.RemoveItemStackFrom(index);
-			Stack s2 = newInv.RemoveItemStackFrom(newIndex);
+			var s1 = inv.RemoveItemStackFrom(index);
+			var s2 = newInv.RemoveItemStackFrom(newIndex);
 
 			if (CanMergeItemStacks(s1, s2, 1f))
 				MoveItemsToStack(s2, s1, s2.NumItems);
@@ -46,10 +47,12 @@ namespace DeepSpace.Networking
 				inv.AddItemStackAt(s2, index);
 		}
 
-		public void OnItemStackSplit(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
+		public static void OnItemStackSplit(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
-			Stack s1 = inv.GetItemStackAt(index);
-			Stack s2 = newInv.GetItemStackAt(newIndex);
+			//TODO: Fix splitting into Stacks of different ItemDefinitions.
+
+			var s1 = inv.GetItemStackAt(index);
+			var s2 = newInv.GetItemStackAt(newIndex);
 
 			if (s1.NumItems == 1)
 			{
@@ -58,7 +61,7 @@ namespace DeepSpace.Networking
 			}
 
 			if (s2 == null)
-				s2 = OnItemStackCreated(s1.Type, 0);
+				s2 = OnItemStackCreated(s1.DefinitionId as MyItemDefinitionId?, 0);
 
 			if (CanMoveToItemStack(s1, s2))
 				MoveItemsToStack(s1, s2, Mathf.FloorToInt(s1.NumItems * percentage));
@@ -69,37 +72,26 @@ namespace DeepSpace.Networking
 				newInv.AddItemStackAt(s2, newIndex);
 		}
 
-		void MoveItemsToStack(Stack s1, Stack s2, int n)
+		private static void MoveItemsToStack(Stack s1, Stack s2, int n)
 		{
 			s1.RemoveItems(n);
 			s2.AddItems(n);
 		}
 
-		bool CanMergeItemStacks(Stack s1, Stack s2, float percentage)
+		private static bool CanMergeItemStacks(Stack s1, Stack s2, float percentage)
 		{
 			if (s1 == null || s2 == null)
 				return false;
 
-			return s1.Type == s2.Type && s2.ItemAddability >= (s1.NumItems * percentage);
+			return s1.DefinitionId == s2.DefinitionId && s2.ItemAddability >= (s1.NumItems * percentage);
 		}
 
-		bool CanMoveToItemStack(Stack s1, Stack s2)
+		private static bool CanMoveToItemStack(Stack s1, Stack s2)
 		{
 			if (s1 == null || s2 == null)
 				return false;
 
-			return s1.Type == s2.Type;
-		}
-
-		public void OnEntityInventoryComponentUpdated(Entity e)
-		{
-			//TODO: Avoid pointer chasing here. Use C# job system?
-
-			foreach (Player p in e.SolarSystem.PlayersInSystem)
-			{
-				if (p.Character.IsUsingInventorySystem)
-					p.Character.Controllers.OverlayController.OnInventoryUpdate();
-			}
+			return s1.DefinitionId == s2.DefinitionId;
 		}
 	}
 }

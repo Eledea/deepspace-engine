@@ -11,49 +11,27 @@ namespace DeepSpace.Networking
 	/// </summary>
 	public class PlayerManager : NetworkBehaviour
 	{
-		public static PlayerManager Instance { get; protected set; }
-
-		void OnEnable()
-		{
-			Instance = this;
-
-			m_players = new List<Player>();
-		}
-
-		List<Player> m_players;
-		public Player[] GetPlayersInManager
-		{
-			get
-			{
-				return m_players.ToArray();
-			}
-		}
-
-		public int PlayerCount
-		{
-			get
-			{
-				return m_players.Count;
-			}
-		}
-
-		public void OnNewPlayerConnect(PlayerConnection c, string name, SolarSystem ss)
+		public static void OnNewPlayerConnect(PlayerConnection c, string name, SolarSystem ss)
 		{
 			c.gameObject.name = name;
-			SolarSystemView view = c.gameObject.GetComponent<SolarSystemView>();
+			var view = c.gameObject.GetComponent<SolarSystemView>() as SolarSystemView;
 
-			Player p = new Player(name, 37331, new Vector3D(10, 0, 8), Quaternion.identity, view);
+			var p = new Player(name, 37331, new Vector3D(10, 0, 8), Quaternion.identity, view);
 
-			m_players.Add(p);
 			OnPlayerSolarSystemChanged(p, ss);
 
 			view.OnLocalCharacterSpawned();
 
-			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.OnItemStackCreated(IType.Wood, Random.Range(1, 51)), new Vector2I(0, 2));
-			p.Character.Inventory.AddItemStackAt(InventoryManager.Instance.OnItemStackCreated(IType.Stone, Random.Range(1, 51)), new Vector2I(3, 1));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Wood", 0, 50), Random.Range(1, 51)), new Vector2I(0, 2));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Stone", 1, 50), Random.Range(1, 51)), new Vector2I(3, 1));
 		}
 
-		public void OnEntityTransformComponentUpdate(Entity e)
+		public static void OnPlayerSolarSystemChanged(Player p, SolarSystem ss)
+		{
+			ss.AddPlayerToSolarSystem(p);
+		}
+
+		public static void OnEntityTransformComponentUpdate(Entity e)
 		{
 			if (e.SolarSystem == null)
 				return;
@@ -64,9 +42,15 @@ namespace DeepSpace.Networking
 				p.View.UpdateGameObjectForEntity(e);
 		}
 
-		public void OnPlayerSolarSystemChanged(Player p, SolarSystem ss)
+		public static void OnEntityInventoryComponentUpdated(Entity e)
 		{
-			ss.AddPlayerToSolarSystem(p);
+			//TODO: Avoid pointer chasing here. Use C# job system?
+
+			foreach (Player p in e.SolarSystem.PlayersInSystem)
+			{
+				if (p.Character.IsUsingInventorySystem)
+					p.Character.Controllers.OverlayController.OnInventoryUpdate();
+			}
 		}
 	}
 }

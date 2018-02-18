@@ -2,29 +2,23 @@
 
 namespace DeepSpace
 {
-	public enum IType
-	{
-		Wood = 0,
-		Stone = 1
-	}
-
 	/// <summary>
 	/// Defines a stack of Items.
 	/// </summary>
 	public class Stack
 	{
+		public MyItemDefinitionId DefinitionId { get; private set; }
+
 		public MyEntityInventoryComponent Inventory { get; set; }
+
+		public Stack(MyItemDefinitionId id, int n)
+		{
+			DefinitionId = id;
+			m_itemCount = n;
+		}
 
 		private int m_inv_x;
 		private int m_inv_y;
-		protected int m_itemCount;
-
-		protected int m_itemLimit;
-		protected IType m_type;
-
-		/// <summary>
-		/// Returns or sets the array index of this ItemStack in it's Inventory.
-		/// </summary>
 		public Vector2I InventoryIndex
 		{
 			get
@@ -38,51 +32,43 @@ namespace DeepSpace
 			}
 		}
 
-		/// <summary>
-		/// Returns the number of Items currently in this ItemStack.
-		/// </summary>
+		protected int m_itemCount;
 		public int NumItems
 		{
-			get { return m_itemCount; }
+			get
+			{
+				return m_itemCount;
+			}
 		}
-
-		/// <summary>
-		/// Returns the maximum number of Items this ItemStack can hold.
-		/// </summary>
 		public int MaxItems
 		{
-			get { return m_itemLimit; }
+			get
+			{
+				return DefinitionId.StackLimit;
+			}
 		}
 
-		/// <summary>
-		/// Returns the IType of this ItemStack 
-		/// </summary>
-		public IType Type
-		{
-			get { return m_type; }
-		}
-
-		/// <summary>
-		/// Returns the number of Items that this ItemStack can add before it exceeds it reaches it's limit.
-		/// </summary>
 		public int ItemAddability
 		{
-			get { return m_itemLimit - m_itemCount; }
+			get
+			{
+				return DefinitionId.StackLimit - m_itemCount;
+			}
 		}
 
-		/// <summary>
-		/// Increments the ItemCount for this ItemStack by n.
-		/// </summary>
 		public void AddItems(int n)
 		{
+			if (n > DefinitionId.StackLimit - m_itemCount)
+				return;
+
 			m_itemCount += n;
 		}
 
-		/// <summary>
-		/// Decrements the ItemCount for this ItemStack by n.
-		/// </summary>
 		public void RemoveItems(int n)
 		{
+			if (n > m_itemCount)
+				return;
+
 			m_itemCount -= n;
 		}
 	}

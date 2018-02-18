@@ -1,3 +1,4 @@
+using DeepSpace.Core;
 using DeepSpace.Networking;
 
 namespace DeepSpace
@@ -7,6 +8,9 @@ namespace DeepSpace
 	/// </summary>
 	public class Entity
 	{
+		//TODO: Implement Object Factory pattern so that this definition defines what sub-class of Entity will be instantiated.
+		MyEntityDefinitionId DefinitionId;
+
 		public string Name;
 		public SolarSystem SolarSystem;
 
@@ -48,7 +52,7 @@ namespace DeepSpace
 
 				m_transformComponent = value;
 				//Pass event callback via Lambda expression...
-				m_transformComponent.OnEntityComponentUpdate += ((e) => { PlayerManager.Instance.OnEntityTransformComponentUpdate(this); });
+				m_transformComponent.OnEntityComponentUpdate += ((e) => { PlayerManager.OnEntityTransformComponentUpdate(this); });
 			}
 		}
 
@@ -66,8 +70,13 @@ namespace DeepSpace
 				Components.AddComponentToPackage(value);
 
 				m_inventoryComponent = value;
-				m_inventoryComponent.OnEntityComponentUpdate += ((e) => { InventoryManager.Instance.OnEntityInventoryComponentUpdated(this); });
+				m_inventoryComponent.OnEntityComponentUpdate += ((e) => { PlayerManager.OnEntityInventoryComponentUpdated(this); });
 			}
+		}
+
+		public override string ToString()
+		{
+			return Name;
 		}
 	}
 }
