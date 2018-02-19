@@ -1,6 +1,6 @@
 ﻿using DeepSpace.Controllers;
 using DeepSpace.Core;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -16,14 +16,15 @@ namespace DeepSpace.Networking
 			c.gameObject.name = name;
 			var view = c.gameObject.GetComponent<SolarSystemView>() as SolarSystemView;
 
-			var p = new Player(name, 37331, new Vector3D(10, 0, 8), Quaternion.identity, view);
+			long id = DateTime.Now.Ticks;
+			var p = new Player(name, id, new Vector3D(10, 0, 8), Quaternion.identity, view);
 
 			OnPlayerSolarSystemChanged(p, ss);
 
 			view.OnLocalCharacterSpawned();
 
-			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Wood", 0, 50), Random.Range(1, 51)), new Vector2I(0, 2));
-			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Stone", 1, 50), Random.Range(1, 51)), new Vector2I(3, 1));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Wood", 0, 50), UnityEngine.Random.Range(1, 51)), new Vector2I(0, 2));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Stone", 1, 50), UnityEngine.Random.Range(1, 51)), new Vector2I(3, 1));
 		}
 
 		public static void OnPlayerSolarSystemChanged(Player p, SolarSystem ss)
@@ -44,7 +45,8 @@ namespace DeepSpace.Networking
 
 		public static void OnEntityInventoryComponentUpdated(Entity e)
 		{
-			//TODO: Avoid pointer chasing here. Use C# job system?
+			//TODO: We need a way to make this more efficient.
+			//Explore possibilities of task parallelism, asynchronous execution and linear memory allocation.
 
 			foreach (Player p in e.SolarSystem.PlayersInSystem)
 			{

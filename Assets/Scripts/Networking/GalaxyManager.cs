@@ -10,7 +10,7 @@ namespace DeepSpace.Networking
 	{
 		void Start()
 		{
-			OnNewGalaxyCreated("Testworld");
+			OnNewGalaxyCreated("Galaxy");
 		}
 
 		/// <summary>

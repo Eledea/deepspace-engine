@@ -14,7 +14,6 @@ namespace DeepSpace
 		public string Name;
 		public SolarSystem SolarSystem;
 
-		//TODO: Use this for Serialisation later.
 		public MyEntityComponentPacakage Components { get; private set; }
 
 		long m_entityId;

@@ -52,9 +52,6 @@ namespace DeepSpace
 
 			foreach (Orbital child in myStar.ChildOrbitals)
 				AddEntityToSolarSystem(child);
-
-			var s = new Storage("Storage", 673731, Vector3D.zero, new Vector3D(10, 0, 10), Quaternion.identity);
-			AddEntityToSolarSystem(s);
 		}
 
 		/// <summary>

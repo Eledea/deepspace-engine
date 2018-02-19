@@ -1,20 +1,24 @@
 ﻿using DeepSpace.Core;
-using UnityEngine;
 
 namespace DeepSpace
 {
 	/// <summary>
 	/// Defines a Storage and it's components.
 	/// </summary>
-	public class Storage : Deployable
+	public class Storage : Deployable, IStorage
 	{
-		public Storage(string name, long id, Vector3D velocity, Vector3D position, Quaternion rotation)
+		public override void OnBuildableCreated(BuildData data)
 		{
-			Name = name;
-			EntityId = id;
+			base.OnBuildableCreated(data);
 
-			Transform = new MyEntityTransformComponent(this, position, rotation);
 			Inventory = new MyEntityInventoryComponent(this, 8, 4);
+		}
+
+		public override void OnBuildableDestroyed()
+		{
+			base.OnBuildableDestroyed();
+
+			//TODO: Convert all Stacks to Entities.
 		}
 	}
 }

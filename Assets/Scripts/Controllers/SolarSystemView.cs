@@ -7,6 +7,7 @@ namespace DeepSpace.Controllers
 	[System.Serializable]
 	public struct EntityDefinition
 	{
+		//TODO: Integrate this into MyEntityDefinitionId;
 		public string Name;
 		public GameObject GO;
 	}
@@ -41,6 +42,7 @@ namespace DeepSpace.Controllers
 				Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
 
 				LocalCharacter.transform.position = (Character.Transform.Position - FloatingOrigin).ToVector3();
+				Character.Controllers.BuildController.OnFloatingOriginChange();
 				UpdateAllEntitiesForSolarSystem();
 			}
 		}

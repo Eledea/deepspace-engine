@@ -36,7 +36,7 @@ namespace DeepSpace.Networking
 			var s1 = inv.RemoveItemStackFrom(index);
 			var s2 = newInv.RemoveItemStackFrom(newIndex);
 
-			if (CanMergeItemStacks(s1, s2, 1f))
+			if (CanMergeItemStacks(s1, s2, 1F))
 				MoveItemsToStack(s2, s1, s2.NumItems);
 			else if (CanMoveToItemStack(s1, s2))
 				MoveItemsToStack(s2, s1, s1.ItemAddability);

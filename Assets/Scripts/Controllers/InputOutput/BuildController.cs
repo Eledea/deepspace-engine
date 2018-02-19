@@ -1,5 +1,6 @@
 ﻿using DeepSpace.Core;
 using DeepSpace.Networking;
+using System;
 using UnityEngine;
 
 namespace DeepSpace.Controllers
@@ -23,9 +24,10 @@ namespace DeepSpace.Controllers
 		public Character Character { get; set; }
 		public bool IsBuilding { get; private set; }
 
+		private MyEntityDefinitionId? m_selectedBuildable = new MyEntityDefinitionId("Storage", 15);
 		private Direction m_previewOrientation = Direction.Forward;
 		private float m_previewDistance = 3F;
-		private Quaternion m_previewRotation; 
+		private Quaternion m_previewRotation;
 
 		GameObject m_preview;
 		BuildCheckResult m_result;
@@ -81,11 +83,13 @@ namespace DeepSpace.Controllers
 			}
 		}
 
-		private void ShowPreviewAt(Vector3 position, Quaternion rotation)
+		private void ShowPreviewAt(Vector3 position, Quaternion orientation)
 		{
+			//TODO: Fix preview "jumping" on Player exceeding floating range.
+
 			if (m_preview == null)
 			{
-				m_preview = Instantiate(PreviewObject, position, rotation);
+				m_preview = Instantiate(PreviewObject, position, orientation);
 				m_preview.name = "Building Preview";
 				m_preview.GetComponent<Collider>().isTrigger = true;
 				m_preview.GetComponent<Renderer>().material = PreviewMaterials[0].Material;
@@ -94,8 +98,18 @@ namespace DeepSpace.Controllers
 				m_preview.AddComponent<BuildPreview>().OnBuildCheckResultChanged += UpdateBuildCheckResult;
 			}
 
+			//Um Sam...why are you using Linear Interpolation like this? xD
+			//TODO: Create a centralised struct/static class/etc. for Interpolation calculations?
 			m_preview.transform.position = Vector3.Lerp(m_preview.transform.position, position, Time.deltaTime * 10F);
-			m_preview.transform.rotation = Quaternion.Lerp(m_preview.transform.rotation, rotation, Time.deltaTime * 10F);
+			m_preview.transform.rotation = Quaternion.Lerp(m_preview.transform.rotation, orientation, Time.deltaTime * 10F);
+		}
+
+		public void OnFloatingOriginChange()
+		{
+			//TODO: Was being lazy when I made this :P We'll need a better solution later ig. Intergrate in the Interpolation manager?
+
+			Ray fromCamera = new Ray(transform.position, transform.forward);
+			m_preview.transform.position = fromCamera.GetPoint(m_previewDistance);
 		}
 
 		private void UpdateBuildCheckResult(BuildCheckResult result)
@@ -117,10 +131,8 @@ namespace DeepSpace.Controllers
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
-				if (m_result == BuildCheckResult.OK)
-				{
-					BuildingManager.OnBuildableCreated(Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation);
-				}
+				var request = new BuildRequest(m_selectedBuildable, Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation, m_result);
+				BuildingManager.InstantiateBuildable(request);
 			}
 		}
 	}

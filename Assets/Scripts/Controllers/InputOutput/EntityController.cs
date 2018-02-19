@@ -69,7 +69,6 @@ namespace DeepSpace.Controllers
 					//What is the Velocity of this Entity in this direction?
 					//Take the magnitude of this Velocity and clamp it between a range of 0 and 1.
 				}
-
 				acceleration += BaseDirections.VectorInDirection(transform.rotation, dir) * dirInput; i++;
 			}
 
@@ -79,7 +78,7 @@ namespace DeepSpace.Controllers
 				velocity = Vector3.zero;
 
 			transform.position += velocity * Time.deltaTime;
-			Character.Transform.Position += velocity* Time.deltaTime;
+			Character.Transform.Position += velocity * Time.deltaTime;
 		}
 
 		void Update_EntityRotation()
