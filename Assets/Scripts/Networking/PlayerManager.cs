@@ -23,8 +23,8 @@ namespace DeepSpace.Networking
 
 			view.OnLocalCharacterSpawned();
 
-			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Wood", 0, 50), UnityEngine.Random.Range(1, 51)), new Vector2I(0, 2));
-			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(new MyItemDefinitionId("Stone", 1, 50), UnityEngine.Random.Range(1, 51)), new Vector2I(3, 1));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(InventoryManager.ItemDefinitions[0], UnityEngine.Random.Range(1, 51)), new Vector2I(0, 2));
+			p.Character.Inventory.AddItemStackAt(InventoryManager.OnItemStackCreated(InventoryManager.ItemDefinitions[1], UnityEngine.Random.Range(1, 51)), new Vector2I(3, 1));
 		}
 
 		public static void OnPlayerSolarSystemChanged(Player p, SolarSystem ss)

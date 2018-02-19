@@ -11,7 +11,11 @@ namespace DeepSpace.Networking
 	public class InventoryManager : NetworkBehaviour
 	{
 		//TOOD: Populate this from the Inspector using a script.
-		public static MyItemDefinitionId[] ItemDefinitions;
+		public static MyItemDefinitionId[] ItemDefinitions =
+		{
+			new MyItemDefinitionId("Wood", 0, 50),
+			new MyItemDefinitionId("Stone", 1, 50),
+		};
 
 		public static Stack OnItemStackCreated(MyItemDefinitionId? definition, int numItems)
 		{
@@ -49,8 +53,6 @@ namespace DeepSpace.Networking
 
 		public static void OnItemStackSplit(MyEntityInventoryComponent inv, Vector2I index, float percentage, MyEntityInventoryComponent newInv, Vector2I newIndex)
 		{
-			//TODO: Fix splitting into Stacks of different ItemDefinitions.
-
 			var s1 = inv.GetItemStackAt(index);
 			var s2 = newInv.GetItemStackAt(newIndex);
 
@@ -61,7 +63,7 @@ namespace DeepSpace.Networking
 			}
 
 			if (s2 == null)
-				s2 = OnItemStackCreated(s1.DefinitionId as MyItemDefinitionId?, 0);
+				s2 = OnItemStackCreated(s1.DefinitionId.Id, 0);
 
 			if (CanMoveToItemStack(s1, s2))
 				MoveItemsToStack(s1, s2, Mathf.FloorToInt(s1.NumItems * percentage));
@@ -80,10 +82,7 @@ namespace DeepSpace.Networking
 
 		private static bool CanMergeItemStacks(Stack s1, Stack s2, float percentage)
 		{
-			if (s1 == null || s2 == null)
-				return false;
-
-			return s1.DefinitionId == s2.DefinitionId && s2.ItemAddability >= (s1.NumItems * percentage);
+			return CanMoveToItemStack(s1, s2) && s2.ItemAddability >= (s1.NumItems * percentage);
 		}
 
 		private static bool CanMoveToItemStack(Stack s1, Stack s2)
@@ -91,7 +90,7 @@ namespace DeepSpace.Networking
 			if (s1 == null || s2 == null)
 				return false;
 
-			return s1.DefinitionId == s2.DefinitionId;
+			return s1.DefinitionId.Id == s2.DefinitionId.Id;
 		}
 	}
 }
