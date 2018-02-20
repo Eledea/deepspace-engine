@@ -51,7 +51,7 @@ namespace DeepSpace.Networking
 			foreach (Player p in e.SolarSystem.PlayersInSystem)
 			{
 				if (p.Character.IsUsingInventorySystem)
-					p.Character.Controllers.OverlayController.OnInventoryUpdate();
+					p.Character.OverlayController.DrawInventoryOverlay();
 			}
 		}
 	}

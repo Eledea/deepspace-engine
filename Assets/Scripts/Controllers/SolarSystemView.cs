@@ -20,6 +20,7 @@ namespace DeepSpace.Controllers
 		public EntityDefinition[] Objects;
 
 		public Character Character { get; set; }
+		private BuildController BuildController { get; set; }
 
 		Dictionary<Entity, GameObject> m_entityToGameObject;
 		Dictionary<GameObject, Entity> m_gameObjectToEntity;
@@ -42,7 +43,7 @@ namespace DeepSpace.Controllers
 				Debug.Log("Player exceeded floating point range. Setting a new floating origin...");
 
 				LocalCharacter.transform.position = (Character.Transform.Position - FloatingOrigin).ToVector3();
-				Character.Controllers.BuildController.OnFloatingOriginChange();
+				BuildController.OnFloatingOriginChange();
 				UpdateAllEntitiesForSolarSystem();
 			}
 		}
@@ -77,10 +78,25 @@ namespace DeepSpace.Controllers
 			FloatingOrigin = Character.Transform.Position;
 
 			LocalCharacter = DrawGameObjectForEntity(Character) as GameObject;
-			Character.Controllers = new InputOutput(LocalCharacter, Character);
+			SetupControllerReferencesForCharacter(LocalCharacter, Character);
 
 			UpdateAllEntitiesForSolarSystem();
 			Debug.Log(string.Format("Loaded a new SolarSystem with {0} Entity(s).", Character.SolarSystem.EntitiesInSystem.Length));
+		}
+
+		private void SetupControllerReferencesForCharacter(GameObject go, Character c)
+		{
+			var entityController = go.GetComponentInChildren<EntityController>();
+			var overlayController = go.GetComponentInChildren<OverlayController>();
+			var buildController = go.GetComponentInChildren<BuildController>();
+			var camera = go.GetComponentInChildren<Camera>();
+
+			c.OverlayController = overlayController;
+			entityController.Character = c;
+			entityController.OverlayController = overlayController;
+			overlayController.Character = c;
+			overlayController.Camera = camera;
+			buildController.Character = c;
 		}
 
 		private void UpdateAllEntitiesForSolarSystem()

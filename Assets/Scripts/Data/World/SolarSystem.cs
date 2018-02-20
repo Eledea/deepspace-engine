@@ -1,7 +1,5 @@
-using DeepSpace.Core;
 using DeepSpace.Networking;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace DeepSpace
 {

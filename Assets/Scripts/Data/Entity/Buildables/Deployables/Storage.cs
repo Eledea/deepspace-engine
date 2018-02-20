@@ -17,8 +17,6 @@ namespace DeepSpace
 		public override void OnBuildableDestroyed()
 		{
 			base.OnBuildableDestroyed();
-
-			//TODO: Convert all Stacks to Entities.
 		}
 	}
 }

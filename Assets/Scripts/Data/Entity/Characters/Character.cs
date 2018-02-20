@@ -1,5 +1,5 @@
-﻿using DeepSpace.Core;
-using System;
+﻿using DeepSpace.Controllers;
+using DeepSpace.Core;
 using UnityEngine;
 
 namespace DeepSpace
@@ -20,7 +20,7 @@ namespace DeepSpace
 			Inventory = new MyEntityInventoryComponent(this, 4, 4);
 		}
 
-		[NonSerialized] public InputOutput Controllers;
+		public OverlayController OverlayController { get; set; }
 
 		public bool IsUsingInventorySystem
 		{
@@ -29,51 +29,29 @@ namespace DeepSpace
 				if (m_player.IsSpawned == false)
 					return false;
 
-				return Controllers.OverlayController.ShowingOverlay == false;
-			}
-		}
-
-		public bool IsUsingBuildingSystem
-		{
-			get
-			{
-				return Controllers.BuildController.IsBuilding == false;
+				return OverlayController.ShowingOverlay;
 			}
 		}
 
 		Player m_player;
 		public Player Player
 		{
-			get { return m_player; }
+			get
+			{
+				return m_player;
+			}
 		}
-
-		protected int m_healthPoints;
-		protected float m_oxygenLevel;
 
 		public int Health
 		{
-			get
-			{
-				return m_healthPoints;
-			}
-
-			set
-			{
-				m_healthPoints = value;
-			}
+			get;
+			set;
 		}
 
 		public float Oxygen
 		{
-			get
-			{
-				return m_oxygenLevel;
-			}
-
-			set
-			{
-				m_oxygenLevel = value;
-			}
+			get;
+			set;
 		}
 	}
 }

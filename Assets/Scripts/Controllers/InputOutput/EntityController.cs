@@ -22,6 +22,7 @@ namespace DeepSpace.Controllers
 		}
 
 		public Character Character { get; set; }
+		public OverlayController OverlayController { get; set; }
 
 		Dictionary<Direction, KeyBinding> dirBindings;
 		KeyBinding roll;
@@ -33,11 +34,14 @@ namespace DeepSpace.Controllers
 
 		void LateUpdate()
 		{
-			Update_DampenersController();
-			Update_EntityVelocity();
+			if (OverlayController.ShowingOverlay == false)
+			{
+				Update_DampenersController();
+				Update_EntityVelocity();
 
-			if (Character.IsUsingInventorySystem == false)
-				Update_EntityRotation();
+				if (OverlayController.UsingInventory == false)
+					Update_EntityRotation();
+			}
 
 			transform.rotation = Quaternion.Lerp(transform.rotation, rotateTo, Time.deltaTime * 30F);
 			Character.Transform.Rotation = transform.rotation;

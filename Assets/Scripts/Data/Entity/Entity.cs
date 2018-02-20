@@ -8,7 +8,6 @@ namespace DeepSpace
 	/// </summary>
 	public class Entity
 	{
-		//TODO: Implement Object Factory pattern so that this definition defines what sub-class of Entity will be instantiated.
 		MyEntityDefinitionId DefinitionId;
 
 		public string Name;

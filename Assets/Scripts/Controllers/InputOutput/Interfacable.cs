@@ -1,29 +1,37 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DeepSpace.Controllers
 {
 	public class Interfacable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 	{
-		public OverlayController myController;
+		public event Action<Interfacable> PointerDown;
+		public event Action<Interfacable> BeginDrag;
+		public event Action<Interfacable> Drag;
+		public event Action<Interfacable> EndDrag;
 
 		public void OnPointerDown(PointerEventData eventData)
 		{
-			myController.OnPointerDown(this);
+			PointerDown(this);
 		}
 
 		public void OnBeginDrag(PointerEventData eventData)
 		{
-			myController.OnBeginDrag(this);
+			BeginDrag(this);
 		}
 
 		public void OnDrag(PointerEventData eventData)
 		{
+			if (Drag != null)
+			{
+				Drag(this);
+			}
 		}
 
 		public void OnEndDrag(PointerEventData eventData)
 		{
-			myController.OnEndDrag();
+			EndDrag(this);
 		}
 	}
 }
