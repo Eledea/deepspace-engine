@@ -23,8 +23,8 @@ namespace DeepSpace.Controllers
 
 		public Character Character { get; set; }
 		public bool IsBuilding { get; private set; }
+		public MyEntityDefinitionId? SelectedBuilable { get; set; }
 
-		private MyEntityDefinitionId? m_selectedBuildable = new MyEntityDefinitionId("Storage", 15);
 		private Direction m_previewOrientation = Direction.Forward;
 		private float m_previewDistance = 3F;
 		private Quaternion m_previewRotation;
@@ -131,8 +131,8 @@ namespace DeepSpace.Controllers
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
-				var request = new BuildRequest(m_selectedBuildable, Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation, m_result);
-				BuildingManager.InstantiateBuildable(request);
+				var request = new BuildRequest(SelectedBuilable, Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation, m_result);
+				EntityManager.InstantiateBuildable(request);
 			}
 		}
 	}

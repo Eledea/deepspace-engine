@@ -10,11 +10,8 @@ namespace DeepSpace
 	{
 		public void GenerateStar(int numPlanets, int maxMoons)
 		{
-			Name = "Star";
 			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = 0;
-
-			Transform = new MyEntityTransformComponent(this, OrbitalPosition, Quaternion.identity);
 
 			for (int i = 0; i < numPlanets; i++)
 			{

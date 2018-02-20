@@ -10,11 +10,8 @@ namespace DeepSpace
 	{
 		public void GeneratePlanet(int i, int maxMoons)
 		{
-			Name = "Planet";
 			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = (ulong)(50000 * (i + 1));
-
-			Transform = new MyEntityTransformComponent(this, OrbitalPosition, Quaternion.identity);
 
 			int numMoons = UnityEngine.Random.Range(0, maxMoons + 1);
 

@@ -7,7 +7,7 @@ namespace DeepSpace
 	/// <summary>
 	/// The Orbital class defines an Orbital in a SolarSystem.
 	/// </summary>
-	public class Orbital : Entity
+	public class Orbital
 	{
 		Orbital m_parent;
 		List<Orbital> m_children;

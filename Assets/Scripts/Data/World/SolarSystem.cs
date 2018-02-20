@@ -44,12 +44,12 @@ namespace DeepSpace
 		/// </summary>
 		public void GenerateSolarSystem(int numPlanets, int maxMoons)
 		{
-			var myStar = new Star() as Star;
+			/*var myStar = new Star() as Star;
 			myStar.GenerateStar(numPlanets, maxMoons);
 			AddEntityToSolarSystem(myStar);
 
 			foreach (Orbital child in myStar.ChildOrbitals)
-				AddEntityToSolarSystem(child);
+				AddEntityToSolarSystem(child);*/
 		}
 
 		/// <summary>

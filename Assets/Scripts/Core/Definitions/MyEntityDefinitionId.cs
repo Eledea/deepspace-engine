@@ -3,18 +3,12 @@
 	/// <summary>
 	/// Contains fields, properties and methods that relate to Entity definition and creation.
 	/// </summary>
+	[System.Serializable]
 	public struct MyEntityDefinitionId
 	{
-		//Constructors
-		public MyEntityDefinitionId (string name, int id)
-		{
-			DefinitionName = name;
-			DefinitionId = id;
-		}
-
 		//Fields
-		public readonly string DefinitionName;
-		public readonly int DefinitionId;
+		public string Name;
+		public int Id;
 
 		//Methods
 		public override bool Equals(object obj)
@@ -27,17 +21,17 @@
 		}
 		public override string ToString()
 		{
-			return DefinitionName;
+			return Name;
 		}
 
 		//Operators
 		public static bool operator == (MyEntityDefinitionId lhs, MyEntityDefinitionId rhs)
 		{
-			return true;
+			return lhs.Id == rhs.Id;
 		}
 		public static bool operator != (MyEntityDefinitionId lhs, MyEntityDefinitionId rhs)
 		{
-			return true;
+			return !(lhs == rhs);
 		}
 	}
 }

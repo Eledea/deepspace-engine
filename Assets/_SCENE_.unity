@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 1796750952}
   - component: {fileID: 1796750951}
   m_Layer: 0
-  m_Name: BuildingManager
+  m_Name: EntityManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -684,9 +684,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1796750949}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46601ff1c28195145aa1c4e738a139bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f06ed28a37e59a4f90f3d27b0461683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EntityDefinitions:
+  - Name: Character
+    Id: 0
+  - Name: Entity
+    Id: 1
+  EntityPrefabs:
+  - {fileID: 1167942811384792, guid: c40f7233c54757b409c5c24976e04536, type: 2}
+  - {fileID: 1765080728381664, guid: 74e930ad96fc89b44bd7ea2a6e9c0d20, type: 2}
+  LocalCharacterPrefab: {fileID: 1083334517023208, guid: 1599e903317f94944b8f7539b2ae6051,
+    type: 2}
 --- !u!114 &1796750952
 MonoBehaviour:
   m_ObjectHideFlags: 0

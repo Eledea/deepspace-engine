@@ -10,11 +10,8 @@ namespace DeepSpace
 	{
 		public void GenerateMoon()
 		{
-			Name = "Moon";
 			OrbitalAngle = Point.RandomAngle;
 			OrbitalDistance = 10000;
-
-			Transform = new MyEntityTransformComponent(this, OrbitalPosition, Quaternion.identity);
 		}
 	}
 }

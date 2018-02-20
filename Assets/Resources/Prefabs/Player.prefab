@@ -96,12 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3d6494853d9d046a32f92fb82aa63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Objects:
-  - Name: LocalCharacter
-    GO: {fileID: 1083334517023208, guid: 1599e903317f94944b8f7539b2ae6051, type: 2}
+  EntityDefinitions:
   - Name: Character
-    GO: {fileID: 1167942811384792, guid: c40f7233c54757b409c5c24976e04536, type: 2}
-  - Name: Orbital
-    GO: {fileID: 1610489541373994, guid: b08d50ac8e0bb7e4c89dcacc45359d25, type: 2}
+    Id: 0
+    Prefab: {fileID: 1167942811384792, guid: c40f7233c54757b409c5c24976e04536, type: 2}
   - Name: Entity
-    GO: {fileID: 1765080728381664, guid: 74e930ad96fc89b44bd7ea2a6e9c0d20, type: 2}
+    Id: 1
+    Prefab: {fileID: 1765080728381664, guid: 74e930ad96fc89b44bd7ea2a6e9c0d20, type: 2}
+  LocalCharacterPrefab: {fileID: 1083334517023208, guid: 1599e903317f94944b8f7539b2ae6051,
+    type: 2}

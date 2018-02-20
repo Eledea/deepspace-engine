@@ -1,24 +1,15 @@
 using DeepSpace.Core;
+using DeepSpace.Networking;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DeepSpace.Controllers
 {
-	[System.Serializable]
-	public struct EntityDefinition
-	{
-		//TODO: Integrate this into MyEntityDefinitionId;
-		public string Name;
-		public GameObject GO;
-	}
-
 	/// <summary>
 	/// Manages the drawing, updating and destruction of Entities as GameObjects.
 	/// </summary>
 	public class SolarSystemView : MonoBehaviour
 	{
-		public EntityDefinition[] Objects;
-
 		public Character Character { get; set; }
 		private BuildController BuildController { get; set; }
 
@@ -77,7 +68,9 @@ namespace DeepSpace.Controllers
 
 			FloatingOrigin = Character.Transform.Position;
 
-			LocalCharacter = DrawGameObjectForEntity(Character) as GameObject;
+			LocalCharacter = Instantiate(EntityManager._LocalCharacterPrefab) as GameObject;
+			LocalCharacter.transform.SetParent(this.transform);
+			LocalCharacter.name = Character.Name;
 			SetupControllerReferencesForCharacter(LocalCharacter, Character);
 
 			UpdateAllEntitiesForSolarSystem();
@@ -97,6 +90,7 @@ namespace DeepSpace.Controllers
 			overlayController.Character = c;
 			overlayController.Camera = camera;
 			buildController.Character = c;
+			buildController.SelectedBuilable = EntityManager._EntityDefinitions[1];
 		}
 
 		private void UpdateAllEntitiesForSolarSystem()
@@ -128,17 +122,7 @@ namespace DeepSpace.Controllers
 
 		private GameObject DrawGameObjectForEntity(Entity e)
 		{
-			GameObject go;
-
-			if (e.EntityId == Character.EntityId)
-				go = Instantiate(Objects[0].GO) as GameObject;
-			else if (e is Character)
-				go = Instantiate(Objects[1].GO) as GameObject;
-			else if (e is Orbital)
-				go = Instantiate(Objects[2].GO) as GameObject;
-			else
-				go = Instantiate(Objects[3].GO) as GameObject;
-
+			var go = Instantiate(EntityManager._EntityPrefabs[e.DefinitionId.Id]) as GameObject;
 			go.transform.SetParent(this.transform);
 			go.name = e.Name;
 

@@ -8,7 +8,7 @@ namespace DeepSpace
 	/// </summary>
 	public class Entity
 	{
-		MyEntityDefinitionId DefinitionId;
+		public MyEntityDefinitionId DefinitionId;
 
 		public string Name;
 		public SolarSystem SolarSystem;
