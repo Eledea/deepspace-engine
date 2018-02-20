@@ -1,5 +1,4 @@
 ﻿using DeepSpace.Core;
-using UnityEngine;
 
 namespace DeepSpace
 {
@@ -10,7 +9,7 @@ namespace DeepSpace
 	{
 		public virtual void OnBuildableCreated(BuildData data)
 		{
-			Name = data.Name; EntityId = data.Id;
+			DefinitionId = data.Definition; Name = data.Definition.Name; EntityId = data.Id;
 
 			//All Buildables require a Transform component.
 			Transform = new MyEntityTransformComponent(this, data.Position, data.Orientation);

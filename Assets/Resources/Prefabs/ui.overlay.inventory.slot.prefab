@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 222202547735656512}
   - component: {fileID: 114908387268506580}
   m_Layer: 5
-  m_Name: InventorySlot
+  m_Name: ui.overlay.inventory.slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bcf1b9ddc83a2e4d9ce97f268db6d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myController: {fileID: 0}
 --- !u!222 &222202547735656512
 CanvasRenderer:
   m_ObjectHideFlags: 1

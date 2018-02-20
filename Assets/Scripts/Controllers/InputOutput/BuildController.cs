@@ -132,7 +132,7 @@ namespace DeepSpace.Controllers
 			if (Input.GetMouseButtonDown(0))
 			{
 				var request = new BuildRequest(SelectedBuilable, Character.SolarSystem, Character.Player.View.FloatingOrigin + m_preview.transform.position, m_previewRotation, m_result);
-				EntityManager.InstantiateBuildable(request);
+				BuildingManager.InstantiateBuildable(request);
 			}
 		}
 	}

@@ -68,7 +68,7 @@ namespace DeepSpace.Controllers
 
 			FloatingOrigin = Character.Transform.Position;
 
-			LocalCharacter = Instantiate(EntityManager._LocalCharacterPrefab) as GameObject;
+			LocalCharacter = Instantiate(DefinitionsManager._LocalCharacterPrefab) as GameObject;
 			LocalCharacter.transform.SetParent(this.transform);
 			LocalCharacter.name = Character.Name;
 			SetupControllerReferencesForCharacter(LocalCharacter, Character);
@@ -90,7 +90,7 @@ namespace DeepSpace.Controllers
 			overlayController.Character = c;
 			overlayController.Camera = camera;
 			buildController.Character = c;
-			buildController.SelectedBuilable = EntityManager._EntityDefinitions[1];
+			buildController.SelectedBuilable = DefinitionsManager._EntityDefinitions[1];
 		}
 
 		private void UpdateAllEntitiesForSolarSystem()
@@ -122,8 +122,9 @@ namespace DeepSpace.Controllers
 
 		private GameObject DrawGameObjectForEntity(Entity e)
 		{
-			var go = Instantiate(EntityManager._EntityPrefabs[e.DefinitionId.Id]) as GameObject;
+			var go = Instantiate(DefinitionsManager._EntityPrefabs[e.DefinitionId.Id]) as GameObject;
 			go.transform.SetParent(this.transform);
+
 			go.name = e.Name;
 
 			m_entityToGameObject[e] = go;

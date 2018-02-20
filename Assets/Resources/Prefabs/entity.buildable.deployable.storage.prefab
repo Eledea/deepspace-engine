@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65033448753239052}
   - component: {fileID: 23438121580894014}
   m_Layer: 8
-  m_Name: Entity
+  m_Name: entity.buildable.deployable.storage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

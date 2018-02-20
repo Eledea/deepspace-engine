@@ -7,15 +7,15 @@ namespace DeepSpace.Core
 	/// </summary>
 	public struct BuildData
 	{
-		public string Name;
+		public MyEntityDefinitionId Definition;
 		public long Id;
 
 		public Vector3D Position;
 		public Quaternion Orientation;
 
-		public BuildData(string name, long id, Vector3D position, Quaternion orientation)
+		public BuildData(MyEntityDefinitionId definition, long id, Vector3D position, Quaternion orientation)
 		{
-			Name = name; Id = id; Position = position; Orientation = orientation;
+			Definition = definition; Id = id; Position = position; Orientation = orientation;
 		}
 	}
 }
