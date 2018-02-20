@@ -280,13 +280,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   UIObjects:
-  - Name: UIAnchor
+  - Name: Anchor
     Prefab: {fileID: 1874577171245302, guid: 151ad761489c76a4fa673af5017e8f26, type: 2}
-  - Name: InventorySlot
+  - Name: Slot
     Prefab: {fileID: 1384236002794270, guid: 3aeebd4c1abf0bb4ab40b9a36a3c5cf5, type: 2}
-  - Name: ItemGraphic
+  - Name: Item
     Prefab: {fileID: 1880470963982012, guid: bbaa8ab904bbaa94293d71569af035a2, type: 2}
-  - Name: DragGraphic
+  - Name: Drag
     Prefab: {fileID: 1316846741875388, guid: 567a34e758743b7418bb0482e56fee9b, type: 2}
   - Name: Console
     Prefab: {fileID: 1233663534915168, guid: 360838f1ee03d234ea56c4f4b627bd50, type: 2}
