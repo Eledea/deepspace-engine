@@ -1,6 +1,6 @@
 ﻿using DeepSpace.Core;
 using DeepSpace.Networking;
-using System;
+using DeepSpace.Settings;
 using UnityEngine;
 
 namespace DeepSpace.Controllers
@@ -20,6 +20,8 @@ namespace DeepSpace.Controllers
 		//TODO: Needs to be serialised later.
 		public GameObject PreviewObject;
 		public BuildCheckMaterialDefinition[] PreviewMaterials;
+
+		public SettingsInput InputBindings;
 
 		public Character Character { get; set; }
 		public bool IsBuilding { get; private set; }
@@ -43,7 +45,7 @@ namespace DeepSpace.Controllers
 
 		void Update_ModeController()
 		{
-			if (Input.GetKeyDown(KeyCode.B))
+			if (Input.GetKeyDown(InputBindings.buildMode))
 			{
 				if (Character.IsUsingInventorySystem == false)
 				{
@@ -62,12 +64,12 @@ namespace DeepSpace.Controllers
 				m_previewDistance += Input.GetAxis("Mouse ScrollWheel") * 5F;
 				m_previewDistance = Mathf.Clamp(m_previewDistance, 2F, 8F);
 
-				if (Input.GetKeyDown(KeyCode.RightBracket))
+				if (Input.GetKeyDown(InputBindings.nextOrientation))
 				{
 					m_previewOrientation = BaseDirections.GetNextDirection(m_previewOrientation);
 					m_previewRotation = BaseDirections.GetRotation(m_previewOrientation);
 				}
-				if (Input.GetKeyDown(KeyCode.LeftBracket))
+				if (Input.GetKeyDown(InputBindings.prevOrientation))
 				{
 					m_previewOrientation = BaseDirections.GetPrevDirection(m_previewOrientation);
 					m_previewRotation = BaseDirections.GetRotation(m_previewOrientation);

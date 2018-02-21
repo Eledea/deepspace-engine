@@ -10,8 +10,6 @@ namespace DeepSpace
 		public virtual void OnBuildableCreated(BuildData data)
 		{
 			DefinitionId = data.Definition; Name = data.Definition.Name; EntityId = data.Id;
-
-			//All Buildables require a Transform component.
 			Transform = new MyEntityTransformComponent(this, data.Position, data.Orientation);
 		}
 

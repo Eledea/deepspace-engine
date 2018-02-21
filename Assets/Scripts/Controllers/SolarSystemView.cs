@@ -1,5 +1,6 @@
 using DeepSpace.Core;
 using DeepSpace.Networking;
+using DeepSpace.Settings;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -79,16 +80,20 @@ namespace DeepSpace.Controllers
 
 		private void SetupControllerReferencesForCharacter(GameObject go, Character c)
 		{
+			var settingsInput = new SettingsInput();
 			var entityController = go.GetComponentInChildren<EntityController>();
 			var overlayController = go.GetComponentInChildren<OverlayController>();
 			var buildController = go.GetComponentInChildren<BuildController>();
 			var camera = go.GetComponentInChildren<Camera>();
 
 			c.OverlayController = overlayController;
+			entityController.InputBindings = settingsInput;
 			entityController.Character = c;
 			entityController.OverlayController = overlayController;
+			overlayController.InputBindings = settingsInput;
 			overlayController.Character = c;
 			overlayController.Camera = camera;
+			buildController.InputBindings = settingsInput;
 			buildController.Character = c;
 			buildController.SelectedBuilable = DefinitionsManager._EntityDefinitions[1];
 		}
@@ -144,6 +149,7 @@ namespace DeepSpace.Controllers
 			{
 				go = LocalCharacter;
 				LocalCharacter = null;
+				return;
 			}
 			else
 			{

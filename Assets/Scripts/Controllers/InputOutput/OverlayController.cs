@@ -1,6 +1,6 @@
 using DeepSpace.Core;
 using DeepSpace.Networking;
-using System.Collections.Generic;
+using DeepSpace.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,22 +23,24 @@ namespace DeepSpace.Controllers
 		public Sprite[] Sprites;
 		public int GraphicSize = 50;
 
+		public SettingsInput InputBindings;
+
 		public Character Character { get; set; }
 		public Camera Camera { get; set; }
 
-		bool m_usingConsole;
-		GameObject m_consoleObject;
+		private bool m_usingConsole;
+		private GameObject m_consoleObject;
 
+		private Entity m_target;
+
+		enum OverlayShowMode { None, Internal, External }
 		enum InventoryShowMode { None, Internal, External }
-		InventoryShowMode m_showMode;
+		private OverlayShowMode m_overlayMode;
+		private InventoryShowMode m_inventoryMode;
 
-		MouseButton m_dragButton;
-
-		Entity m_target;
-		Queue<GameObject> m_overlayGraphics;
-
-		Dropzone m_startDragDrop;
-		Dropzone m_endDragDrop;
+		private MouseButton m_dragButton;
+		private Dropzone m_startDragDrop;
+		private Dropzone m_endDragDrop;
 
 		public bool ShowingOverlay
 		{
@@ -47,7 +49,7 @@ namespace DeepSpace.Controllers
 
 		public bool UsingInventory
 		{
-			get { return m_showMode != InventoryShowMode.None; }
+			get { return m_inventoryMode != InventoryShowMode.None; }
 		}
 
 		void Update()
@@ -57,7 +59,7 @@ namespace DeepSpace.Controllers
 
 		void Update_OverlayController()
 		{
-			if (Input.GetKeyDown(KeyCode.BackQuote))
+			if (Input.GetKeyDown(InputBindings.console))
 			{
 				if (m_usingConsole)
 				{
@@ -71,18 +73,18 @@ namespace DeepSpace.Controllers
 				}
 			}
 
-			if (Input.GetKeyDown(KeyCode.Tab))
+			if (Input.GetKeyDown(InputBindings.overlay))
 			{
 				if (Character.IsUsingInventorySystem)
 				{
-					m_showMode = InventoryShowMode.None;
+					m_inventoryMode = InventoryShowMode.None;
 					HideOverlay();
 				}
 				else
 				{
 					RaycastHit hitInfo;
 
-					m_showMode = InventoryShowMode.Internal;
+					m_inventoryMode = InventoryShowMode.Internal;
 					m_target = Character;
 
 					Ray fromCamera = new Ray(Camera.transform.position, Camera.transform.forward);
@@ -90,7 +92,7 @@ namespace DeepSpace.Controllers
 					{
 						if (Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject).Inventory != null)
 						{
-							m_showMode = InventoryShowMode.External;
+							m_inventoryMode = InventoryShowMode.External;
 							m_target = Character.Player.View.GameObjectToEntity(hitInfo.transform.gameObject);
 						}
 					}
@@ -103,7 +105,13 @@ namespace DeepSpace.Controllers
 		private void DrawConsole()
 		{
 			m_consoleObject = Instantiate(UIObjects[4].Prefab, this.transform);
-			m_consoleObject.GetComponentInChildren<ConsoleInput>().OnConsoleInput += Console.Console.ReadConsoleInput;
+
+			ConsoleInput input = m_consoleObject.GetComponentInChildren<ConsoleInput>();
+			ConsoleOutput output = m_consoleObject.GetComponentInChildren<ConsoleOutput>();
+
+			input.Output = output;
+			input.OnConsoleInput += Console.Console.ReadConsoleInput;
+
 			m_consoleObject.name = "Console";
 		}
 
@@ -114,16 +122,13 @@ namespace DeepSpace.Controllers
 
 		public void DrawInventoryOverlay()
 		{
-			if (m_overlayGraphics != null)
-				HideOverlay();
+			HideOverlay();
 
-			m_overlayGraphics = new Queue<GameObject>();
-
-			if (m_showMode == InventoryShowMode.Internal)
+			if (m_inventoryMode == InventoryShowMode.Internal)
 			{
 				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, 0), Character.Name);
 			}
-			else if (m_showMode == InventoryShowMode.External)
+			else if (m_inventoryMode == InventoryShowMode.External)
 			{
 				DrawInventoryAtPosition(Character.Inventory, new Vector2(0, -2.5F * GraphicSize), Character.Name);
 				DrawInventoryAtPosition(m_target.Inventory, new Vector2(0, 2.5F * GraphicSize), m_target.Name);
@@ -160,7 +165,6 @@ namespace DeepSpace.Controllers
 						i.EndDrag += OnEndDrag;
 						graphic.GetComponentInChildren<Image>().sprite = Sprites[s.DefinitionId.Id];
 						graphic.GetComponentInChildren<Text>().text = c.GetItemStackAt(x, y).NumItems.ToString();
-						m_overlayGraphics.Enqueue(graphic);
 					}
 				}
 			}
@@ -233,9 +237,9 @@ namespace DeepSpace.Controllers
 		}
 
 		/// <summary>
-		/// Interprets the Drag this Player just made and runs any operations that should occur.
+		/// Interprets the Drag this Player just made and runs any operations that should happen here.
 		/// </summary>
-		void ExecuteDragCommand(MouseDrag drag)
+		private void ExecuteDragCommand(MouseDrag drag)
 		{
 			//We can now use guard clauses to simplify the logic for this mess dramatically! :D
 

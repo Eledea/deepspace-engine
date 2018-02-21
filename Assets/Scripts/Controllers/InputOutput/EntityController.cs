@@ -1,5 +1,5 @@
 ﻿using DeepSpace.Core;
-using System.Collections.Generic;
+using DeepSpace.Settings;
 using UnityEngine;
 
 namespace DeepSpace.Controllers
@@ -9,23 +9,10 @@ namespace DeepSpace.Controllers
 	/// </summary>
 	public class EntityController : MonoBehaviour
 	{
-		void OnEnable()
-		{
-			dirBindings = new Dictionary<Direction, KeyBinding>()
-			{
-				{ Direction.Right, new KeyBinding(KeyCode.D, KeyCode.A) },
-				{ Direction.Up, new KeyBinding(KeyCode.Space, KeyCode.LeftControl) },
-				{ Direction.Forward, new KeyBinding(KeyCode.W, KeyCode.S) }
-			};
-
-			roll = new KeyBinding(KeyCode.Q, KeyCode.E);
-		}
+		public SettingsInput InputBindings;
 
 		public Character Character { get; set; }
 		public OverlayController OverlayController { get; set; }
-
-		Dictionary<Direction, KeyBinding> dirBindings;
-		KeyBinding roll;
 
 		bool DampenersOn = true;
 
@@ -49,7 +36,7 @@ namespace DeepSpace.Controllers
 
 		void Update_DampenersController()
 		{
-			if (Input.GetKeyDown(KeyCode.Z))
+			if (Input.GetKeyDown(InputBindings.dampeners))
 			{
 				if (DampenersOn == true)
 					DampenersOn = false;
@@ -62,13 +49,17 @@ namespace DeepSpace.Controllers
 		{
 			Vector3 acceleration = Vector3.zero;
 
-			int i = 0; foreach (Direction dir in dirBindings.Keys)
+			//TODO: Consider whether it's best to store a pointer to the respective SettingsInput class or to just have direct pointers for each controller class..
+
+			int i = 0; foreach (Direction dir in InputBindings.dirBindings.Keys)
 			{
-				float dirInput = dirBindings[dir].Magnitude;
+				float dirInput = InputBindings.dirBindings[dir].Magnitude;
 
 				//Did we receive an input from this axis this frame?
 				if (dirInput == 0)
 				{
+					//TODO: Getting this to work is an urgent priority!
+
 					//If not, then factor in any deceleration we need to apply.
 					//What is the Velocity of this Entity in this direction?
 					//Take the magnitude of this Velocity and clamp it between a range of 0 and 1.
@@ -90,7 +81,7 @@ namespace DeepSpace.Controllers
 			rotateTo = rotateTo * Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * 300F * Time.deltaTime, Vector3.right);
 			rotateTo = rotateTo * Quaternion.AngleAxis(Input.GetAxis("Mouse X") * 300F * Time.deltaTime, Vector3.up);
 
-			rotateTo = rotateTo * Quaternion.AngleAxis(roll.Magnitude * 100F * Time.deltaTime, Vector3.forward);
+			rotateTo = rotateTo * Quaternion.AngleAxis(InputBindings.worldRoll.Magnitude * 100F * Time.deltaTime, Vector3.forward);
 		}
 	}
 }
